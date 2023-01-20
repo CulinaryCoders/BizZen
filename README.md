@@ -7,8 +7,8 @@ BizZen is a B2B software-as-a-service platform designed to help small and medium
 
 Project Members:
   Front-End:
-    Lucinda Quintal
+    Lucinda Quintal,
     Alaine Spade
   Back-End:
-    Ryan Brooks
+    Ryan Brooks,
     Angelina Uriarte-Wilson
