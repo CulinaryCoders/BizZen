@@ -2,7 +2,7 @@
 name: New Feature Template
 about: Use to create all new Feature issues
 title: "[FEATURE]  <Replace w/ Feature title>"
-labels: ''
+labels: Feature
 assignees: ''
 
 ---
