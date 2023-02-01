@@ -7,9 +7,9 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var mySigningKey = []byte("secretkey") // Need to replace with env variable
+var mySigningKey = GetSigningKey()
 
-type Token struct {
+type Claims struct {
 	Email string `json:"email"`
 	Role  string `json:"role"`
 	jwt.StandardClaims
@@ -18,7 +18,7 @@ type Token struct {
 func GenerateToken(email, role string) (string, error) {
 
 	expirationTime := time.Now().Add(1 * time.Hour)
-	claims := &Token{
+	claims := &Claims{
 		Email: email,
 		Role:  role,
 		StandardClaims: jwt.StandardClaims{
@@ -31,30 +31,34 @@ func GenerateToken(email, role string) (string, error) {
 	return tokenString, err
 }
 
-func ValidateToken(signedToken string) (err error) {
+func ValidateToken(signedToken string) (string, error) {
 	token, err := jwt.ParseWithClaims(
 		signedToken,
-		&Token{},
+		&Claims{},
 		func(token *jwt.Token) (interface{}, error) {
 			return []byte(mySigningKey), nil
 		},
 	)
 
 	if err != nil {
-		return
+		return "", err
 	}
 
-	claims, ok := token.Claims.(*Token)
+	claims, ok := token.Claims.(*Claims)
 	if !ok {
 		err = errors.New("couldn't parse claims")
-		return
+		return "", err
 	}
 
 	if claims.ExpiresAt < time.Now().Local().Unix() {
 		err = errors.New("token expired")
-		return
+		return "", err
 	}
 
-	return
+	if ok && token.Valid {
+		return claims.Role, err
+	}
+
+	return "", err
 
 }

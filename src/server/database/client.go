@@ -11,8 +11,8 @@ import (
 var Instance *gorm.DB
 var dbError error
 
-func Init() *gorm.DB {
-	connectionString := "postgres://postgres:supersecretpassword@localhost:5432/postgres"
+func Init(connectionString string) *gorm.DB {
+
 	Instance, dbError = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 	if dbError != nil {
 		log.Fatal(dbError)

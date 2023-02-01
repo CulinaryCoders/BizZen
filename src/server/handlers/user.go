@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type Authentication struct {
+type Credentials struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
@@ -37,7 +37,8 @@ func (h handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h handler) LogIn(w http.ResponseWriter, r *http.Request) {
-	var credentials Authentication
+	var credentials Credentials
+
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&credentials); err != nil {
 		respondError(w, http.StatusBadRequest, err.Error())
@@ -45,7 +46,10 @@ func (h handler) LogIn(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	user := h.checkIfUserExists(credentials.Email, w, r)
+	user, err := h.checkIfUserExists(credentials.Email, w, r)
+	if err != nil {
+		return
+	}
 
 	if err := user.CheckPassword(credentials.Password); err != nil {
 		respondError(w, http.StatusBadRequest, "Incorrect password.")
@@ -53,30 +57,28 @@ func (h handler) LogIn(w http.ResponseWriter, r *http.Request) {
 	}
 
 	validToken, err := controllers.GenerateToken(user.Email, user.Role)
-
 	if err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
 	}
 
 	respondJSON(w, http.StatusOK, validToken)
-
 }
 
-func (h handler) checkIfUserExists(email string, w http.ResponseWriter, r *http.Request) *models.User {
+func (h handler) checkIfUserExists(email string, w http.ResponseWriter, r *http.Request) (*models.User, error) {
 	var user models.User
 
 	if err := h.DB.First(&user, models.User{Email: email}).Error; err != nil {
-		respondError(w, http.StatusNotFound, err.Error())
-		return nil
+		respondError(w, http.StatusNotFound, "User does not exist.")
+		return nil, err
 	}
-	return &user
+	return &user, nil
 }
 
 func (h handler) FindUser(w http.ResponseWriter, r *http.Request) {
 	userEmail := mux.Vars(r)["email"]
 
-	user := h.checkIfUserExists(userEmail, w, r)
-	if user == nil {
+	user, err := h.checkIfUserExists(userEmail, w, r)
+	if err != nil {
 		return
 	}
 	respondJSON(w, http.StatusOK, user)
@@ -85,8 +87,10 @@ func (h handler) FindUser(w http.ResponseWriter, r *http.Request) {
 func (h handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	userId := mux.Vars(r)["email"]
 
-	user := h.checkIfUserExists(userId, w, r)
-
+	user, err := h.checkIfUserExists(userId, w, r)
+	if err != nil {
+		return
+	}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		respondError(w, http.StatusBadRequest, err.Error())
 		return
@@ -106,8 +110,8 @@ func (h handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 func (h handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	userEmail := mux.Vars(r)["email"]
 
-	user := h.checkIfUserExists(userEmail, w, r)
-	if user == nil {
+	user, err := h.checkIfUserExists(userEmail, w, r)
+	if err != nil {
 		return
 	}
 

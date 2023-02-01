@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"server/config"
 	"server/database"
 	"server/handlers"
 	"server/middlewares"
@@ -13,7 +14,8 @@ import (
 
 func main() {
 	// Initialize Database
-	DB := database.Init()
+	config.InitEnvConfigs()
+	DB := database.Init(config.ConfigVars.DatabaseConnection)
 	router := mux.NewRouter()
 	h := handlers.New(DB)
 
@@ -31,6 +33,6 @@ func main() {
 	router.HandleFunc("/deleteuser/{email}", h.DeleteUser).Methods("DELETE")
 
 	log.Println("API is running!")
-	http.ListenAndServe(":8080", router)
+	log.Fatal(http.ListenAndServe(":8080", router))
 
 }
