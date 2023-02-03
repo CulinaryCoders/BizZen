@@ -7,17 +7,23 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+// ? Official Go docs mentioned this package for managing JWTs (possibly more mature?): github.com/golang-jwt/jwt/v4
+
 var mySigningKey = GetSigningKey()
 
+// TODO: Add comment documentation (type Claims)
 type Claims struct {
 	Email string `json:"email"`
 	Role  string `json:"role"`
 	jwt.StandardClaims
 }
 
+// TODO: Add comment documentation (func GenerateToken)
 func GenerateToken(email, role string) (string, error) {
 
+	// TODO: Add comment documentation (var expirationTime)
 	expirationTime := time.Now().Add(1 * time.Hour)
+
 	claims := &Claims{
 		Email: email,
 		Role:  role,
@@ -25,12 +31,14 @@ func GenerateToken(email, role string) (string, error) {
 			ExpiresAt: expirationTime.Unix(),
 		},
 	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(mySigningKey)
 
 	return tokenString, err
 }
 
+// TODO: Add comment documentation (func ValidateToken)
 func ValidateToken(signedToken string) (string, error) {
 	token, err := jwt.ParseWithClaims(
 		signedToken,

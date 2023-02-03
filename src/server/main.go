@@ -24,9 +24,9 @@ func main() {
 	})
 
 	router.HandleFunc("/register", db.RegisterUser).Methods("POST")
-	router.HandleFunc("/login", db.LogIn).Methods("POST")
+	router.HandleFunc("/login", db.Authenticate).Methods("POST")
 
-	router.HandleFunc("/customer", middlewares.Auth(db.Customer)).Methods("GET")
+	router.HandleFunc("/customer", middlewares.Authorize(db.Customer)).Methods("GET")
 
 	router.HandleFunc("/finduser/{email}", db.FindUser).Methods("GET")
 	router.HandleFunc("/updateuser/{email}", db.UpdateUser).Methods("POST")

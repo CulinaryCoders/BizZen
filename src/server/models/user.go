@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// TODO: Add comment documentation (type User)
 type User struct {
 	gorm.Model
 	Name     string `json:"name"`
@@ -14,6 +15,7 @@ type User struct {
 	Role     string `json:"role"`
 }
 
+// TODO: Add comment documentation (func HashPassword)
 func (user *User) HashPassword(password string) error {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
@@ -22,6 +24,8 @@ func (user *User) HashPassword(password string) error {
 	user.Password = string(bytes)
 	return nil
 }
+
+// TODO: Add comment documentation (func CheckPassword)
 func (user *User) CheckPassword(providedPassword string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(providedPassword))
 	if err != nil {
