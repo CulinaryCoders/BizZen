@@ -7,29 +7,29 @@ import (
 )
 
 func Auth(handler http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(writer http.ResponseWriter, request *http.Request) {
 
-		if r.Header["Token"] == nil {
-			respondError(w, http.StatusUnauthorized, "Token Not Found.")
+		if request.Header["Token"] == nil {
+			respondError(writer, http.StatusUnauthorized, "Token Not Found.")
 			return
 		}
 
 		//var mySigningKey = []byte("secretkey")
-		tokenString := r.Header["Token"][0]
+		tokenString := request.Header["Token"][0]
 		role, err := controllers.ValidateToken(tokenString)
 		if err != nil {
-			respondError(w, http.StatusInternalServerError, err.Error())
+			respondError(writer, http.StatusInternalServerError, err.Error())
 			return
 		}
 
 		if role == "customer" {
-			r.Header.Set("Role", "customer")
-			handler.ServeHTTP(w, r)
+			request.Header.Set("Role", "customer")
+			handler.ServeHTTP(writer, request)
 			return
 
 		} else if role == "user" {
-			r.Header.Set("Role", "user")
-			handler.ServeHTTP(w, r)
+			request.Header.Set("Role", "user")
+			handler.ServeHTTP(writer, request)
 			return
 
 		}
@@ -38,19 +38,19 @@ func Auth(handler http.HandlerFunc) http.HandlerFunc {
 }
 
 // respondJSON makes the response with payload as json format
-func respondJSON(w http.ResponseWriter, status int, payload interface{}) {
+func respondJSON(writer http.ResponseWriter, status int, payload interface{}) {
 	response, err := json.Marshal(payload)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		writer.WriteHeader(http.StatusInternalServerError)
+		writer.Write([]byte(err.Error()))
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	w.Write([]byte(response))
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(status)
+	writer.Write([]byte(response))
 }
 
 // respondError makes the error response with payload as json format
-func respondError(w http.ResponseWriter, code int, message string) {
-	respondJSON(w, code, map[string]string{"error": message})
+func respondError(writer http.ResponseWriter, code int, message string) {
+	respondJSON(writer, code, map[string]string{"error": message})
 }

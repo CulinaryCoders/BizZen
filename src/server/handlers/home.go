@@ -5,10 +5,10 @@ import (
 	"net/http"
 )
 
-func (h handler) Home(w http.ResponseWriter, r *http.Request) {
+func (db Handler) Home(writer http.ResponseWriter, request *http.Request) {
 	// your code here
-	w.Write([]byte("Welcome to the Matrix!"))
-	json.NewEncoder(w).Encode("Product Not Found!")
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	writer.Write([]byte("Welcome to the Matrix!"))
+	json.NewEncoder(writer).Encode("Product Not Found!")
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
 }

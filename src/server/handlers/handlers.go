@@ -7,28 +7,32 @@ import (
 	"gorm.io/gorm"
 )
 
-type handler struct {
+type Handler struct {
 	DB *gorm.DB
 }
 
-func New(db *gorm.DB) handler {
-	return handler{db}
+func NewHandler(db *gorm.DB) Handler {
+	return Handler{db}
 }
 
 // respondJSON makes the response with payload as json format
-func respondJSON(w http.ResponseWriter, status int, payload interface{}) {
+func respondJSON(writer http.ResponseWriter, status int, payload interface{}) {
 	response, err := json.Marshal(payload)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		writer.WriteHeader(http.StatusInternalServerError)
+		writer.Write([]byte(err.Error()))
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	w.Write([]byte(response))
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(status)
+	writer.Write([]byte(response))
 }
 
 // respondError makes the error response with payload as json format
-func respondError(w http.ResponseWriter, code int, message string) {
-	respondJSON(w, code, map[string]string{"error": message})
+func respondError(writer http.ResponseWriter, code int, message string) {
+	respondJSON(
+		writer,
+		code,
+		map[string]string{"error": message},
+	)
 }

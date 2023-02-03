@@ -2,10 +2,10 @@ package handlers
 
 import "net/http"
 
-func (h handler) Customer(w http.ResponseWriter, r *http.Request) {
-	if r.Header.Get("Role") != "customer" {
-		respondError(w, http.StatusBadRequest, "Invalid role.")
+func (db Handler) Customer(writer http.ResponseWriter, request *http.Request) {
+	if request.Header.Get("Role") != "customer" {
+		respondError(writer, http.StatusBadRequest, "Invalid role.")
 		return
 	}
-	w.Write([]byte("Welcome, Customer."))
+	writer.Write([]byte("Welcome, Customer."))
 }

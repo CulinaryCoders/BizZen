@@ -17,20 +17,20 @@ func main() {
 	config.InitEnvConfigs()
 	DB := database.Init(config.ConfigVars.DatabaseConnection)
 	router := mux.NewRouter()
-	h := handlers.New(DB)
+	db := handlers.NewHandler(DB)
 
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Hello, World!")
+	router.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+		fmt.Fprint(writer, "Hello, World!")
 	})
 
-	router.HandleFunc("/register", h.RegisterUser).Methods("POST")
-	router.HandleFunc("/login", h.LogIn).Methods("POST")
+	router.HandleFunc("/register", db.RegisterUser).Methods("POST")
+	router.HandleFunc("/login", db.LogIn).Methods("POST")
 
-	router.HandleFunc("/customer", middlewares.Auth(h.Customer)).Methods("GET")
+	router.HandleFunc("/customer", middlewares.Auth(db.Customer)).Methods("GET")
 
-	router.HandleFunc("/finduser/{email}", h.FindUser).Methods("GET")
-	router.HandleFunc("/updateuser/{email}", h.UpdateUser).Methods("POST")
-	router.HandleFunc("/deleteuser/{email}", h.DeleteUser).Methods("DELETE")
+	router.HandleFunc("/finduser/{email}", db.FindUser).Methods("GET")
+	router.HandleFunc("/updateuser/{email}", db.UpdateUser).Methods("POST")
+	router.HandleFunc("/deleteuser/{email}", db.DeleteUser).Methods("DELETE")
 
 	log.Println("API is running!")
 	log.Fatal(http.ListenAndServe(":8080", router))
