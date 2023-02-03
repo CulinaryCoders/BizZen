@@ -1,0 +1,32 @@
+<div class="container">
+  <h1 (click)="routeToHome()" style="background-color: antiquewhite; border-radius: 5px; display: inline-block; padding: 15px; margin-top:15px; cursor: pointer">[bizZen]</h1>
+  <div style="box-shadow: 5px 5px 5px lightgrey; padding: 25px; border: 1px solid lightgrey; border-radius: 30px">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form-group">
+      <h2>Register</h2>
+      <div class="form-group">
+        <label for="first-name">First Name: </label>
+        <input id="first-name" type="text" formControlName="firstName" class="form-control" >
+      </div>
+      <div class="form-group">
+        <label for="last-name">Last Name: </label>
+        <input id="last-name" type="text" formControlName="lastName" class="form-control" >
+      </div>
+      <div formGroupName="password" class="form-group">
+        <label for="pass">Password: </label>
+        <input id="pass" type="password" formControlName="pass" class="form-control">
+        <br/>
+        <label for="confPass">Confirm Password: </label>
+        <input id="confPass" type="password" formControlName="confPass" class="form-control">
+        <div *ngIf="registerForm.errors?.['passwordsDontMatch'] && (registerForm.touched || registerForm.dirty)" class="cross-validation-error-message alert">
+          Passwords must match.
+        </div>
+      </div>
+      <button type="submit" [disabled]="!registerForm.valid" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+  <br/>
+  <div style="text-align: center">
+    <h6>Already have an account?</h6>
+    <button (click)="routeToLogin()" class="btn btn-secondary">Log In</button>
+  </div>
+</div>
