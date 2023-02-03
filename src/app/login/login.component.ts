@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {User} from '../user';
 
 //passes info between components
-import {Router, ActivatedRoute, ParamMap} from '@angular/router'; 
+import {Router, ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -18,14 +18,19 @@ export class LoginComponent {
   model = new User("", "", "");
 
   constructor(private router:Router){}
-  
+
   submitted = false;
 
-  onSubmit() { 
-    this.submitted = true; 
-    
+  onSubmit() {
+    this.submitted = true;
+
     if(this.model.type === "customer")
       this.router.navigate(['/profile']);
   }
-
+  routeToRegister() {
+    this.router.navigate(['/register']);
+  }
+  routeToHome() {
+    this.router.navigate(['']);
+  }
 }
