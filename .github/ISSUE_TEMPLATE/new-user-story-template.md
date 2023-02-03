@@ -7,12 +7,16 @@ assignees: ''
 
 ---
 
-**Parent Feature**:  <To link related issues in the same repository, you can type # followed by part of the issue title and then clicking the issue that you want to link.>
+## "As a..." statement
 
-##  **Details**
+As a <type of user>, I want <some goal> so that <some reason>.
 
-<A clear and concise description of the user story>
 
-##  **Additional context**
+## Details
 
-<Add any other context, functionality, scope, or screenshots about the user story here.>
+< Add details about the here. Keep it high level. >
+
+
+## **Example Functionality**
+
+< Outline basic/core functionality here. Keep it high level. >
