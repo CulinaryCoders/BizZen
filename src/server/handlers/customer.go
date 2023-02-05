@@ -5,7 +5,7 @@ import "net/http"
 // TODO: Add comment documentation (func Customer)
 func (db Handler) Customer(writer http.ResponseWriter, request *http.Request) {
 	if request.Header.Get("Role") != "customer" {
-		respondError(
+		RespondError(
 			writer,
 			http.StatusBadRequest,
 			"Invalid role.",
