@@ -10,6 +10,6 @@ type Handler struct {
 }
 
 // TODO: Add comment documentation (func NewHandler)
-func NewHandler(db *gorm.DB) Handler {
-	return Handler{db}
+func NewHandler(db *gorm.DB) *Handler {
+	return &Handler{db}
 }

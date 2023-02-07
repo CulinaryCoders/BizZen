@@ -11,7 +11,7 @@ func Authorize(handler http.HandlerFunc) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 
 		if request.Header["Token"] == nil {
-			utils.RespondError(writer, http.StatusUnauthorized, "Token Not Found.")
+			utils.RespondWithError(writer, http.StatusUnauthorized, "Token Not Found.")
 			return
 		}
 
@@ -19,7 +19,7 @@ func Authorize(handler http.HandlerFunc) http.HandlerFunc {
 		tokenString := request.Header["Token"][0]
 		role, err := ValidateToken(tokenString, config.AppConfig.GetSigningKey())
 		if err != nil {
-			utils.RespondError(writer, http.StatusInternalServerError, err.Error())
+			utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 			return
 		}
 

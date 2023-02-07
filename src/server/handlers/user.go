@@ -24,25 +24,25 @@ func (db Handler) CreateUser(writer http.ResponseWriter, request *http.Request) 
 	// TODO:  Create new function to consolidate duplicative code (decoding request body / error handling).
 	decoder := json.NewDecoder(request.Body)
 	if err := decoder.Decode(&user); err != nil {
-		utils.RespondError(writer, http.StatusBadRequest, err.Error())
+		utils.RespondWithError(writer, http.StatusBadRequest, err.Error())
 		return
 	}
 	defer request.Body.Close()
 
 	// ? Should error handling and response be handled by the called function instead?
 	if err := user.HashPassword(user.Password); err != nil {
-		utils.RespondError(writer, http.StatusInternalServerError, err.Error())
+		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	// ? Should error handling and response be handled by the called function instead?
 	// TODO: Create wrapper function for Handler type/struct to encapsulate "gorm.DB" logic
 	if err := db.DB.Create(&user).Error; err != nil {
-		utils.RespondError(writer, http.StatusInternalServerError, err.Error())
+		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	utils.RespondJSON(
+	utils.RespondWithJSON(
 		writer,
 		http.StatusCreated,
 		user)
@@ -56,7 +56,7 @@ func (db Handler) Authenticate(writer http.ResponseWriter, request *http.Request
 	// TODO:  Create new function to consolidate duplicative code (decoding request body / error handling).
 	decoder := json.NewDecoder(request.Body)
 	if err := decoder.Decode(&credentials); err != nil {
-		utils.RespondError(writer, http.StatusBadRequest, err.Error())
+		utils.RespondWithError(writer, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -71,7 +71,7 @@ func (db Handler) Authenticate(writer http.ResponseWriter, request *http.Request
 
 	// ? Should error handling and response be handled by the called function instead?
 	if err := user.CheckPassword(credentials.Password); err != nil {
-		utils.RespondError(
+		utils.RespondWithError(
 			writer,
 			http.StatusBadRequest,
 			"Incorrect password.")
@@ -82,13 +82,13 @@ func (db Handler) Authenticate(writer http.ResponseWriter, request *http.Request
 	// ? Should error handling and response be handled by the called function instead?
 	validToken, err := GenerateToken(user.Email, user.AccountType, config.AppConfig.GetSigningKey())
 	if err != nil {
-		utils.RespondError(
+		utils.RespondWithError(
 			writer,
 			http.StatusInternalServerError,
 			err.Error())
 	}
 
-	utils.RespondJSON(
+	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
 		validToken)
@@ -101,7 +101,7 @@ func (db Handler) checkIfUserExists(userEmail string, writer http.ResponseWriter
 	// ? Should error handling and response be handled by the called function instead?
 	// TODO: Create wrapper function for Handler type/struct to encapsulate "gorm.DB" logic (First / checkIfUserExists)
 	if err := db.DB.First(&user, models.User{Email: userEmail}).Error; err != nil {
-		utils.RespondError(writer, http.StatusNotFound, "User does not exist.")
+		utils.RespondWithError(writer, http.StatusNotFound, "User does not exist.")
 		return nil, err
 	}
 
@@ -119,7 +119,7 @@ func (db Handler) GetUser(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	utils.RespondJSON(
+	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
 		user)
@@ -139,7 +139,7 @@ func (db Handler) UpdateUser(writer http.ResponseWriter, request *http.Request) 
 	// ? Duplicative code block for decoding request body and error checking/response.
 	// TODO:  Create new function to consolidate duplicative code (decoding request body / error handling).
 	if err := json.NewDecoder(request.Body).Decode(&user); err != nil {
-		utils.RespondError(writer, http.StatusBadRequest, err.Error())
+		utils.RespondWithError(writer, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -148,11 +148,11 @@ func (db Handler) UpdateUser(writer http.ResponseWriter, request *http.Request) 
 	// ? Should error handling and response be handled by the called function instead?
 	// TODO: Create wrapper function for Handler type/struct to encapsulate "gorm.DB" logic (Save / UpdateUser)
 	if err := db.DB.Save(&user).Error; err != nil {
-		utils.RespondError(writer, http.StatusInternalServerError, err.Error())
+		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	utils.RespondJSON(
+	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
 		user)
@@ -173,11 +173,11 @@ func (db Handler) DeleteUser(writer http.ResponseWriter, request *http.Request) 
 	// ? Should error handling and response be handled by the called function instead?
 	// TODO: Create wrapper function for Handler type/struct to encapsulate "gorm.DB" logic (DeleteUser)
 	if err := db.DB.Delete(&user).Error; err != nil {
-		utils.RespondError(writer, http.StatusInternalServerError, err.Error())
+		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	utils.RespondJSON(
+	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
 		user)
