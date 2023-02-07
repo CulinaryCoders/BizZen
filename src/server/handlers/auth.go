@@ -7,6 +7,7 @@ import (
 )
 
 // TODO: Add comment documentation (func Authorize)
+// TODO: Refactor Authorize method to support current models and logic
 func Authorize(handler http.HandlerFunc) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 

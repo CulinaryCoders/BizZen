@@ -16,7 +16,7 @@ import (
 type Application struct {
 	Router    *mux.Router
 	DB        *gorm.DB
-	DBHandler *handlers.Handler
+	DBHandler *handlers.DatabaseHandler
 }
 
 // TODO:  Add documentation (func Initialize)
@@ -26,7 +26,7 @@ func (app *Application) Initialize() {
 	app.DB = database.Initialize(dbConnectionString)
 
 	// Initialize database handler
-	app.DBHandler = handlers.NewHandler(app.DB)
+	app.DBHandler = handlers.NewDatabaseHandler(app.DB)
 
 	// Initialize router and routes
 	app.Router = mux.NewRouter()

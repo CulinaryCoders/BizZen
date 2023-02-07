@@ -5,11 +5,11 @@ import (
 )
 
 // TODO: Add comment documentation (type Handler)
-type Handler struct {
+type DatabaseHandler struct {
 	DB *gorm.DB
 }
 
 // TODO: Add comment documentation (func NewHandler)
-func NewHandler(db *gorm.DB) *Handler {
-	return &Handler{db}
+func NewDatabaseHandler(db *gorm.DB) *DatabaseHandler {
+	return &DatabaseHandler{db}
 }
