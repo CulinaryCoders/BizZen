@@ -8,13 +8,10 @@ import (
 	"gorm.io/gorm"
 )
 
-var dbInstance *gorm.DB
-var dbError error
-
 // TODO: Add comment documentation (func Initialize)
 func Initialize(connectionString string) *gorm.DB {
 
-	dbInstance, dbError = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
+	dbInstance, dbError := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 
 	if dbError != nil {
 		log.Fatal(dbError)
