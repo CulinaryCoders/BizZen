@@ -18,6 +18,8 @@ type Configuration struct {
 	APP_DB_PASSWORD string `mapstructure:"APP_DB_PASSWORD"`
 	APP_DB_HOST     string `mapstructure:"APP_DB_HOST"`
 	APP_DB_PORT     int    `mapstructure:"APP_DB_PORT"`
+	API_SERVER_HOST string `mapstructure:"API_SERVER_HOST"`
+	API_SERVER_PORT int    `mapstructure:"API_SERVER_PORT"`
 }
 
 // Initialize method creates and initializes new Configuration object
@@ -57,4 +59,13 @@ func (config *Configuration) GetDBConnectionString() string {
 		config.APP_DB_PORT)
 
 	return connectionString
+}
+
+// GetAPIServerNetworkAddress returns the full network address ("host:port") that will serve the API
+func (config *Configuration) GetAPIServerNetworkAddress() string {
+	var networkAddress string = fmt.Sprintf("%s:%d",
+		config.API_SERVER_HOST,
+		config.API_SERVER_PORT)
+
+	return networkAddress
 }

@@ -1,8 +1,10 @@
 {
-    "JWT_KEY": null,
+    "JWT_SIGNING_KEY": null,
     "APP_DB_NAME": null,
     "APP_DB_USER": null,
     "APP_DB_PASSWORD": null,
     "APP_DB_HOST": null,
-    "APP_DB_PORT": null
+    "APP_DB_PORT": null,
+    "API_SERVER_HOST": null,
+    "API_SERVER_PORT": null
 }
