@@ -7,30 +7,33 @@ import (
 	"server/config"
 	"server/database"
 	"server/handlers"
-	"server/middlewares"
 
 	"github.com/gorilla/mux"
 )
 
 func main() {
-	// Initialize Database
-	config.InitEnvConfigs()
-	DB := database.Init(config.ConfigVars.DatabaseConnection)
-	router := mux.NewRouter()
-	db := handlers.NewHandler(DB)
+	// Initialize database
+	var dbConnectionString string = config.AppConfig.GetDBConnectionString()
+	DB := database.Initialize(dbConnectionString)
 
+	// Initialize router
+	router := mux.NewRouter()
+
+	// Initialize database handler
+	dbHandler := handlers.NewHandler(DB)
+
+	// Define routes
 	router.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+		// TODO: Create API table of contents or list of valid objects in API for root "/" route
 		fmt.Fprint(writer, "Hello, World!")
 	})
 
-	router.HandleFunc("/register", db.RegisterUser).Methods("POST")
-	router.HandleFunc("/login", db.Authenticate).Methods("POST")
+	router.HandleFunc("/register", dbHandler.CreateUser).Methods("POST")
+	router.HandleFunc("/authenticate", dbHandler.Authenticate).Methods("POST")
 
-	router.HandleFunc("/customer", middlewares.Authorize(db.Customer)).Methods("GET")
-
-	router.HandleFunc("/finduser/{email}", db.FindUser).Methods("GET")
-	router.HandleFunc("/updateuser/{email}", db.UpdateUser).Methods("POST")
-	router.HandleFunc("/deleteuser/{email}", db.DeleteUser).Methods("DELETE")
+	router.HandleFunc("/user/{id}", dbHandler.GetUser).Methods("GET")
+	router.HandleFunc("/user/{id}", dbHandler.UpdateUser).Methods("PUT")
+	router.HandleFunc("/user/{id}}", dbHandler.DeleteUser).Methods("DELETE")
 
 	log.Println("API is running!")
 	log.Fatal(http.ListenAndServe(":8080", router))

@@ -7,6 +7,9 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Read in environmental variables used throughout application
+var AppConfig *Configuration = InitializeConfig()
+
 // struct to map env values
 type Configuration struct {
 	JWT_SIGNING_KEY []byte `mapstructure:"JWT_SIGNING_KEY"`
@@ -18,7 +21,7 @@ type Configuration struct {
 }
 
 // Initialize method creates and initializes new Configuration object
-func Initialize() (config *Configuration) {
+func InitializeConfig() (config *Configuration) {
 	return loadEnvironmentVariables()
 }
 
@@ -36,7 +39,7 @@ func loadEnvironmentVariables() (config *Configuration) {
 		log.Fatal(err)
 	}
 
-	return
+	return config
 }
 
 // GetSigningKey returns the JWT_SIGNING_KEY environmental variable defined in the calling Configuration object

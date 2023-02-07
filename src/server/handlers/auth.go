@@ -1,9 +1,9 @@
-package middlewares
+package handlers
 
 import (
 	"net/http"
-	"server/controllers"
-	"server/handlers"
+	"server/config"
+	"server/utils"
 )
 
 // TODO: Add comment documentation (func Authorize)
@@ -11,15 +11,15 @@ func Authorize(handler http.HandlerFunc) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 
 		if request.Header["Token"] == nil {
-			handlers.RespondError(writer, http.StatusUnauthorized, "Token Not Found.")
+			utils.RespondError(writer, http.StatusUnauthorized, "Token Not Found.")
 			return
 		}
 
 		//var mySigningKey = []byte("secretkey")
 		tokenString := request.Header["Token"][0]
-		role, err := controllers.ValidateToken(tokenString)
+		role, err := ValidateToken(tokenString, config.AppConfig.GetSigningKey())
 		if err != nil {
-			handlers.RespondError(writer, http.StatusInternalServerError, err.Error())
+			utils.RespondError(writer, http.StatusInternalServerError, err.Error())
 			return
 		}
 

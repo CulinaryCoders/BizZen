@@ -8,13 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
-var Instance *gorm.DB
+var dbInstance *gorm.DB
 var dbError error
 
-// TODO: Add comment documentation (func Init)
-func Init(connectionString string) *gorm.DB {
+// TODO: Add comment documentation (func Initialize)
+func Initialize(connectionString string) *gorm.DB {
 
-	Instance, dbError = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
+	dbInstance, dbError = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 
 	if dbError != nil {
 		log.Fatal(dbError)
@@ -23,8 +23,8 @@ func Init(connectionString string) *gorm.DB {
 
 	log.Println("Connected to Database!")
 
-	Instance.AutoMigrate(&models.User{})
+	dbInstance.AutoMigrate(&models.User{})
 	log.Println("Database Migration Completed!")
 
-	return Instance
+	return dbInstance
 }
