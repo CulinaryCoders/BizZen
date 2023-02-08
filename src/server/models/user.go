@@ -8,11 +8,13 @@ import (
 // TODO: Add comment documentation (type User)
 type User struct {
 	gorm.Model
-	Name     string `json:"name"`
-	Username string `json:"username" gorm:"unique"`
-	Email    string `json:"email" gorm:"unique"`
-	Password string `json:"password"`
-	Role     string `json:"role"`
+	ID          uint64 `gorm:"primaryKey;serial"`
+	Name        string `json:"name"`
+	Username    string `json:"username" gorm:"unique"`
+	Email       string `json:"email" gorm:"unique"`
+	Password    string `json:"password"`
+	Role        string `json:"role"`
+	AccountType string `json:"account_type"`
 }
 
 // TODO: Add comment documentation (func HashPassword)

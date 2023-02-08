@@ -3,8 +3,8 @@ package handlers
 import "net/http"
 
 // TODO: Add comment documentation (func Customer)
-func (db Handler) Customer(writer http.ResponseWriter, request *http.Request) {
-	if request.Header.Get("Role") != "customer" {
+func (db Handler) Business(writer http.ResponseWriter, request *http.Request) {
+	if request.Header.Get("Role") != "business" {
 		RespondError(
 			writer,
 			http.StatusBadRequest,
@@ -14,10 +14,9 @@ func (db Handler) Customer(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	//writer.Write([]byte("Welcome, Customer."))
 	RespondJSON(
 		writer,
 		http.StatusOK,
-		"Welcome, Customer.",
+		"Welcome, Business Owner.",
 	)
 }
