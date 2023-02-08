@@ -1,4 +1,9 @@
 # Sprint 1
+
+## Video Links
+Frontend: https://www.youtube.com/watch?v=o8U-HqkyJN4
+Backend: https://www.youtube.com/watch?v=mbtpTFUQO1Y
+
 ## User Stories
 * **Create and manage user accounts**
   * As a **user**, I want to be able to create a new user account or login to an existing user account in order to access the application.
