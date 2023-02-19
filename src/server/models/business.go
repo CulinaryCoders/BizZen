@@ -9,12 +9,11 @@ import (
 // TODO: Add foreign key logic to Business model
 type Business struct {
 	gorm.Model
-	ID           uint `gorm:"primaryKey;serial"`
-	OwnerID      uint
-	AddressID    uint
-	PhoneNumber1 string
-	PhoneNumber2 string
-	FaxNumber    string
+	ID           uint   `gorm:"primaryKey;serial" json:"id"`
+	OwnerID      uint   `json:"owner"`
+	MainOfficeID uint   `json:"main_office"`
+	Name         string `json:"name"`
+	Type         string `json:"type"`
 }
 
 // TODO: Add foreign key logic to Office model
