@@ -1,12 +1,12 @@
-package handlers
+package utils
 
 import (
 	"encoding/json"
 	"net/http"
 )
 
-// RespondJSON makes the response with payload as json format
-func RespondJSON(writer http.ResponseWriter, status int, payload interface{}) {
+// RespondWithJSON marshals the payload into JSON format and returns the HTTP response
+func RespondWithJSON(writer http.ResponseWriter, status int, payload interface{}) {
 	response, err := json.Marshal(payload)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
@@ -18,9 +18,9 @@ func RespondJSON(writer http.ResponseWriter, status int, payload interface{}) {
 	writer.Write([]byte(response))
 }
 
-// RespondError makes the error response with payload as json format
-func RespondError(writer http.ResponseWriter, code int, message string) {
-	RespondJSON(
+// RespondWithError takes in an error code and error message and returns the HTTP response
+func RespondWithError(writer http.ResponseWriter, code int, message string) {
+	RespondWithJSON(
 		writer,
 		code,
 		map[string]string{"error": message},

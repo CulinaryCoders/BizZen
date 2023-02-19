@@ -5,14 +5,30 @@ import (
 	"gorm.io/gorm"
 )
 
-// TODO: Add comment documentation (type User)
+// TODO: Add foreign key logic to User model
+// TODO: Update time columns type / formatting to ensure behavior/values are expected
+// TODO: Add constraint for AccountType column to limit user types
 type User struct {
 	gorm.Model
-	Name     string `json:"name"`
-	Username string `json:"username" gorm:"unique"`
-	Email    string `json:"email" gorm:"unique"`
-	Password string `json:"password"`
-	Role     string `json:"role"`
+	ID                uint   `gorm:"primaryKey;serial"`
+	Email             string `gorm:"not null;unique"`
+	Username          string `gorm:"not null;unique"`
+	Password          string `gorm:"not null;unique"`
+	AccountType       string `gorm:"not null;unique"`
+	FirstName         string `gorm:"not null"`
+	LastName          string `gorm:"not null"`
+	ContactInfoID     uint
+	BusinessID        uint
+	UserPermissionsID uint
+	UserPreferencesID uint
+	ProfilePicID      uint
+}
+
+type UserPermissions struct {
+	gorm.Model
+	ID          uint   `gorm:"primaryKey;serial"`
+	Label       string `gorm:"not null"`
+	Description string `gorm:"not null"`
 }
 
 // TODO: Add comment documentation (func HashPassword)
