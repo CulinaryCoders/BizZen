@@ -9,24 +9,32 @@ import (
 	"server/handlers"
 
 	"github.com/gorilla/mux"
-	"gorm.io/gorm"
+	"github.com/gorilla/sessions"
 )
 
 // TODO:  Add documentation (type Application)
 type Application struct {
 	Router    *mux.Router
-	DB        *gorm.DB
 	DBHandler *handlers.DatabaseHandler
 }
 
 // TODO:  Add documentation (func Initialize)
 func (app *Application) Initialize() {
-	// Initialize database
-	var dbConnectionString string = config.AppConfig.GetDBConnectionString()
-	app.DB = database.Initialize(dbConnectionString)
+	// Initialize main app database
+	var dbConnectionString string = config.AppConfig.GetPostgresDBConnectionString()
+	appDB := database.InitializePostgresDB(dbConnectionString)
 
-	// Initialize database handler
-	app.DBHandler = handlers.NewDatabaseHandler(app.DB)
+	// Initialize cache db
+	var cacheDSN string = config.AppConfig.GetRedisDBNetworkAddress()
+	cacheDB := database.InitializeRedisDB(cacheDSN)
+
+	// Initialize cookie store
+	cookieStore := sessions.NewCookieStore([]byte("super-secret"))
+	cookieStore.Options.HttpOnly = true
+	cookieStore.Options.Secure = true
+
+	// Initialize DataHandler
+	app.DBHandler = handlers.NewDatabaseHandler(appDB, cacheDB)
 
 	// Initialize router and routes
 	app.Router = mux.NewRouter()
@@ -41,15 +49,20 @@ func (app *Application) initializeRoutes() {
 		fmt.Fprint(writer, "Hello, World!")
 	})
 
+	// User routes
 	app.Router.HandleFunc("/register", app.DBHandler.CreateUser).Methods("POST")
 	app.Router.HandleFunc("/authenticate", app.DBHandler.Authenticate).Methods("POST")
-
 	app.Router.HandleFunc("/user/{id}", app.DBHandler.GetUser).Methods("GET")
 	app.Router.HandleFunc("/user/{id}", app.DBHandler.UpdateUser).Methods("PUT")
 	app.Router.HandleFunc("/user/{id}}", app.DBHandler.DeleteUser).Methods("DELETE")
+
+	// Business routes
+	app.Router.HandleFunc("/business", app.DBHandler.CreateBusiness).Methods("POST")
+
 }
 
 // TODO:  Add documentation (func Run)
 func (app *Application) Run(networkAddress string) {
+	log.Printf("Server is now listening on: %s", networkAddress)
 	log.Fatal(http.ListenAndServe(networkAddress, app.Router))
 }
