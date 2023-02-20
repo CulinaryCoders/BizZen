@@ -27,11 +27,11 @@
       </div>
 
       <div class="form-group">
-        <label for="userType">Are You a Customer or a Business?</label>
-        <select class="form-control" id="isBusiness" required
-            [(ngModel)]="model.type" name="type">
-          <option *ngFor="let user of userTypes" [value]="user">{{user}}</option>
-        </select>
+        <label for="userType">Are You a Business?</label>
+
+        <input type="checkbox" id="isBusiness"
+              [(ngModel)]="model.isBusiness" name="isBusiness" #isBusiness="ngModel" >
+
       </div>
       <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Submit</button>
     </form>

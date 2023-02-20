@@ -13,9 +13,9 @@ import {Router, ActivatedRoute, ParamMap} from '@angular/router';
 
 export class LoginComponent {
 
-  userTypes = ["Customer", "Business"];
+  //userTypes = ["Customer", "Business"];
 
-  model = new User("", "", "");
+  model = new User("", "", false);
 
   constructor(private router:Router){}
 
@@ -24,7 +24,7 @@ export class LoginComponent {
   onSubmit() {
     this.submitted = true;
 
-    if(this.model.type === "customer")
+    if(!this.model.isBusiness)
       this.router.navigate(['/profile']);
   }
   routeToRegister() {
