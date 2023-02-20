@@ -1,44 +1,31 @@
 package handlers
 
 import (
-	"encoding/json"
-	"net/http"
-
+	"github.com/go-redis/redis/v7"
+	"github.com/gorilla/sessions"
 	"gorm.io/gorm"
 )
 
-// TODO: Add comment documentation (type Handler)
-type Handler struct {
-	DB *gorm.DB
+// TODO: Add comment documentation (type DatabaseHandler)
+type DatabaseHandler struct {
+	DB     *gorm.DB
+	client *redis.Client
 }
 
-// TODO: Add comment documentation (func NewHandler)
-func NewHandler(db *gorm.DB) Handler {
-	return Handler{db}
+// TODO: Add comment documentation (type CookieHandler)
+type CookieHandler struct {
+	store *sessions.CookieStore
 }
 
-// ? respondJSON duplicated across packages (present in both 'handlers' and 'middlewares')
-// TODO: Consolidate respondJSON to a single package
-// respondJSON makes the response with payload as json format
-func respondJSON(writer http.ResponseWriter, status int, payload interface{}) {
-	response, err := json.Marshal(payload)
-	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError)
-		writer.Write([]byte(err.Error()))
-		return
-	}
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(status)
-	writer.Write([]byte(response))
+// TODO: Add comment documentation (func NewDatabaseHandler)
+func NewDatabaseHandler(postgresDB *gorm.DB, redisDB *redis.Client) *DatabaseHandler {
+	return &DatabaseHandler{postgresDB, redisDB}
 }
 
-// ? respondError duplicated across packages (present in both 'handlers' and 'middlewares')
-// TODO: Consolidate respondJSON to a single package
-// respondError makes the error response with payload as json format
-func respondError(writer http.ResponseWriter, code int, message string) {
-	respondJSON(
-		writer,
-		code,
-		map[string]string{"error": message},
-	)
+// TODO: Add comment documentation (func NewCookieHandler)
+func NewCookieHandler(cookieStore *sessions.CookieStore) *CookieHandler {
+	cookieStore.Options.HttpOnly = true
+	cookieStore.Options.Secure = true
+
+	return &CookieHandler{cookieStore}
 }
