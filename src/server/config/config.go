@@ -22,6 +22,8 @@ type Configuration struct {
 	APP_CACHE_DB_PORT int    `mapstructure:"APP_CACHE_DB_PORT"`
 	API_SERVER_HOST   string `mapstructure:"API_SERVER_HOST"`
 	API_SERVER_PORT   int    `mapstructure:"API_SERVER_PORT"`
+	FRONTEND_HOST     string `mapstructure:"FRONTEND_HOST"`
+	FRONTEND_PORT     int    `mapstructure:"FRONTEND_PORT"`
 }
 
 // Initialize method creates and initializes new Configuration object
@@ -75,6 +77,13 @@ func (config *Configuration) GetRedisDBNetworkAddress() string {
 	return getNetworkAddress(
 		config.API_SERVER_HOST,
 		config.API_SERVER_PORT)
+}
+
+// GetFrontendNetworkAddress returns the full network address ("host:port") that will serve the frontend Angular application
+func (config *Configuration) GetFrontendNetworkAddress() string {
+	return getNetworkAddress(
+		config.FRONTEND_HOST,
+		config.FRONTEND_PORT)
 }
 
 // getNetworkAddress takes in host address and port number and returns the network address (a.k.a. DSN) in "host:port" string format
