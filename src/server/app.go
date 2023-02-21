@@ -57,8 +57,10 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/user/{id}}", app.DBHandler.DeleteUser).Methods("DELETE")
 
 	// Business routes
-	app.Router.HandleFunc("/business", app.DBHandler.CreateBusiness).Methods("POST")
-
+	app.Router.HandleFunc("/business/{id}", app.DBHandler.CreateBusiness).Methods("POST")
+	app.Router.HandleFunc("/business/{id}", app.DBHandler.GetBusiness).Methods("GET")
+	app.Router.HandleFunc("/business/{id}", app.DBHandler.UpdateBusiness).Methods("PUT")
+	app.Router.HandleFunc("/business/{id}", app.DBHandler.DeleteBusiness).Methods("DELETE")
 }
 
 // TODO:  Add documentation (func Run)

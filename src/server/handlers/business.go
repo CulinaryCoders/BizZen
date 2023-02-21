@@ -7,6 +7,7 @@ import (
 	"server/utils"
 )
 
+// TODO:  Add comment documentation (func CreateBusiness)
 func (dbHandler *DatabaseHandler) CreateBusiness(writer http.ResponseWriter, request *http.Request) {
 	business := models.Business{}
 
@@ -27,4 +28,16 @@ func (dbHandler *DatabaseHandler) CreateBusiness(writer http.ResponseWriter, req
 		writer,
 		http.StatusCreated,
 		business)
+}
+
+// TODO:  Add comment documentation (func CreateBusiness)
+func (dbHandler *DatabaseHandler) GetBusiness(writer http.ResponseWriter, request *http.Request) {
+}
+
+// TODO:  Add comment documentation (func CreateBusiness)
+func (dbHandler *DatabaseHandler) UpdateBusiness(writer http.ResponseWriter, request *http.Request) {
+}
+
+// TODO:  Add comment documentation (func CreateBusiness)
+func (dbHandler *DatabaseHandler) DeleteBusiness(writer http.ResponseWriter, request *http.Request) {
 }
