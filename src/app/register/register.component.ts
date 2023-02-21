@@ -17,7 +17,8 @@ export class RegisterComponent {
     password: new FormGroup({
       pass: new FormControl(''),
       confPass: new FormControl('')
-    })
+    }),
+    isBusiness: new FormControl('')
   }
   // , {validators: this.passwordMatch}
   )

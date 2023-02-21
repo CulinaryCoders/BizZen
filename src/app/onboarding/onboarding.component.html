@@ -1,0 +1,26 @@
+<div class="container">
+  <h1 (click)="routeToHome()" style="background-color: antiquewhite; border-radius: 5px; display: inline-block; padding: 15px; margin-top:15px; cursor: pointer">[bizZen]</h1>
+  <h2>Welcome to Bizzen, please answer a few questions to get your account set up!</h2>
+<!--  <div style="box-shadow: 5px 5px 5px lightgrey; padding: 25px; border: 1px solid lightgrey; border-radius: 30px">-->
+    <form [formGroup]="onboardingForm" (ngSubmit)="onSubmit()" class="form-group">
+      <div class="form-group">
+        <label for="first-name">First Name: </label>
+        <input id="first-name" type="text" formControlName="firstName" class="form-control" style="width: 200px">
+      </div>
+      <div class="form-group">
+        <label for="last-name">Last Name: </label>
+        <input id="last-name" type="text" formControlName="lastName" class="form-control" style="width: 200px" >
+      </div>
+      <ul class="list-group">
+        <li class="list-group-item" (click)="toggleInterest('health')">Health</li>
+        <li class="list-group-item">Art</li>
+        <li class="list-group-item">Exercise</li>
+        <li class="list-group-item">Travel</li>
+        <li class="list-group-item">Cooking</li>
+      </ul>
+      <p id="selectedInterests"></p>
+      <br/>
+      <button type="submit" [disabled]="!onboardingForm.valid" class="btn btn-primary" style="float: right; margin: 10px">Next</button>
+    </form>
+<!--  </div>-->
+</div>

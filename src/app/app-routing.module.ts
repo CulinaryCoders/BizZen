@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import {RegisterComponent} from "./register/register.component";
 import {LandingComponent} from "./landing/landing.component";
+import {OnboardingComponent} from "./onboarding/onboarding.component";
 
 const routes: Routes = [
   //more specific routes should be above less specific routes
@@ -11,7 +12,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'register', component: RegisterComponent },
-  // { path: '',   redirectTo: '/login', pathMatch: 'full' }, // redirect to `first-component`
+  { path: 'onboarding', component: OnboardingComponent },
   { path: '',   redirectTo: '/home', pathMatch: 'full' }, // redirect to `first-component`
 ];
 
