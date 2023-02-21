@@ -16,15 +16,15 @@ export class OnboardingComponent {
     interests: new FormControl([]),
   });
 
-  interests: string[] = [];
+  interests = ["Travel", "Cooking", "Yoga", "Technology", "Art"]
+  selectedInterests: string[] = [];
 
   toggleInterest(interest: string) {
-    this.interests.push(interest)
-    // if (this.interests.find(interest)) {
-    //   this.interests.remove(interest)
-    // } else {
-    //   this.interests.push(interest)
-    // }
+    if (this.selectedInterests.includes(interest)) {
+      this.selectedInterests.splice(this.selectedInterests.indexOf(interest), 1)
+    } else {
+      this.selectedInterests.push(interest)
+    }
   }
 
   onSubmit() {

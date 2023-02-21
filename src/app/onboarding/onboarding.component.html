@@ -12,13 +12,13 @@
         <input id="last-name" type="text" formControlName="lastName" class="form-control" style="width: 200px" >
       </div>
       <ul class="list-group">
-        <li class="list-group-item" (click)="toggleInterest('health')">Health</li>
-        <li class="list-group-item">Art</li>
-        <li class="list-group-item">Exercise</li>
-        <li class="list-group-item">Travel</li>
-        <li class="list-group-item">Cooking</li>
+        <li class="list-group-item" (click)="toggleInterest('Health')" [ngClass]="{'active': selectedInterests.includes('Health')}">Health</li>
+        <li class="list-group-item" (click)="toggleInterest('Art')" [ngClass]="{'active': selectedInterests.includes('Art')}">Art</li>
+        <li class="list-group-item" (click)="toggleInterest('Exercise')" [ngClass]="{'active': selectedInterests.includes('Exercise')}">Exercise</li>
+        <li class="list-group-item" (click)="toggleInterest('Travel')" [ngClass]="{'active': selectedInterests.includes('Travel')}">Travel</li>
+        <li class="list-group-item" (click)="toggleInterest('Cooking')" [ngClass]="{'active': selectedInterests.includes('Cooking')}">Cooking</li>
       </ul>
-      <p id="selectedInterests"></p>
+      <p id="selectedInterests">{{selectedInterests.toString()}}</p>
       <br/>
       <button type="submit" [disabled]="!onboardingForm.valid" class="btn btn-primary" style="float: right; margin: 10px">Next</button>
     </form>
