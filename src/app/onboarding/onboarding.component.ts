@@ -30,9 +30,8 @@ export class OnboardingComponent {
   onSubmit() {
     console.log(this.onboardingForm.value);
     // let text = document.getElementById("selectedInterests").textContent || ''
+    this.router.navigate(['/profile']);
 
-    const selected: HTMLElement = document.getElementById("selectedInterests")!
-    // selected?.textContent("hi")
   }
 
   routeToHome() {
