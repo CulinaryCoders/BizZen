@@ -21,8 +21,7 @@
         {{interest}}
       </li>
     </ul>
-
-    <p id="selectedInterests">{{selectedInterests.toString()}}</p>
+    <p id="errorMsg" style="color: red; font-weight: bold">{{errorMsg}}</p>
     <br/>
     <button type="submit" [disabled]="!onboardingForm.valid" class="btn btn-primary" style="float: right; margin: 10px">Next</button>
   </form>

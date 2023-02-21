@@ -10,11 +10,13 @@ import {FormControl, FormGroup} from "@angular/forms";
 export class OnboardingComponent {
   constructor(private router: Router) {};
 
+  errorMsg = "";
+
   onboardingForm = new FormGroup({
     firstName: new FormControl(''),
     lastName: new FormControl(''),
-    interests: new FormControl([]),
-  });
+    interests: new FormControl(),
+  })
 
   interests = ["Travel", "Cooking", "Yoga", "Technology", "Art"]
   selectedInterests: string[] = [];
@@ -28,10 +30,27 @@ export class OnboardingComponent {
   }
 
   onSubmit() {
-    console.log(this.onboardingForm.value);
-    // let text = document.getElementById("selectedInterests").textContent || ''
-    this.router.navigate(['/profile']);
+    this.errorMsg = "";
+    let fname = this.onboardingForm.value.firstName
+    let lname = this.onboardingForm.value.lastName
+    console.log("fname lname: ", fname, lname)
+    if (!fname || fname === "") {
+      this.errorMsg += "ERROR First Name Required -- "
+    }
+    if (!lname || lname === "") {
+      this.errorMsg += "ERROR Last Name Required -- "
+    }
+    if (this.selectedInterests.length === 0) {
+      this.errorMsg += "ERROR Please add at least 1 interest "
+    }
+    if (this.errorMsg === "") {
+      this.onboardingForm.value.interests = this.selectedInterests;
 
+      // CONNECT BACKEND this.onboardingForm.value has all the info needed to add to DB User object
+      console.log(this.onboardingForm.value);
+
+      this.router.navigate(['/profile']);
+    }
   }
 
   routeToHome() {
