@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -25,8 +26,9 @@ type CookieHandler struct {
 
 // TODO: Add comment documentation (type AngularHandler)
 type AngularHandler struct {
-	NetworkAddress string
-	ReverseProxy   *httputil.ReverseProxy
+	Host         string
+	HTTPAddress  string
+	ReverseProxy *httputil.ReverseProxy
 }
 
 // TODO: Add comment documentation (func NewDatabaseHandler)
@@ -44,9 +46,10 @@ func NewCookieHandler(cookieStore *sessions.CookieStore) *CookieHandler {
 
 // TODO: Add comment documentation (func NewAngularHandler)
 func NewAngularHandler() *AngularHandler {
-	var networkAddress string = config.AppConfig.GetFrontendNetworkAddress()
+	var host string = config.AppConfig.FRONTEND_HOST
+	var httpAddress = fmt.Sprintf("http://%s", config.AppConfig.GetFrontendNetworkAddress())
 
-	origin, err := url.Parse(networkAddress)
+	origin, err := url.Parse(host)
 	if err != nil {
 		log.Fatal("Failed to parse frontend network address for origin", err)
 	}
@@ -60,5 +63,5 @@ func NewAngularHandler() *AngularHandler {
 
 	reverseProxy := &httputil.ReverseProxy{Director: director}
 
-	return &AngularHandler{networkAddress, reverseProxy}
+	return &AngularHandler{host, httpAddress, reverseProxy}
 }

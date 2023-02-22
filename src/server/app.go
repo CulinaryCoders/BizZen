@@ -40,6 +40,9 @@ func (app *Application) Initialize() {
 	// Initialize CookieHandler
 	app.CookieHandler = handlers.NewCookieHandler(cookieStore)
 
+	// Initialize AngularHandler
+	app.NGHandler = handlers.NewAngularHandler()
+
 	// Initialize router and routes
 	app.Router = mux.NewRouter()
 	app.initializeRoutes()
@@ -58,7 +61,7 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/authenticate", app.DBHandler.Authenticate).Methods("POST")
 	app.Router.HandleFunc("/user/{id}", app.DBHandler.GetUser).Methods("GET")
 	app.Router.HandleFunc("/user/{id}", app.DBHandler.UpdateUser).Methods("PUT")
-	app.Router.HandleFunc("/user/{id}}", app.DBHandler.DeleteUser).Methods("DELETE")
+	app.Router.HandleFunc("/user/{id}", app.DBHandler.DeleteUser).Methods("DELETE")
 
 	// Business routes
 	app.Router.HandleFunc("/business/{id}", app.DBHandler.CreateBusiness).Methods("POST")
@@ -73,18 +76,16 @@ func (app *Application) initializeRoutes() {
 
 // TODO:  Add documentation (func Run)
 func (app *Application) Run(networkAddress string) {
+	var appHTTPAddress string = fmt.Sprintf("http://%s", networkAddress)
 
 	corsOptions := cors.Options{
-		AllowedOrigins:   []string{networkAddress, app.NGHandler.NetworkAddress},
-		AllowCredentials: true,
-		AllowedHeaders: []string{"X-Requested-With", "Content-Type", "Authorization",
-			"DNT", "Keep-Alive", "User-Agent", "X-Requested-With", "If-Modified-Since",
-			"Cache-Control", "Content-Range", "Range"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "HEAD", "OPTIONS"},
-		ExposedHeaders: []string{"DNT", "Keep-Alive", "User-Agent",
-			"X-Requested-With", "If-Modified-Since", "Cache-Control",
-			"Content-Type", "Content-Range", "Range", "Content-Disposition"},
-		MaxAge: 86400,
+		AllowedOrigins:      []string{appHTTPAddress, app.NGHandler.HTTPAddress},
+		AllowedMethods:      []string{"GET", "POST", "PUT", "HEAD", "OPTIONS"},
+		AllowedHeaders:      []string{"X-Requested-With", "Content-Type", "Authorization", "DNT", "Keep-Alive", "User-Agent", "X-Requested-With", "If-Modified-Since", "Cache-Control", "Content-Range", "Range"},
+		ExposedHeaders:      []string{"DNT", "Keep-Alive", "User-Agent", "X-Requested-With", "If-Modified-Since", "Cache-Control", "Content-Type", "Content-Range", "Range", "Content-Disposition"},
+		MaxAge:              86400,
+		AllowCredentials:    true,
+		AllowPrivateNetwork: true,
 	}
 
 	httpHandler := cors.New(corsOptions).Handler(app.Router)

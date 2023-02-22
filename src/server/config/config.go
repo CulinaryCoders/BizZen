@@ -75,8 +75,8 @@ func (config *Configuration) GetAPIServerNetworkAddress() string {
 // GetRedisDBNetworkAddress returns DSN for Redis DB in "host:port" string format
 func (config *Configuration) GetRedisDBNetworkAddress() string {
 	return getNetworkAddress(
-		config.API_SERVER_HOST,
-		config.API_SERVER_PORT)
+		config.APP_CACHE_DB_HOST,
+		config.APP_CACHE_DB_PORT)
 }
 
 // GetFrontendNetworkAddress returns the full network address ("host:port") that will serve the frontend Angular application
