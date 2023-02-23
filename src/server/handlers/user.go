@@ -47,8 +47,6 @@ type Credentials struct {
 //
 //	{
 //	  "id": "123456",
-//	  "username": "johndoe",
-//	  "email": "johndoe@example.com"
 //	}
 func (dbHandler *DatabaseHandler) CreateUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
@@ -79,7 +77,34 @@ func (dbHandler *DatabaseHandler) CreateUser(writer http.ResponseWriter, request
 		user.ID)
 }
 
-// TODO: Add comment documentation (func Authenticate)
+// AuthenticateUser is an HTTP handler that authenticates a user.
+//
+// This handler expects a POST request with a JSON body containing the following fields:
+//   - "email" (string): the username of the user to authenticate
+//   - "password" (string): the password of the user to authenticate
+//
+// If the user is successfully authenticated, this handler returns a JSON response with the following fields:
+//   - "token" (string): a JWT token that can be used to authorize future requests
+//
+// If there is an error authenticating the user (e.g. if the username or password is incorrect), this handler returns a JSON response with the following fields:
+//   - "error" (string): a message describing the error that occurred
+//
+// Example usage:
+//
+//	POST /login
+//	{
+//	  "email": "johndoe@example.com",
+//	  "password": "secretpassword"
+//	}
+//
+// Response:
+//
+//	HTTP/1.1 200 OK
+//	Content-Type: application/json
+//
+//	{
+//	  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+//	}
 func (dbHandler *DatabaseHandler) Authenticate(writer http.ResponseWriter, request *http.Request) {
 	var credentials Credentials
 
@@ -121,7 +146,32 @@ func (dbHandler *DatabaseHandler) Authenticate(writer http.ResponseWriter, reque
 		validToken)
 }
 
-// TODO: Add comment documentation (func checkIfUserExists)
+// checkIfUserExists is a helper function that checks if a user with the specified email exists in the database.
+//
+// Parameters:
+//   - email (string): the email of the user to check.
+//   - writer (http.ResponseWriter): an HTTP response writer for writing the response.
+//   - request (*http.Request): an HTTP request object containing the user email in the URL path.
+//
+// Returns:
+//   - *User: a pointer to the User object if the user exists, nil otherwise.
+//   - error: a 404 Not Found error if there was a problem checking if the user exists.
+//
+// Example usage:
+//
+//   func GetUser(writer http.ResponseWriter, request *http.Request) {
+//     	email := mux.Vars(request)["email"]
+//
+//		user, err := dbHandler.checkIfUserExists(userEmail, writer, request)
+// 		if err != nil {
+// 			return
+// 		}
+
+//		utils.RespondWithJSON(
+//			writer,
+//			http.StatusOK,
+//			user)
+//	  }
 func (dbHandler *DatabaseHandler) checkIfUserExists(userEmail string, writer http.ResponseWriter, request *http.Request) (*models.User, error) {
 	var user models.User
 
@@ -133,7 +183,16 @@ func (dbHandler *DatabaseHandler) checkIfUserExists(userEmail string, writer htt
 	return &user, nil
 }
 
-// TODO: Add comment documentation (func GetUser)
+// GetUser is an HTTP handler that creates a new user.
+//
+// This handler expects a GET request with a URL path that includes the Email of the user to retrieve:
+//   - GET /users/{email}
+//
+// Response:
+//   - If the user is successfully found, the handler function responds with a JSON-encoded User object.
+//
+// If there is an error getting the user (e.g. if the email does not exist), this handler returns a JSON response with the following fields:
+//   - "error" (string): a message describing the error that occurred
 func (dbHandler *DatabaseHandler) GetUser(writer http.ResponseWriter, request *http.Request) {
 	userEmail := mux.Vars(request)["email"]
 
@@ -148,7 +207,34 @@ func (dbHandler *DatabaseHandler) GetUser(writer http.ResponseWriter, request *h
 		user)
 }
 
-// TODO: Add comment documentation (func UpdateUser)
+// UpdateUser is an HTTP handler function that updates a user's information in the database and responds with a JSON-encoded User object.
+//
+// Parameters:
+//   - writer (http.ResponseWriter): an HTTP response writer for writing the response.
+//   - request (*http.Request): an HTTP request object containing the user email in the URL path and the updated user data in the request body.
+//
+// HTTP Request:
+//   The handler function expects a PUT or POST request with a URL path that includes the email of the user to update:
+//
+//      PUT /users/{email}
+//      POST /users/{email}
+//
+//   The {email} path parameter should be replaced with the email of the user to update.
+//
+//   The request body should contain a JSON object with the updated user data. For example:
+//
+//      {
+//        "first_name": "New Name",
+//        "email": "new-email@example.com"
+//      }
+//
+// Returns:
+//   - none
+//
+// Response:
+//   The handler function responds with a JSON-encoded User object representing the updated user. If the user is not found in the database, the function responds with a 404 Not Found error. If the request body is invalid or the update fails for some other reason, the function responds with a 400 Bad Request error or a 500 Internal Server error.
+//
+
 func (dbHandler *DatabaseHandler) UpdateUser(writer http.ResponseWriter, request *http.Request) {
 	userEmail := mux.Vars(request)["email"]
 
@@ -178,7 +264,26 @@ func (dbHandler *DatabaseHandler) UpdateUser(writer http.ResponseWriter, request
 
 }
 
-// TODO: Add comment documentation (func DeleteUser)
+// DeleteUserByEmail is an HTTP handler function that deletes a user from the database by email and responds with a JSON-encoded success message.
+//
+// Parameters:
+//   - writer (http.ResponseWriter): an HTTP response writer for writing the response.
+//   - request (*http.Request): an HTTP request object containing the user email in the URL path.
+//
+// HTTP Request:
+//
+//	The handler function expects a DELETE request with a URL path that includes the email of the user to delete:
+//
+//	   DELETE /users/email/{email}
+//
+//	The {email} path parameter should be replaced with the email of the user to delete.
+//
+// Returns:
+//   - none
+//
+// Response:
+//
+//	The handler function responds with a JSON-encoded success message indicating that the user has been successfully deleted. If the user is not found in the database, the function responds with a 404 Not Found error. If the delete operation fails for some other reason, the function responds with a 500 Internal Server Error.
 func (dbHandler *DatabaseHandler) DeleteUser(writer http.ResponseWriter, request *http.Request) {
 	userEmail := mux.Vars(request)["email"]
 
