@@ -1,3 +1,4 @@
+// This package demonstrates godocs.
 package handlers
 
 import (

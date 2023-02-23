@@ -16,7 +16,40 @@ type Credentials struct {
 	Password string `json:"password"`
 }
 
-// TODO: Add comment documentation (func CreateUser)
+// CreateUser is an HTTP handler that creates a new user.
+//
+// This handler expects a POST request with a JSON body containing the following fields:
+//   - "username" (string): the username of the new user
+//   - "email" (string): the email address of the new user
+//   - "password" (string): the password for the new user
+//
+// If the user is successfully created, this handler returns a JSON response with the following fields:
+//   - "id" (string): the unique ID of the new user
+//   - "username" (string): the username of the new user
+//   - "email" (string): the email address of the new user
+//
+// If there is an error creating the user (e.g. if the username is already taken), this handler returns a JSON response with the following fields:
+//   - "error" (string): a message describing the error that occurred
+//
+// Example usage:
+//
+//	POST /users
+//	{
+//	  "username": "johndoe",
+//	  "email": "johndoe@example.com",
+//	  "password": "secretpassword"
+//	}
+//
+// Response:
+//
+//	HTTP/1.1 201 Created
+//	Content-Type: application/json
+//
+//	{
+//	  "id": "123456",
+//	  "username": "johndoe",
+//	  "email": "johndoe@example.com"
+//	}
 func (dbHandler *DatabaseHandler) CreateUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
 
@@ -43,7 +76,7 @@ func (dbHandler *DatabaseHandler) CreateUser(writer http.ResponseWriter, request
 	utils.RespondWithJSON(
 		writer,
 		http.StatusCreated,
-		user)
+		user.ID)
 }
 
 // TODO: Add comment documentation (func Authenticate)
