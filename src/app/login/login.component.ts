@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {User} from '../user';
 
 //passes info between components
-import {Router, ActivatedRoute, ParamMap} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,19 +13,18 @@ import {Router, ActivatedRoute, ParamMap} from '@angular/router';
 
 export class LoginComponent {
 
-  //userTypes = ["Customer", "Business"];
-
   model = new User("", "", false);
+  userId : String = "12345";
 
-  constructor(private router:Router){}
+  constructor(private router:Router, private activatedRoute:ActivatedRoute){}
 
   submitted = false;
 
   onSubmit() {
     this.submitted = true;
-
+  
     if(!this.model.isBusiness)
-      this.router.navigate(['/profile']);
+      this.router.navigateByUrl('/profile', {state: {idToPass: this.model.username }});
   }
   routeToRegister() {
     this.router.navigate(['/register']);

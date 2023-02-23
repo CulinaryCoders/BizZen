@@ -33,7 +33,7 @@
               [(ngModel)]="model.isBusiness" name="isBusiness" #isBusiness="ngModel" >
 
       </div>
-      <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Submit</button>
+      <button (click)="onSubmit()" type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Submit</button>
     </form>
   </div>
   <div style="text-align: center">
