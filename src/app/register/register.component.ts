@@ -68,7 +68,7 @@ export class RegisterComponent {
     let user;
     if (this.allFieldsFilled() && this.registerForm.value.password?.pass === this.registerForm.value.password?.confPass) {
       // Note: since first & last name required, might need to test with dummy data
-      user = new User(this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", this.registerForm.value.isBusiness || false);
+      user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", this.registerForm.value.isBusiness || false);
       // Send to db!
     }
   }
