@@ -20,7 +20,7 @@ import (
 //	If the user is authenticated, the function calls the next HTTP handler function in the chain with the same http.ResponseWriter and *http.Request objects passed to it.
 func (h *Handler) Authorize(next http.HandlerFunc) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
-		session, _ := h.Store.Get(request, "session")
+		session, _ := h.cookieStore.Get(request, "session")
 		_, ok := session.Values["sessionID"]
 		if !ok {
 			utils.RespondWithError(writer, http.StatusUnauthorized, "Unauthorized.")

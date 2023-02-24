@@ -130,7 +130,7 @@ func (h *Handler) Authenticate(writer http.ResponseWriter, request *http.Request
 
 		return
 	}
-	session, _ := h.Store.Get(request, "sessionID")
+	session, _ := h.cookieStore.Get(request, "sessionID")
 	session.Values["authenticated"] = true
 	session.Save(request, writer)
 	//validToken, err := GenerateToken(user.Email, user.AccountType, config.AppConfig.GetSigningKey())
