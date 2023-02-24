@@ -4,12 +4,12 @@
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form-group">
       <h2>Register</h2>
       <div class="form-group">
-        <label for="first-name">First Name: </label>
-        <input id="first-name" type="text" formControlName="firstName" class="form-control" >
+        <label for="username">Username: </label>
+        <input id="username" type="text" formControlName="username" class="form-control" >
       </div>
       <div class="form-group">
-        <label for="last-name">Last Name: </label>
-        <input id="last-name" type="text" formControlName="lastName" class="form-control" >
+        <label for="email">Email: </label>
+        <input id="email" type="text" formControlName="email" class="form-control" >
       </div>
       <div formGroupName="password" class="form-group">
         <label for="pass">Password: </label>
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" id="customSwitches">
+        <input type="checkbox" class="custom-control-input" id="customSwitches" (change)="toggleAccountType()">
         <label class="custom-control-label" for="customSwitches">I am a business</label>
       </div>
       <br/>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {FormGroup, FormControl, Validator, AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {Router} from "@angular/router";
+import {User} from "../user";
 
 @Component({
   selector: 'app-register',
@@ -9,32 +10,25 @@ import {Router} from "@angular/router";
 })
 export class RegisterComponent {
   constructor(private router: Router) {}
-  // public registerForm : FormGroup;
 
   registerForm = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
+    username: new FormControl(''),
+    email: new FormControl(''),
     password: new FormGroup({
       pass: new FormControl(''),
       confPass: new FormControl('')
     }),
-    isBusiness: new FormControl('')
+    isBusiness: new FormControl(false)
   }
-  // , {validators: this.passwordMatch}
   )
 
-  // comparisonValidator() : ValidatorFn{
-  //   return (registerForm: FormGroup): ValidationErrors => {
-  //     const control1 = registerForm.controls['password'].pass;
-  //     const control2 = registerForm.controls['password'].confPass;
-  //     if (control1.value !== control2.value) {
-  //       control2.setErrors({notEquivalent: true});
-  //     } else {
-  //       control2.setErrors(null);
-  //     }
-  //     return;
-  //   };
-  // }
+  toggleAccountType() {
+    if (this.registerForm.value.isBusiness) {
+      this.registerForm.value.isBusiness = false;
+    } else {
+      this.registerForm.value.isBusiness = true;
+    }
+  }
 
   passwordMatch(password: string, confirmPassword: string):ValidatorFn {
     return (formGroup: AbstractControl):{ [key: string]: any } | null => {
@@ -62,8 +56,21 @@ export class RegisterComponent {
     };
   }
 
+  allFieldsFilled() {
+    return this.registerForm.value.username && this.registerForm.value.username !== ""
+      && this.registerForm.value.email && this.registerForm.value.email !== ""
+      && this.registerForm.value.password?.pass && this.registerForm.value.password.pass !== ""
+      && this.registerForm.value.password?.confPass && this.registerForm.value.password.confPass !== ""
+  }
+
   onSubmit() {
     console.log(this.registerForm.value);
+    let user;
+    if (this.allFieldsFilled() && this.registerForm.value.password?.pass === this.registerForm.value.password?.confPass) {
+      // Note: since first & last name required, might need to test with dummy data
+      user = new User(this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", this.registerForm.value.isBusiness || false);
+      // Send to db!
+    }
   }
 
   routeToLogin() {
