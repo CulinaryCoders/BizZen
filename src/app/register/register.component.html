@@ -1,32 +1,43 @@
 <div class="container">
   <h1 (click)="routeToHome()" style="background-color: antiquewhite; border-radius: 5px; display: inline-block; padding: 15px; margin-top:15px; cursor: pointer">[bizZen]</h1>
   <div style="box-shadow: 5px 5px 5px lightgrey; padding: 25px; border: 1px solid lightgrey; border-radius: 30px">
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form-group">
+<!--    [formGroup]="registerForm"-->
+    <form (ngSubmit)="onSubmit()" class="form-group" #registerForm="ngForm">
       <h2>Register</h2>
       <div class="form-group">
         <label for="username">Username: </label>
-        <input id="username" type="text" formControlName="username" class="form-control" >
+        <input id="username" type="text" class="form-control" [(ngModel)]="userModel.username" name="username" #username ="ngModel">
+        <div [hidden]="username.valid || username.pristine"
+             class="alert alert-danger">
+          Username is required
+        </div>
       </div>
       <div class="form-group">
         <label for="email">Email: </label>
-        <input id="email" type="text" formControlName="email" class="form-control" >
+        <input id="email" type="text" class="form-control" [(ngModel)]="userModel.userId" name="userId" #userId ="ngModel">
+        <div [hidden]="userId.valid || userId.pristine"
+             class="alert alert-danger">
+          Email is required
+        </div>
       </div>
-      <div formGroupName="password" class="form-group">
+      <div class="form-group">
         <label for="pass">Password: </label>
-        <input id="pass" type="password" formControlName="pass" class="form-control">
+        <input id="pass" type="password" name="pass" class="form-control" [(ngModel)]="userModel.password">
         <br/>
         <label for="confPass">Confirm Password: </label>
-        <input id="confPass" type="password" formControlName="confPass" class="form-control">
+        <input id="confPass" type="password" class="form-control">
         <div *ngIf="registerForm.errors?.['passwordsDontMatch'] && (registerForm.touched || registerForm.dirty)" class="cross-validation-error-message alert">
           Passwords must match.
         </div>
       </div>
       <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" id="customSwitches" (change)="toggleAccountType()">
+        <input type="checkbox" class="custom-control-input" id="customSwitches" [(ngModel)]="userModel.isBusiness" name="isBusiness">
         <label class="custom-control-label" for="customSwitches">I am a business</label>
       </div>
       <br/>
       <button type="submit" [disabled]="!registerForm.valid" class="btn btn-primary">Submit</button>
+      <br/><br/>
+      <p style="color: red; font-weight: bold">{{errorMsg}}</p>
     </form>
   </div>
   <br/>

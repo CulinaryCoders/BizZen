@@ -33,14 +33,14 @@ export class LoginComponent {
   }
   onSubmit() {
     this.submitted = true;
-  
-   
+
+
     /*
-    if(!this.model.isBusiness)
-      this.router.navigateByUrl('/profile', {state: {idToPass: this.model.username }});
+    if(!this.userModel.isBusiness)
+      this.router.navigateByUrl('/profile', {state: {idToPass: this.userModel.username }});
     */
 
-      
+
   }
   routeToRegister() {
     this.router.navigate(['/register']);
