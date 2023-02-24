@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	"server/config"
 	"server/models"
 	"server/utils"
 
@@ -48,7 +47,7 @@ type Credentials struct {
 //	{
 //	  "id": "123456",
 //	}
-func (dbHandler *DatabaseHandler) CreateUser(writer http.ResponseWriter, request *http.Request) {
+func (h *Handler) CreateUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
 
 	// ? Duplicative code block for decoding request body and error checking/response.
@@ -66,7 +65,7 @@ func (dbHandler *DatabaseHandler) CreateUser(writer http.ResponseWriter, request
 		return
 	}
 
-	if err := dbHandler.DB.Create(&user).Error; err != nil {
+	if err := h.DB.Create(&user).Error; err != nil {
 		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -105,7 +104,7 @@ func (dbHandler *DatabaseHandler) CreateUser(writer http.ResponseWriter, request
 //	{
 //	  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 //	}
-func (dbHandler *DatabaseHandler) Authenticate(writer http.ResponseWriter, request *http.Request) {
+func (h *Handler) Authenticate(writer http.ResponseWriter, request *http.Request) {
 	var credentials Credentials
 
 	// ? Duplicative code block for decoding request body and error checking/response.
@@ -118,7 +117,7 @@ func (dbHandler *DatabaseHandler) Authenticate(writer http.ResponseWriter, reque
 
 	defer request.Body.Close()
 
-	user, err := dbHandler.checkIfUserExists(credentials.Email, writer, request)
+	user, err := h.checkIfUserExists(credentials.Email, writer, request)
 	if err != nil {
 		return
 	}
@@ -131,8 +130,10 @@ func (dbHandler *DatabaseHandler) Authenticate(writer http.ResponseWriter, reque
 
 		return
 	}
-
-	validToken, err := GenerateToken(user.Email, user.AccountType, config.AppConfig.GetSigningKey())
+	session, _ := h.cookieStore.Get(request, "sessionID")
+	session.Values["authenticated"] = true
+	session.Save(request, writer)
+	//validToken, err := GenerateToken(user.Email, user.AccountType, config.AppConfig.GetSigningKey())
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -143,7 +144,7 @@ func (dbHandler *DatabaseHandler) Authenticate(writer http.ResponseWriter, reque
 	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
-		validToken)
+		"User logged in.")
 }
 
 // checkIfUserExists is a helper function that checks if a user with the specified email exists in the database.
@@ -162,7 +163,7 @@ func (dbHandler *DatabaseHandler) Authenticate(writer http.ResponseWriter, reque
 //   func GetUser(writer http.ResponseWriter, request *http.Request) {
 //     	email := mux.Vars(request)["email"]
 //
-//		user, err := dbHandler.checkIfUserExists(userEmail, writer, request)
+//		user, err := h.checkIfUserExists(userEmail, writer, request)
 // 		if err != nil {
 // 			return
 // 		}
@@ -172,10 +173,10 @@ func (dbHandler *DatabaseHandler) Authenticate(writer http.ResponseWriter, reque
 //			http.StatusOK,
 //			user)
 //	  }
-func (dbHandler *DatabaseHandler) checkIfUserExists(userEmail string, writer http.ResponseWriter, request *http.Request) (*models.User, error) {
+func (h *Handler) checkIfUserExists(userEmail string, writer http.ResponseWriter, request *http.Request) (*models.User, error) {
 	var user models.User
 
-	if err := dbHandler.DB.First(&user, models.User{Email: userEmail}).Error; err != nil {
+	if err := h.DB.First(&user, models.User{Email: userEmail}).Error; err != nil {
 		utils.RespondWithError(writer, http.StatusNotFound, "User does not exist.")
 		return nil, err
 	}
@@ -193,10 +194,10 @@ func (dbHandler *DatabaseHandler) checkIfUserExists(userEmail string, writer htt
 //
 // If there is an error getting the user (e.g. if the email does not exist), this handler returns a JSON response with the following fields:
 //   - "error" (string): a message describing the error that occurred
-func (dbHandler *DatabaseHandler) GetUser(writer http.ResponseWriter, request *http.Request) {
+func (h *Handler) GetUser(writer http.ResponseWriter, request *http.Request) {
 	userEmail := mux.Vars(request)["email"]
 
-	user, err := dbHandler.checkIfUserExists(userEmail, writer, request)
+	user, err := h.checkIfUserExists(userEmail, writer, request)
 	if err != nil {
 		return
 	}
@@ -235,10 +236,10 @@ func (dbHandler *DatabaseHandler) GetUser(writer http.ResponseWriter, request *h
 //   The handler function responds with a JSON-encoded User object representing the updated user. If the user is not found in the database, the function responds with a 404 Not Found error. If the request body is invalid or the update fails for some other reason, the function responds with a 400 Bad Request error or a 500 Internal Server error.
 //
 
-func (dbHandler *DatabaseHandler) UpdateUser(writer http.ResponseWriter, request *http.Request) {
+func (h *Handler) UpdateUser(writer http.ResponseWriter, request *http.Request) {
 	userEmail := mux.Vars(request)["email"]
 
-	user, err := dbHandler.checkIfUserExists(userEmail, writer, request)
+	user, err := h.checkIfUserExists(userEmail, writer, request)
 	if err != nil {
 		return
 	}
@@ -252,7 +253,7 @@ func (dbHandler *DatabaseHandler) UpdateUser(writer http.ResponseWriter, request
 
 	defer request.Body.Close()
 
-	if err := dbHandler.DB.Save(&user).Error; err != nil {
+	if err := h.DB.Save(&user).Error; err != nil {
 		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -284,15 +285,15 @@ func (dbHandler *DatabaseHandler) UpdateUser(writer http.ResponseWriter, request
 // Response:
 //
 //	The handler function responds with a JSON-encoded success message indicating that the user has been successfully deleted. If the user is not found in the database, the function responds with a 404 Not Found error. If the delete operation fails for some other reason, the function responds with a 500 Internal Server Error.
-func (dbHandler *DatabaseHandler) DeleteUser(writer http.ResponseWriter, request *http.Request) {
+func (h *Handler) DeleteUser(writer http.ResponseWriter, request *http.Request) {
 	userEmail := mux.Vars(request)["email"]
 
-	user, err := dbHandler.checkIfUserExists(userEmail, writer, request)
+	user, err := h.checkIfUserExists(userEmail, writer, request)
 	if err != nil {
 		return
 	}
 
-	if err := dbHandler.DB.Delete(&user).Error; err != nil {
+	if err := h.DB.Delete(&user).Error; err != nil {
 		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
