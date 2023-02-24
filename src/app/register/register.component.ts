@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {FormGroup, FormControl, Validator, AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../user";
+import {UserService} from '../user.service';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +10,11 @@ import {User} from "../user";
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private activatedRoute:ActivatedRoute, private userService:UserService) {}
+
+  userModel = new User("12345","", "", false);
+  confPass = "";
+  errorMsg = "";
 
   registerForm = new FormGroup({
     username: new FormControl(''),
@@ -21,14 +26,6 @@ export class RegisterComponent {
     isBusiness: new FormControl(false)
   }
   )
-
-  toggleAccountType() {
-    if (this.registerForm.value.isBusiness) {
-      this.registerForm.value.isBusiness = false;
-    } else {
-      this.registerForm.value.isBusiness = true;
-    }
-  }
 
   passwordMatch(password: string, confirmPassword: string):ValidatorFn {
     return (formGroup: AbstractControl):{ [key: string]: any } | null => {
@@ -57,19 +54,46 @@ export class RegisterComponent {
   }
 
   allFieldsFilled() {
-    return this.registerForm.value.username && this.registerForm.value.username !== ""
-      && this.registerForm.value.email && this.registerForm.value.email !== ""
-      && this.registerForm.value.password?.pass && this.registerForm.value.password.pass !== ""
-      && this.registerForm.value.password?.confPass && this.registerForm.value.password.confPass !== ""
+    // return this.registerForm.value.username && this.registerForm.value.username !== ""
+    //   && this.registerForm.value.email && this.registerForm.value.email !== ""
+    //   && this.registerForm.value.password?.pass && this.registerForm.value.password.pass !== ""
+    //   && this.registerForm.value.password?.confPass && this.registerForm.value.password.confPass !== ""
+    return this.userModel.username && this.userModel.username !== ""
+      && this.userModel.userId && this.userModel.userId !== ""
+      && this.userModel.password && this.userModel.password !== ""
+      // && this.userModel.password?.confPass && this.userModel.password.confPass !== ""
+  }
+
+  async addUser(){
+    // Promise interface
+    this.userService.addUser(this.userModel.userId, this.userModel.username, this.userModel.password, this.userModel.isBusiness).then(
+      user => {
+        console.log("ADDING USER")
+        this.userModel = user;
+        console.log("success");
+      }, err => {
+        console.log("ERROR");
+        console.log(err);
+      }
+    );
   }
 
   onSubmit() {
-    console.log(this.registerForm.value);
+    this.errorMsg = "";
+    // console.log(this.registerForm.value);
+    console.log(this.userModel);
     let user;
     if (this.allFieldsFilled() && this.registerForm.value.password?.pass === this.registerForm.value.password?.confPass) {
       // Note: since first & last name required, might need to test with dummy data
       user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", this.registerForm.value.isBusiness || false);
+
+      // Update userModel to be sent
+      this.userModel.username = this.registerForm.value.username || "test";
+
       // Send to db!
+      this.addUser();
+    } else {
+      this.errorMsg = "ERROR Please fill out all fields correctly!"
     }
   }
 
