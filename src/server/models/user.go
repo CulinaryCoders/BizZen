@@ -31,7 +31,19 @@ type UserPermissions struct {
 	Description string `gorm:"not null"`
 }
 
-// TODO: Add comment documentation (func HashPassword)
+// CheckPassword checks if a given password matches the hashed password stored in a User struct.
+//
+// Parameters:
+// -hashedPassword: The hashed password to be compared with the given password.
+// -password: The password to be checked against the hashed password.
+//
+// Returns:
+// -bool: If the given password matches the hashed password, true is returned. Otherwise, false is returned.
+//
+// Description:
+// This function uses the bcrypt algorithm to compare the given password with the hashed password
+// stored in a User struct. If the given password matches the hashed password, true is returned.
+// Otherwise, false is returned.
 func (user *User) HashPassword(password string) error {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
@@ -41,7 +53,19 @@ func (user *User) HashPassword(password string) error {
 	return nil
 }
 
-// TODO: Add comment documentation (func CheckPassword)
+// CheckPassword method compares a provided password with the hashed password stored in a User struct.
+//
+// Parameters:
+// - providedPassword: The password to be checked against the hashed password stored in the User struct.
+//
+// Returns:
+// - error: If the provided password does not match the hashed password, an error is returned.
+// Otherwise, nil is returned.
+//
+// Description:
+// This method uses the bcrypt algorithm to compare the provided password with the hashed password
+// stored in the User struct. If the provided password does not match the hashed password, an error is returned.
+// Otherwise, nil is returned.
 func (user *User) CheckPassword(providedPassword string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(providedPassword))
 	if err != nil {

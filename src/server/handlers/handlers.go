@@ -1,4 +1,4 @@
-// This package demonstrates godocs.
+// Package handlers contains HTTP handlers for the application.
 package handlers
 
 import (
@@ -15,14 +15,10 @@ import (
 )
 
 // TODO: Add comment documentation (type DatabaseHandler)
-type DatabaseHandler struct {
+type Handler struct {
 	DB     *gorm.DB
 	Client *redis.Client
-}
-
-// TODO: Add comment documentation (type CookieHandler)
-type CookieHandler struct {
-	Store *sessions.CookieStore
+	Store  *sessions.CookieStore
 }
 
 // TODO: Add comment documentation (type AngularHandler)
@@ -33,16 +29,10 @@ type AngularHandler struct {
 }
 
 // TODO: Add comment documentation (func NewDatabaseHandler)
-func NewDatabaseHandler(postgresDB *gorm.DB, redisDB *redis.Client) *DatabaseHandler {
-	return &DatabaseHandler{postgresDB, redisDB}
-}
-
-// TODO: Add comment documentation (func NewCookieHandler)
-func NewCookieHandler(cookieStore *sessions.CookieStore) *CookieHandler {
+func NewHandler(postgresDB *gorm.DB, redisDB *redis.Client, cookieStore *sessions.CookieStore) *Handler {
 	cookieStore.Options.HttpOnly = true
 	cookieStore.Options.Secure = true
-
-	return &CookieHandler{cookieStore}
+	return &Handler{postgresDB, redisDB, cookieStore}
 }
 
 // TODO: Add comment documentation (func NewAngularHandler)

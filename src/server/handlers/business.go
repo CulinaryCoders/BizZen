@@ -8,7 +8,7 @@ import (
 )
 
 // TODO:  Add comment documentation (func CreateBusiness)
-func (dbHandler *DatabaseHandler) CreateBusiness(writer http.ResponseWriter, request *http.Request) {
+func (h *Handler) CreateBusiness(writer http.ResponseWriter, request *http.Request) {
 	business := models.Business{}
 
 	decoder := json.NewDecoder(request.Body)
@@ -19,7 +19,7 @@ func (dbHandler *DatabaseHandler) CreateBusiness(writer http.ResponseWriter, req
 
 	defer request.Body.Close()
 
-	if err := dbHandler.DB.Create(&business).Error; err != nil {
+	if err := h.DB.Create(&business).Error; err != nil {
 		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -31,13 +31,13 @@ func (dbHandler *DatabaseHandler) CreateBusiness(writer http.ResponseWriter, req
 }
 
 // TODO:  Add comment documentation (func CreateBusiness)
-func (dbHandler *DatabaseHandler) GetBusiness(writer http.ResponseWriter, request *http.Request) {
+func (h *Handler) GetBusiness(writer http.ResponseWriter, request *http.Request) {
 }
 
 // TODO:  Add comment documentation (func CreateBusiness)
-func (dbHandler *DatabaseHandler) UpdateBusiness(writer http.ResponseWriter, request *http.Request) {
+func (h *Handler) UpdateBusiness(writer http.ResponseWriter, request *http.Request) {
 }
 
 // TODO:  Add comment documentation (func CreateBusiness)
-func (dbHandler *DatabaseHandler) DeleteBusiness(writer http.ResponseWriter, request *http.Request) {
+func (h *Handler) DeleteBusiness(writer http.ResponseWriter, request *http.Request) {
 }

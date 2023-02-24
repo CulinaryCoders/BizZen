@@ -15,10 +15,9 @@ import (
 
 // TODO:  Add documentation (type Application)
 type Application struct {
-	Router        *mux.Router
-	DBHandler     *handlers.DatabaseHandler
-	CookieHandler *handlers.CookieHandler
-	NGHandler     *handlers.AngularHandler
+	Router    *mux.Router
+	Handler   *handlers.Handler
+	NGHandler *handlers.AngularHandler
 }
 
 // TODO:  Add documentation (func Initialize)
@@ -34,11 +33,8 @@ func (app *Application) Initialize() {
 	// Initialize cookie store and CookieHandler
 	cookieStore := sessions.NewCookieStore([]byte("super-secret"))
 
-	// Initialize DatabaseHandler
-	app.DBHandler = handlers.NewDatabaseHandler(appDB, cacheDB)
-
-	// Initialize CookieHandler
-	app.CookieHandler = handlers.NewCookieHandler(cookieStore)
+	// Initialize Handler
+	app.Handler = handlers.NewHandler(appDB, cacheDB, cookieStore)
 
 	// Initialize AngularHandler
 	app.NGHandler = handlers.NewAngularHandler()
@@ -57,17 +53,17 @@ func (app *Application) initializeRoutes() {
 	})
 
 	// User routes
-	app.Router.HandleFunc("/register", app.DBHandler.CreateUser).Methods("POST")
-	app.Router.HandleFunc("/authenticate", app.DBHandler.Authenticate).Methods("POST")
-	app.Router.HandleFunc("/user/{id}", app.DBHandler.GetUser).Methods("GET")
-	app.Router.HandleFunc("/user/{id}", app.DBHandler.UpdateUser).Methods("PUT")
-	app.Router.HandleFunc("/user/{id}", app.DBHandler.DeleteUser).Methods("DELETE")
+	app.Router.HandleFunc("/register", app.Handler.CreateUser).Methods("POST")
+	app.Router.HandleFunc("/authenticate", app.Handler.Authenticate).Methods("POST")
+	app.Router.HandleFunc("/user/{id}", app.Handler.GetUser).Methods("GET")
+	app.Router.HandleFunc("/user/{id}", app.Handler.UpdateUser).Methods("PUT")
+	app.Router.HandleFunc("/user/{id}", app.Handler.DeleteUser).Methods("DELETE")
 
 	// Business routes
-	app.Router.HandleFunc("/business/{id}", app.DBHandler.CreateBusiness).Methods("POST")
-	app.Router.HandleFunc("/business/{id}", app.DBHandler.GetBusiness).Methods("GET")
-	app.Router.HandleFunc("/business/{id}", app.DBHandler.UpdateBusiness).Methods("PUT")
-	app.Router.HandleFunc("/business/{id}", app.DBHandler.DeleteBusiness).Methods("DELETE")
+	app.Router.HandleFunc("/business/{id}", app.Handler.CreateBusiness).Methods("POST")
+	app.Router.HandleFunc("/business/{id}", app.Handler.GetBusiness).Methods("GET")
+	app.Router.HandleFunc("/business/{id}", app.Handler.UpdateBusiness).Methods("PUT")
+	app.Router.HandleFunc("/business/{id}", app.Handler.DeleteBusiness).Methods("DELETE")
 
 	// Path prefix for API to work with Angular frontend
 	// WARNING: This MUST be the last route defined by the router.

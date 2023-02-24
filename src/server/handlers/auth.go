@@ -18,9 +18,9 @@ import (
 //	The middleware function first retrieves the session cookie from the HTTP request using the Gorilla sessions package. If the session cookie is not found, or if the session does not contain a "sessionID" value, the function responds with a 401 Unauthorized error and stops the chain of HTTP handlers.
 //
 //	If the user is authenticated, the function calls the next HTTP handler function in the chain with the same http.ResponseWriter and *http.Request objects passed to it.
-func (cookieHandler *CookieHandler) Authorize(next http.HandlerFunc) http.HandlerFunc {
+func (h *Handler) Authorize(next http.HandlerFunc) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
-		session, _ := cookieHandler.Store.Get(request, "session")
+		session, _ := h.Store.Get(request, "session")
 		_, ok := session.Values["sessionID"]
 		if !ok {
 			utils.RespondWithError(writer, http.StatusUnauthorized, "Unauthorized.")
