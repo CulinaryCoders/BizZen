@@ -26,17 +26,19 @@ func TestHashPassword(t *testing.T) {
 }
 
 func TestCheckPassword(t *testing.T) {
-	user := &User{Password: "password"}
+	user := &User{
+		Password: "$2a$14$yYPvfXdM7SaAdxA5jQr4Bu1jq9AsqBSA4lL.8LI8FostoL1UCcth2",
+	}
 
 	// Test with correct password
-	err := user.CheckPassword("password")
+	err := user.CheckPassword("password123")
 	if err != nil {
-		t.Errorf("Expected no error, but got %v", err)
+		t.Errorf("CheckPassword() returned an unexpected error: %v", err)
 	}
 
 	// Test with incorrect password
 	err = user.CheckPassword("wrongpassword")
 	if err == nil {
-		t.Error("Expected an error, but got none")
+		t.Error("CheckPassword() did not return an error with an incorrect password")
 	}
 }

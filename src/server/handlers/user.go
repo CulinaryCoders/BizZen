@@ -47,7 +47,6 @@ Response:
 	  "id": "123456",
 	}
 */
-
 func (h *Handler) RegisterUser(writer http.ResponseWriter, request *http.Request) {
 	user, err := decodeUser(request)
 	if err != nil {
