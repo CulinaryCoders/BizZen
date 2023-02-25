@@ -53,7 +53,7 @@ func (app *Application) initializeRoutes() {
 	})
 
 	// User routes
-	app.Router.HandleFunc("/register", app.Handler.CreateUser).Methods("POST")
+	app.Router.HandleFunc("/register", app.Handler.RegisterUser).Methods("POST")
 	app.Router.HandleFunc("/authenticate", app.Handler.Authenticate).Methods("POST")
 	app.Router.HandleFunc("/user/{id}", app.Handler.GetUser).Methods("GET")
 	app.Router.HandleFunc("/user/{id}", app.Handler.UpdateUser).Methods("PUT")

@@ -14,18 +14,20 @@ import (
 	"gorm.io/gorm"
 )
 
-// Handler is a struct that holds the necessary dependencies for handling HTTP requests related to user management.
-//
-// Fields:
-// - DB: A *gorm.DB object that provides access to the database for user management operations.
-// - redisClient: A *redis.Client object that provides access to the Redis server for session management operations.
-// - cookieStore: A *sessions.CookieStore object that provides session management operations using cookies.
-//
-// Description:
-// The Handler struct is used to handle HTTP requests related to user management, such as authentication and authorization.
-// It holds dependencies such as a *gorm.DB object, which provides access to the database for user management operations,
-// a *redis.Client object, which provides access to the Redis server for session management operations, and a
-// *sessions.CookieStore object, which provides session management using Gorilla sessions.
+/*
+Handler is a struct that holds the necessary dependencies for handling HTTP requests related to user management.
+
+Fields:
+- DB: A *gorm.DB object that provides access to the database for user management operations.
+- redisClient: A *redis.Client object that provides access to the Redis server for session management operations.
+- cookieStore: A *sessions.CookieStore object that provides session management operations using cookies.
+
+Description:
+The Handler struct is used to handle HTTP requests related to user management, such as authentication and authorization.
+It holds dependencies such as a *gorm.DB object, which provides access to the database for user management operations,
+a *redis.Client object, which provides access to the Redis server for session management operations, and a
+*sessions.CookieStore object, which provides session management using Gorilla sessions.
+*/
 type Handler struct {
 	DB          *gorm.DB
 	redisClient *redis.Client
@@ -39,15 +41,19 @@ type AngularHandler struct {
 	ReverseProxy *httputil.ReverseProxy
 }
 
-// NewHandler creates a new instance of the Handler struct with the provided dependencies and returns a pointer to it.
-// The Handler struct contains a *gorm.DB, *redis.Client, and *sessions.CookieStore as attributes.
-// The cookieStore's HttpOnly and Secure options are set to true.
-// Parameters:
-// - postgresDB: A pointer to a *gorm.DB instance representing the PostgreSQL database connection.
-// - redisDB: A pointer to a *redis.Client instance representing the Redis database connection.
-// - cookieStore: A pointer to a *sessions.CookieStore instance representing the session cookie store.
-// Returns:
-// - A pointer to a new Handler instance with the provided dependencies.
+/*
+NewHandler creates a new instance of the Handler struct with the provided dependencies and returns a pointer to it.
+The Handler struct contains a *gorm.DB, *redis.Client, and *sessions.CookieStore as attributes.
+The cookieStore's HttpOnly and Secure options are set to true.
+
+Parameters:
+- postgresDB: A pointer to a *gorm.DB instance representing the PostgreSQL database connection.
+- redisDB: A pointer to a *redis.Client instance representing the Redis database connection.
+- cookieStore: A pointer to a *sessions.CookieStore instance representing the session cookie store.
+
+Returns:
+- A pointer to a new Handler instance with the provided dependencies.
+*/
 func NewHandler(postgresDB *gorm.DB, redisDB *redis.Client, cookieStore *sessions.CookieStore) *Handler {
 	cookieStore.Options.HttpOnly = true
 	cookieStore.Options.Secure = true

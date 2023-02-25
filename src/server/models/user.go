@@ -14,7 +14,7 @@ type User struct {
 	Email             string `gorm:"not null;unique"`
 	Username          string `gorm:"not null;unique"`
 	Password          string `gorm:"not null;unique"`
-	AccountType       string `gorm:"not null;unique"`
+	AccountType       string `gorm:"not null;"`
 	FirstName         string
 	LastName          string
 	ContactInfoID     uint
