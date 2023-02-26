@@ -8,6 +8,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"server/config"
+	"server/models"
 
 	"github.com/go-redis/redis/v7"
 	"github.com/gorilla/sessions"
@@ -15,23 +16,34 @@ import (
 )
 
 /*
-Handler is a struct that holds the necessary dependencies for handling HTTP requests related to user management.
+Interface for accessing the DB functions in models.User. Is used to mock DB functions in unit tests of HTTP handler functions.
+*/
+type UserService interface {
+	CreateUser(user *models.User) (uint64, error)
+	FindUser(userID uint64) (*models.User, error)
+	FindUserByEmail(userEmail string) (*models.User, error)
+	UpdateUser(userID uint64, user *models.User) (*models.User, error)
+	DeleteUser(userID uint64) (bool, error)
+}
 
-Fields:
-- DB: A *gorm.DB object that provides access to the database for user management operations.
-- redisClient: A *redis.Client object that provides access to the Redis server for session management operations.
-- cookieStore: A *sessions.CookieStore object that provides session management operations using cookies.
-
-Description:
-The Handler struct is used to handle HTTP requests related to user management, such as authentication and authorization.
-It holds dependencies such as a *gorm.DB object, which provides access to the database for user management operations,
-a *redis.Client object, which provides access to the Redis server for session management operations, and a
-*sessions.CookieStore object, which provides session management using Gorilla sessions.
+/*
+TODO: migrate existing handler functions using the Handler struct to Env struct so that they can be unit tested
 */
 type Handler struct {
 	DB          *gorm.DB
 	redisClient *redis.Client
-	cookieStore *sessions.CookieStore
+}
+
+/*
+Env is a struct that holds the necessary dependencies for handling HTTP requests related to user management.
+
+Fields:
+- user: Implements the UserService interface which provides access to the database for user management operations and allows for mocking of the Env struct to unit test HTTP handler functions.
+- store: A *sessions.CookieStore object that provides session management operations using cookies.
+*/
+type Env struct {
+	users UserService
+	store *sessions.CookieStore
 }
 
 // TODO: Add comment documentation (type AngularHandler)
@@ -54,10 +66,20 @@ Parameters:
 Returns:
 - A pointer to a new Handler instance with the provided dependencies.
 */
-func NewHandler(postgresDB *gorm.DB, redisDB *redis.Client, cookieStore *sessions.CookieStore) *Handler {
+func NewHandler(postgresDB *gorm.DB, redisDB *redis.Client) *Handler {
+	return &Handler{postgresDB, redisDB}
+}
+
+/*
+NewEnv returns an instance of the Env struct with provided dependencies.
+*/
+func NewEnv(postgresDB *gorm.DB, cookieStore *sessions.CookieStore) *Env {
 	cookieStore.Options.HttpOnly = true
 	cookieStore.Options.Secure = true
-	return &Handler{postgresDB, redisDB, cookieStore}
+
+	user := &models.UserEnv{DB: postgresDB}
+
+	return &Env{users: user, store: cookieStore}
 }
 
 // TODO: Add comment documentation (func NewAngularHandler)

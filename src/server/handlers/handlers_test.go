@@ -2,40 +2,60 @@ package handlers
 
 import (
 	"bytes"
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"server/models"
 	"testing"
-
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
+type mockUserService struct {
+	UsersRegistered []*models.User
+}
+
+//TODO: Refactor and implmenent mock DB functions from models.User
+
+func (m *mockUserService) CreateUser(user *models.User) (insertedID uint64, err error) {
+	return 0, nil
+}
+
+func (m *mockUserService) UpdateUser(userId uint64, user *models.User) (*models.User, error) {
+	return user, nil
+}
+
+func (m *mockUserService) FindUser(userId uint64) (*models.User, error) {
+	user := &models.User{Username: "test", Password: "test"}
+	return user, nil
+}
+
+func (m *mockUserService) FindUserByEmail(userEmail string) (*models.User, error) {
+	user := &models.User{Username: "test", Password: "test"}
+	return user, nil
+}
+
+func (m *mockUserService) DeleteUser(userId uint64) (bool, error) {
+
+	return true, nil
+}
+
 func TestRegisterUser(t *testing.T) {
-	testDB, err := gorm.Open(postgres.Open("test DB connection string"), &gorm.Config{})
-	testDB.Migrator().DropTable(&models.User{})
-	testDB.AutoMigrate(&models.User{})
 
-	h := &Handler{DB: testDB}
+	//TODO: Create working test for Register function
+	t.Run("can register valid users", func(t *testing.T) {
+		var jsonData = []byte(`{
+			"username": "test",
+			"password": "123"
+		}`)
 
-	user := &models.User{
-		Email:    "test@example.com",
-		Username: "test",
-		Password: "password",
-	}
-	jsonBody, err := json.Marshal(user)
+		responseRecorder := httptest.NewRecorder()
+		req, _ := http.NewRequest("POST", "/register", bytes.NewBuffer(jsonData))
 
-	req, err := http.NewRequest(http.MethodPost, "/register", bytes.NewReader(jsonBody))
-	if err != nil {
-		t.Error(err)
-	}
+		mockEnv := Env{users: &mockUserService{}}
 
-	responseRecorder := httptest.NewRecorder()
+		http.HandlerFunc(mockEnv.RegisterUser).ServeHTTP(responseRecorder, req)
 
-	h.RegisterUser(responseRecorder, req)
+		if responseRecorder.Code != http.StatusCreated {
+			t.Errorf("expected 201 but go %d", responseRecorder.Code)
+		}
+	})
 
-	if responseRecorder.Code != http.StatusCreated {
-		t.Errorf("expected 201 but go %d", req.Response.StatusCode)
-	}
 }

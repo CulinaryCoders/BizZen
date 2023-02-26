@@ -17,6 +17,7 @@ import (
 type Application struct {
 	Router    *mux.Router
 	Handler   *handlers.Handler
+	Env       *handlers.Env
 	NGHandler *handlers.AngularHandler
 }
 
@@ -34,7 +35,10 @@ func (app *Application) Initialize() {
 	cookieStore := sessions.NewCookieStore([]byte("super-secret"))
 
 	// Initialize Handler
-	app.Handler = handlers.NewHandler(appDB, cacheDB, cookieStore)
+	app.Handler = handlers.NewHandler(appDB, cacheDB)
+
+	//Initialize Env for HTTP handlers
+	app.Env = handlers.NewEnv(appDB, cookieStore)
 
 	// Initialize AngularHandler
 	app.NGHandler = handlers.NewAngularHandler()
@@ -53,11 +57,11 @@ func (app *Application) initializeRoutes() {
 	})
 
 	// User routes
-	app.Router.HandleFunc("/register", app.Handler.RegisterUser).Methods("POST")
-	app.Router.HandleFunc("/authenticate", app.Handler.Authenticate).Methods("POST")
-	app.Router.HandleFunc("/user/{id}", app.Handler.GetUser).Methods("GET")
-	app.Router.HandleFunc("/user/{id}", app.Handler.UpdateUser).Methods("PUT")
-	app.Router.HandleFunc("/user/{id}", app.Handler.DeleteUser).Methods("DELETE")
+	app.Router.HandleFunc("/register", app.Env.RegisterUser).Methods("POST")
+	app.Router.HandleFunc("/authenticate", app.Env.Authenticate).Methods("POST")
+	app.Router.HandleFunc("/user/{id}", app.Env.GetUser).Methods("GET")
+	app.Router.HandleFunc("/user/{id}", app.Env.UpdateUser).Methods("POST")
+	app.Router.HandleFunc("/user/{id}", app.Env.DeleteUser).Methods("DELETE")
 
 	// Business routes
 	app.Router.HandleFunc("/business/{id}", app.Handler.CreateBusiness).Methods("POST")

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/gorilla/sessions"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -10,7 +11,7 @@ import (
 // TODO: Add constraint for AccountType column to limit user types
 type User struct {
 	gorm.Model
-	ID                uint   `gorm:"primaryKey;serial"`
+	ID                uint64 `gorm:"primaryKey;serial"`
 	Email             string `gorm:"not null;unique"`
 	Username          string `gorm:"not null;unique"`
 	Password          string `gorm:"not null;unique"`
@@ -29,6 +30,11 @@ type UserPermissions struct {
 	ID          uint   `gorm:"primaryKey;serial"`
 	Label       string `gorm:"not null"`
 	Description string `gorm:"not null"`
+}
+
+type UserEnv struct {
+	DB    *gorm.DB
+	Store *sessions.CookieStore
 }
 
 // CheckPassword checks if a given password matches the hashed password stored in a User struct.
@@ -72,4 +78,57 @@ func (user *User) CheckPassword(providedPassword string) error {
 		return err
 	}
 	return nil
+}
+
+func (u *UserEnv) CreateUser(user *User) (insertedID uint64, err error) {
+	result := u.DB.Create(&user)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return user.ID, nil
+}
+
+func (u *UserEnv) FindUser(userId uint64) (*User, error) {
+	var user User
+
+	if err := u.DB.First(&user, User{ID: userId}).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (u *UserEnv) FindUserByEmail(userEmail string) (*User, error) {
+	var user User
+
+	if err := u.DB.First(&user, User{Email: userEmail}).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (u *UserEnv) UpdateUser(userId uint64, updatedUser *User) (*User, error) {
+	currentUser, err := u.FindUser(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := u.DB.Model(&currentUser).Updates(&updatedUser).Error; err != nil {
+		return nil, err
+	}
+
+	return currentUser, nil
+}
+
+func (u *UserEnv) DeleteUser(userId uint64) (bool, error) {
+	userToDelete, err := u.FindUser(userId)
+	if err != nil {
+		return false, err
+	}
+	if err := u.DB.Delete(userToDelete).Error; err != nil {
+		return false, err
+	}
+
+	return true, nil
 }

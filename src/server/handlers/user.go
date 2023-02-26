@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"server/models"
 	"server/utils"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -13,6 +15,16 @@ import (
 type Credentials struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+/*
+Helper function to parse the user's id from the request
+*/
+func parseRequestID(request *http.Request) (uint64, error) {
+	userId := mux.Vars(request)["id"]
+	convertedToUint64, err := strconv.ParseUint(userId, 10, 64)
+	fmt.Print(convertedToUint64)
+	return convertedToUint64, err
 }
 
 /*
@@ -47,7 +59,7 @@ Response:
 	  "id": "123456",
 	}
 */
-func (h *Handler) RegisterUser(writer http.ResponseWriter, request *http.Request) {
+func (env *Env) RegisterUser(writer http.ResponseWriter, request *http.Request) {
 	user, err := decodeUser(request)
 	if err != nil {
 		utils.RespondWithError(writer, http.StatusBadRequest, err.Error())
@@ -59,7 +71,7 @@ func (h *Handler) RegisterUser(writer http.ResponseWriter, request *http.Request
 		return
 	}
 
-	insertedID, err := h.CreateUser(user)
+	insertedID, err := env.users.CreateUser(user)
 	if err != nil {
 		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
@@ -68,6 +80,9 @@ func (h *Handler) RegisterUser(writer http.ResponseWriter, request *http.Request
 	utils.RespondWithJSON(writer, http.StatusCreated, insertedID)
 }
 
+/*
+Helper function to unmarshal the request body into the User model
+*/
 func decodeUser(request *http.Request) (*models.User, error) {
 	user := &models.User{}
 	decoder := json.NewDecoder(request.Body)
@@ -76,14 +91,6 @@ func decodeUser(request *http.Request) (*models.User, error) {
 	}
 	defer request.Body.Close()
 	return user, nil
-}
-
-func (h *Handler) CreateUser(user *models.User) (insertedID uint, err error) {
-	result := h.DB.Create(&user)
-	if result.Error != nil {
-		return 0, result.Error
-	}
-	return user.ID, nil
 }
 
 /*
@@ -113,7 +120,7 @@ Response:
 	Content-Type: application/json
 	Payload: "User logged in."
 */
-func (h *Handler) Authenticate(writer http.ResponseWriter, request *http.Request) {
+func (env *Env) Authenticate(writer http.ResponseWriter, request *http.Request) {
 	var credentials Credentials
 
 	// ? Duplicative code block for decoding request body and error checking/response.
@@ -126,7 +133,7 @@ func (h *Handler) Authenticate(writer http.ResponseWriter, request *http.Request
 
 	defer request.Body.Close()
 
-	user, err := h.checkIfUserExists(credentials.Email, writer, request)
+	user, err := env.users.FindUserByEmail(credentials.Email)
 	if err != nil {
 		return
 	}
@@ -139,10 +146,14 @@ func (h *Handler) Authenticate(writer http.ResponseWriter, request *http.Request
 
 		return
 	}
-	session, _ := h.cookieStore.Get(request, "sessionID")
-	session.Values["authenticated"] = true
-	session.Save(request, writer)
-	//validToken, err := GenerateToken(user.Email, user.AccountType, config.AppConfig.GetSigningKey())
+	/*
+		PLEASE DO NOT REMOVE
+		TODO: Implement this later...
+		session, _ := env.Store.Get(request, "sessionID")
+		session.Values["authenticated"] = true
+		session.Save(request, writer)
+		//validToken, err := GenerateToken(user.Email, user.AccountType, config.AppConfig.GetSigningKey())
+	*/
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -157,45 +168,6 @@ func (h *Handler) Authenticate(writer http.ResponseWriter, request *http.Request
 }
 
 /*
-checkIfUserExists is a helper function that checks if a user with the specified email exists in the database.
-
-Parameters:
-  - email (string): the email of the user to check.
-  - writer (http.ResponseWriter): an HTTP response writer for writing the response.
-  - request (*http.Request): an HTTP request object containing the user email in the URL path.
-
-Returns:
-  - *User: a pointer to the User object if the user exists, nil otherwise.
-  - error: a 404 Not Found error if there was a problem checking if the user exists.
-
-Example usage:
-
-	  func GetUser(writer http.ResponseWriter, request *http.Request) {
-	    	email := mux.Vars(request)["email"]
-
-			user, err := h.checkIfUserExists(userEmail, writer, request)
-			if err != nil {
-				return
-			}
-
-			utils.RespondWithJSON(
-				writer,
-				http.StatusOK,
-				user)
-		  }
-*/
-func (h *Handler) checkIfUserExists(userEmail string, writer http.ResponseWriter, request *http.Request) (*models.User, error) {
-	var user models.User
-
-	if err := h.DB.First(&user, models.User{Email: userEmail}).Error; err != nil {
-		utils.RespondWithError(writer, http.StatusNotFound, "User does not exist.")
-		return nil, err
-	}
-
-	return &user, nil
-}
-
-/*
 GetUser is an HTTP handler that creates a new user.
 
 This handler expects a GET request with a URL path that includes the Email of the user to retrieve:
@@ -207,10 +179,16 @@ Response:
 If there is an error getting the user (e.g. if the email does not exist), this handler returns a JSON response with the following fields:
   - "error" (string): a message describing the error that occurred
 */
-func (h *Handler) GetUser(writer http.ResponseWriter, request *http.Request) {
-	userEmail := mux.Vars(request)["email"]
+func (env *Env) GetUser(writer http.ResponseWriter, request *http.Request) {
+	userId, err := parseRequestID(request)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+	}
 
-	user, err := h.checkIfUserExists(userEmail, writer, request)
+	user, err := env.users.FindUser(userId)
 	if err != nil {
 		return
 	}
@@ -251,24 +229,27 @@ Response:
 
 	The handler function responds with a JSON-encoded User object representing the updated user. If the user is not found in the database, the function responds with a 404 Not Found error. If the request body is invalid or the update fails for some other reason, the function responds with a 400 Bad Request error or a 500 Internal Server error.
 */
-func (h *Handler) UpdateUser(writer http.ResponseWriter, request *http.Request) {
-	userEmail := mux.Vars(request)["email"]
-
-	user, err := h.checkIfUserExists(userEmail, writer, request)
+func (env *Env) UpdateUser(writer http.ResponseWriter, request *http.Request) {
+	userId, err := parseRequestID(request)
 	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+	}
+
+	updatedUser, err := decodeUser(request)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
 		return
 	}
 
-	// ? Duplicative code block for decoding request body and error checking/response.
-	// TODO:  Create new function to consolidate duplicative code (decoding request body / error handling).
-	if err := json.NewDecoder(request.Body).Decode(&user); err != nil {
-		utils.RespondWithError(writer, http.StatusBadRequest, err.Error())
-		return
-	}
+	updateID, err := env.users.UpdateUser(userId, updatedUser)
 
-	defer request.Body.Close()
-
-	if err := h.DB.Save(&user).Error; err != nil {
+	if err != nil {
 		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -276,7 +257,7 @@ func (h *Handler) UpdateUser(writer http.ResponseWriter, request *http.Request) 
 	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
-		user)
+		updateID)
 
 }
 
@@ -302,15 +283,17 @@ Response:
 
 	The handler function responds with a JSON-encoded success message indicating that the user has been successfully deleted. If the user is not found in the database, the function responds with a 404 Not Found error. If the delete operation fails for some other reason, the function responds with a 500 Internal Server Error.
 */
-func (h *Handler) DeleteUser(writer http.ResponseWriter, request *http.Request) {
-	userEmail := mux.Vars(request)["email"]
-
-	user, err := h.checkIfUserExists(userEmail, writer, request)
+func (env *Env) DeleteUser(writer http.ResponseWriter, request *http.Request) {
+	userId, err := parseRequestID(request)
 	if err != nil {
-		return
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
 	}
 
-	if err := h.DB.Delete(&user).Error; err != nil {
+	deleteSuccess, err := env.users.DeleteUser(userId)
+	if err != nil || !deleteSuccess {
 		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -318,5 +301,5 @@ func (h *Handler) DeleteUser(writer http.ResponseWriter, request *http.Request) 
 	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
-		user)
+		"User deleted")
 }
