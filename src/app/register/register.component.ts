@@ -12,7 +12,8 @@ import {UserService} from '../user.service';
 export class RegisterComponent {
   constructor(private router: Router, private activatedRoute:ActivatedRoute, private userService:UserService) {}
 
-  userModel = new User("12345","", "", false);
+  userModel = new User("12345","", "", "business");
+  isBusiness = false;
   confPass = "";
   errorMsg = "";
 
@@ -66,7 +67,8 @@ export class RegisterComponent {
 
   async addUser(){
     // Promise interface
-    this.userService.addUser(this.userModel.userId, this.userModel.username, this.userModel.password, this.userModel.isBusiness).then(
+  
+    this.userService.addUser(this.userModel.userId, this.userModel.username, this.userModel.password, this.userModel.accountType).then(
       user => {
         console.log("ADDING USER")
         this.userModel = user;
@@ -83,9 +85,17 @@ export class RegisterComponent {
     // console.log(this.registerForm.value);
     console.log(this.userModel);
     let user;
+
     if (this.allFieldsFilled() && this.registerForm.value.password?.pass === this.registerForm.value.password?.confPass) {
+
       // Note: since first & last name required, might need to test with dummy data
-      user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", this.registerForm.value.isBusiness || false);
+
+      user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user");
+
+      if(this.isBusiness)
+        user.accountType = "business";
+      else
+        user.accountType = "user";
 
       // Update userModel to be sent
       this.userModel.username = this.registerForm.value.username || "test";

@@ -12,10 +12,10 @@ export class UserService {
 
   private apiUrl = 'localhost:8080/register';
 
-  addUser(userId: string, username: string, password: string, isBusiness:boolean) : Promise<User>{
+  addUser(userId: string, username: string, password: string, accountType:string) : Promise<User>{
 
     return this.http.post<User>(this.apiUrl, {
-        username, password, isBusiness
+        username, password, accountType
     }).toPromise().then();
 
   }

@@ -14,7 +14,10 @@ import {Router, ActivatedRoute} from '@angular/router';
 
 export class LoginComponent {
 
-  model = new User("12345","", "", false);
+  model = new User("12345","", "", "business");
+
+  checkbox : boolean = false;
+
 
   constructor(private router:Router, private activatedRoute:ActivatedRoute, private userService:UserService){}
 
@@ -22,7 +25,7 @@ export class LoginComponent {
 
   async addUser(){
     // Promise interface
-    this.userService.addUser(this.model.userId, this.model.username, this.model.password, this.model.isBusiness).then(
+    this.userService.addUser(this.model.userId, this.model.username, this.model.password, this.model.accountType).then(
       user => {
         this.model = user;
         console.log("success");
@@ -36,11 +39,16 @@ export class LoginComponent {
     this.submitted = true;
 
 
-    /*
-    if(!this.userModel.isBusiness)
-      this.router.navigateByUrl('/profile', {state: {idToPass: this.userModel.username }});
-    */
-
+    if(this.checkbox)
+    {
+      this.model.accountType = "business";
+    }
+    else
+    {
+      this.model.accountType = "user";
+    }
+    
+    this.router.navigateByUrl('/profile', {state: {idToPass: this.model.username }});
 
   }
   routeToRegister() {

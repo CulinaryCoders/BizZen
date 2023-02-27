@@ -30,10 +30,10 @@
         <label for="userType">Are You a Business?</label>
 
         <input type="checkbox" id="isBusiness"
-              [(ngModel)]="model.isBusiness" name="isBusiness" #isBusiness="ngModel" >
+              [(ngModel)]="checkbox" name="isBusiness" #isBusiness="ngModel" >
 
       </div>
-      <button id="submitButton" (click)="addUser()" type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Submit</button>
+      <button id="submitButton" (click)="onSubmit()" type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Submit</button>
     </form>
   </div>
   <div style="text-align: center">
