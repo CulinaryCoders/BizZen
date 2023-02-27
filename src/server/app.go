@@ -45,6 +45,7 @@ func (app *Application) Initialize() {
 
 	// Initialize router and routes
 	app.Router = mux.NewRouter()
+	app.Router.Use(handlers.RequestLoggingMiddleware)
 	app.initializeRoutes()
 }
 
