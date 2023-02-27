@@ -22,9 +22,9 @@ type Application struct {
 }
 
 // TODO:  Add documentation (func Initialize)
-func (app *Application) Initialize() {
+func (app *Application) Initialize(appDBName string) {
 	// Initialize main app database
-	var dbConnectionString string = config.AppConfig.GetPostgresDBConnectionString()
+	var dbConnectionString string = config.AppConfig.GetPostgresDBConnectionString(appDBName)
 	appDB := database.InitializePostgresDB(dbConnectionString)
 
 	// Initialize cache db

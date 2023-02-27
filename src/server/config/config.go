@@ -14,6 +14,7 @@ var AppConfig *Configuration = InitializeConfig()
 type Configuration struct {
 	JWT_SIGNING_KEY   []byte `mapstructure:"JWT_SIGNING_KEY"`
 	APP_DB_NAME       string `mapstructure:"APP_DB_NAME"`
+	APP_TEST_DB_NAME  string `mapstructure:"APP_TEST_DB_NAME"`
 	APP_DB_USER       string `mapstructure:"APP_DB_USER"`
 	APP_DB_PASSWORD   string `mapstructure:"APP_DB_PASSWORD"`
 	APP_DB_HOST       string `mapstructure:"APP_DB_HOST"`
@@ -54,12 +55,12 @@ func (config *Configuration) GetSigningKey() []byte {
 }
 
 // GetPostgresDBConnectionString returns the formatted connection string for Postgres database connections
-func (config *Configuration) GetPostgresDBConnectionString() string {
+func (config *Configuration) GetPostgresDBConnectionString(appDBName string) string {
 	var connectionString string = fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d",
 		config.APP_DB_HOST,
 		config.APP_DB_USER,
 		config.APP_DB_PASSWORD,
-		config.APP_DB_NAME,
+		appDBName,
 		config.APP_DB_PORT)
 
 	return connectionString
