@@ -64,7 +64,7 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/user/{id}", app.Env.DeleteUser).Methods("DELETE")
 
 	// Business routes
-	app.Router.HandleFunc("/business/{id}", app.Handler.CreateBusiness).Methods("POST")
+	app.Router.HandleFunc("/business", app.Handler.CreateBusiness).Methods("POST")
 	app.Router.HandleFunc("/business/{id}", app.Handler.GetBusiness).Methods("GET")
 	app.Router.HandleFunc("/business/{id}", app.Handler.UpdateBusiness).Methods("PUT")
 	app.Router.HandleFunc("/business/{id}", app.Handler.DeleteBusiness).Methods("DELETE")
@@ -79,7 +79,7 @@ func (app *Application) Run(networkAddress string) {
 	var appHTTPAddress string = fmt.Sprintf("http://%s", networkAddress)
 
 	corsOptions := cors.Options{
-		AllowedOrigins:      []string{appHTTPAddress, app.NGHandler.HTTPAddress},
+		AllowedOrigins:      []string{appHTTPAddress, networkAddress, app.NGHandler.HTTPAddress, app.NGHandler.Host},
 		AllowedMethods:      []string{"GET", "POST", "PUT", "HEAD", "OPTIONS"},
 		AllowedHeaders:      []string{"X-Requested-With", "Content-Type", "Authorization", "DNT", "Keep-Alive", "User-Agent", "X-Requested-With", "If-Modified-Since", "Cache-Control", "Content-Range", "Range"},
 		ExposedHeaders:      []string{"DNT", "Keep-Alive", "User-Agent", "X-Requested-With", "If-Modified-Since", "Cache-Control", "Content-Type", "Content-Range", "Range", "Content-Disposition"},
