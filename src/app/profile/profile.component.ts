@@ -15,7 +15,10 @@ export class ProfileComponent {
     ngOnInit()
     {
         //this.route.params.subscribe((params:Params) => this.userIdParameter = params['idToPass'])
-        this.userIdParameter = history.state.idToPass;
+        if(history.state != null)
+          this.userIdParameter = history.state.idToPass;
+        else 
+          this.userIdParameter = "ERROR: userIdParameter is null; no user was passed!";
     }
     routeToHome() {
       this.router.navigate(['/']);
