@@ -55,13 +55,10 @@ describe('RegisterComponent', () => {
   });
 
   it('should navigate to home', () => {
-
     const navigateSpy = spyOn(router, 'navigate');
 
     component.routeToHome();
     expect(navigateSpy).toHaveBeenCalledWith(['/']);
-
-
   });
 
   it('should check that all fields are filled in', () => {

@@ -14,13 +14,13 @@ describe('OnboardingComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ OnboardingComponent ],
-      
+
       imports: [
         RouterTestingModule,
         FormsModule,
         ReactiveFormsModule
       ]
-   
+
     })
     .compileComponents();
 
@@ -33,5 +33,20 @@ describe('OnboardingComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should navigate to home', () => {
+    const navigateSpy = spyOn(router, 'navigate');
+
+    component.routeToHome();
+    expect(navigateSpy).toHaveBeenCalledWith(['/']);
+  });
+
+  it('toggles whether interest is selected', () => {
+    const interestToAdd = "Technology";
+    component.toggleInterest(interestToAdd);
+    expect(component.selectedInterests.includes(interestToAdd)).toBeTruthy();
+    component.toggleInterest(interestToAdd);
+    expect(component.selectedInterests.includes(interestToAdd)).toBeFalse();
   });
 });

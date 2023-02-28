@@ -29,6 +29,7 @@ export class RegisterComponent {
   )
 
   passwordsMatch() {
+    console.log("confpass: ", this.confPass)
     return this.userModel.password === this.confPass;
   }
 
@@ -59,6 +60,8 @@ export class RegisterComponent {
   }
 
   onSubmit() {
+    console.log("===confpass: ", this.confPass)
+
     this.errorMsg = "";
     // console.log(this.registerForm.value);
     console.log(this.userModel);
@@ -81,6 +84,7 @@ export class RegisterComponent {
 
         // Send to db!
         this.addUser();
+        this.router.navigate(["/onboarding"])
       }
     }
   }

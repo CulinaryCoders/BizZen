@@ -25,10 +25,7 @@
         <input id="pass" type="password" name="pass" class="form-control" [(ngModel)]="userModel.password">
         <br/>
         <label for="confPass">Confirm Password: </label>
-        <input id="confPass" type="password" class="form-control" ([ngModel])="confPass">
-        <div *ngIf="registerForm.errors?.['passwordsDontMatch'] && (registerForm.touched || registerForm.dirty)" class="cross-validation-error-message alert">
-          Passwords must match.
-        </div>
+        <input id="confPass" type="password" name="confPass" class="form-control" [(ngModel)]="confPass">
       </div>
       <div class="custom-control custom-switch">
         <input type="checkbox" class="custom-control-input" id="customSwitches" [(ngModel)]="isBusiness" name="accountType">
