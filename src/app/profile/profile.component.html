@@ -1,5 +1,35 @@
 <div class="container">
     <h1 (click)="routeToHome()" style="background-color: antiquewhite; border-radius: 5px; display: inline-block; padding: 15px; margin-top:15px; cursor: pointer">[bizZen]</h1>
-   
-    {{userIdParameter}}
+    <div style="text-align:right">
+        <button class="btn btn-secondary btn-lg">Settings</button>
+    </div>
+
+    <h1 class="display-1">Welcome, {{userIdParameter}}!</h1>
+
+    <br>
+    
+    <div class="card">
+        <div class="card-header">
+            <h4>Appointments</h4>
+        </div>
+        <div class="card-body">
+          <p class="card-text">View all current appointments</p>
+          <button class="btn btn-primary">Go</button>
+        </div>
+    </div>
+
+    <br><br>
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Find Classes</h4>
+        </div>
+        <div class="card-body">
+          <p class="card-text">Find new businesses with classes that might interest you.</p>
+          <button class="btn btn-primary">Go</button>
+        </div>
+    </div>
+    
+
+
 </div>
