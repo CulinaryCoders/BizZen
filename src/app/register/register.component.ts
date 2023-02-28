@@ -39,7 +39,7 @@ export class RegisterComponent {
     //   && this.registerForm.value.password?.confPass && this.registerForm.value.password.confPass !== ""
     return this.userModel.username && this.userModel.username !== ""
       && this.userModel.userId && this.userModel.userId !== ""
-      && this.userModel.password && this.userModel.password !== ""
+      && this.userModel.password && this.userModel.password !== "" || false
       // && this.userModel.password?.confPass && this.userModel.password.confPass !== ""
   }
 
