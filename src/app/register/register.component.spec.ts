@@ -15,7 +15,7 @@ describe('RegisterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ RegisterComponent ],
-      
+
       imports: [
         FormsModule,
         RouterTestingModule,
@@ -52,5 +52,33 @@ describe('RegisterComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith(['/login']);
 
 
+  });
+
+  it('should navigate to home', () => {
+
+    const navigateSpy = spyOn(router, 'navigate');
+
+    component.routeToHome();
+    expect(navigateSpy).toHaveBeenCalledWith(['/']);
+
+
+  });
+
+  it('should check that all fields are filled in', () => {
+    component.userModel.username = "test"
+    component.userModel.userId = "test@example.com"
+    component.userModel.password = "pass123"
+
+    const allFilled = component.allFieldsFilled();
+    expect(allFilled).toBe(true);
+  });
+
+  it('should catch when not all fields filled in', () => {
+    component.userModel.username = ""
+    component.userModel.userId = ""
+    component.userModel.password = ""
+
+    const allFilled = component.allFieldsFilled();
+    expect(allFilled).toBe(false);
   });
 });
