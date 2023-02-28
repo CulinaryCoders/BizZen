@@ -10,7 +10,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl = 'localhost:8080/register';
+  private apiUrl = 'http://localhost:8080/register';
 
   addUser(userId: string, username: string, password: string, accountType:string) : Promise<User>{
 
