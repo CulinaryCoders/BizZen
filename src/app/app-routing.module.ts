@@ -6,7 +6,7 @@ import {RegisterComponent} from "./register/register.component";
 import {LandingComponent} from "./landing/landing.component";
 import {OnboardingComponent} from "./onboarding/onboarding.component";
 
-const routes: Routes = [
+export const routes: Routes = [
   //more specific routes should be above less specific routes
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },

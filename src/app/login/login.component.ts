@@ -23,6 +23,7 @@ export class LoginComponent {
 
   submitted = false;
 
+  /*
   async addUser(){
     // Promise interface
     this.userService.addUser(this.model.userId, this.model.username, this.model.password, this.model.accountType).then(
@@ -33,7 +34,7 @@ export class LoginComponent {
           console.log(err);
       }
     );
-  }
+  }*/
 
   onSubmit() {
     this.submitted = true;
