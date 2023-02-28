@@ -28,30 +28,8 @@ export class RegisterComponent {
   }
   )
 
-  passwordMatch(password: string, confirmPassword: string):ValidatorFn {
-    return (formGroup: AbstractControl):{ [key: string]: any } | null => {
-      const passwordControl = formGroup.get(password);
-      const confirmPasswordControl = formGroup.get(confirmPassword);
-
-      if (!passwordControl || !confirmPasswordControl) {
-        return null;
-      }
-
-      if (
-        confirmPasswordControl.errors &&
-        !confirmPasswordControl.errors['passwordMismatch']
-      ) {
-        return null;
-      }
-
-      if (passwordControl.value !== confirmPasswordControl.value) {
-        confirmPasswordControl.setErrors({ passwordMismatch: true });
-        return { passwordMismatch: true }
-      } else {
-        confirmPasswordControl.setErrors(null);
-        return null;
-      }
-    };
+  passwordsMatch() {
+    return this.userModel.password === this.confPass;
   }
 
   allFieldsFilled() {
@@ -67,7 +45,7 @@ export class RegisterComponent {
 
   async addUser(){
     // Promise interface
-  
+
     this.userService.addUser(this.userModel.userId, this.userModel.username, this.userModel.password, this.userModel.accountType).then(
       user => {
         console.log("ADDING USER")
@@ -87,23 +65,23 @@ export class RegisterComponent {
     let user;
 
     if (this.allFieldsFilled() && this.registerForm.value.password?.pass === this.registerForm.value.password?.confPass) {
+      if (!this.passwordsMatch()) {
+        this.errorMsg = "ERROR Passwords must match"
+      } else {
+        // Note: since first & last name required, might need to test with dummy data
+        user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user");
 
-      // Note: since first & last name required, might need to test with dummy data
+        if (this.isBusiness)
+          user.accountType = "business";
+        else
+          user.accountType = "user";
 
-      user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user");
+        // Update userModel to be sent
+        this.userModel.username = this.registerForm.value.username || "test";
 
-      if(this.isBusiness)
-        user.accountType = "business";
-      else
-        user.accountType = "user";
-
-      // Update userModel to be sent
-      this.userModel.username = this.registerForm.value.username || "test";
-
-      // Send to db!
-      this.addUser();
-    } else {
-      this.errorMsg = "ERROR Please fill out all fields correctly!"
+        // Send to db!
+        this.addUser();
+      }
     }
   }
 

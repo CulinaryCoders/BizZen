@@ -81,4 +81,24 @@ describe('RegisterComponent', () => {
     const allFilled = component.allFieldsFilled();
     expect(allFilled).toBe(false);
   });
+
+  it('check for matching passwords', () => {
+    component.userModel.username = "test"
+    component.userModel.userId = "test@example.com"
+    component.userModel.password = "pass123"
+    component.confPass = "pass123"
+
+    const passMatch = component.passwordsMatch();
+    expect(passMatch).toBe(true);
+  });
+
+  it('check for MISmatching passwords', () => {
+    component.userModel.username = "test"
+    component.userModel.userId = "test@example.com"
+    component.userModel.password = "pass123"
+    component.confPass = "pass1234"
+
+    const passMatch = component.passwordsMatch();
+    expect(passMatch).toBe(false);
+  });
 });
