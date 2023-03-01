@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"server/models"
@@ -8,12 +9,20 @@ import (
 	"github.com/go-redis/redis/v7"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 // TODO: Add comment documentation (func InitializePostgresDB)
-func InitializePostgresDB(connectionString string) *gorm.DB {
+func InitializePostgresDB(connectionString string, debug bool) *gorm.DB {
+	var gormConfig *gorm.Config
 
-	dbInstance, dbError := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
+	if debug {
+		gormConfig = &gorm.Config{Logger: logger.Default.LogMode(logger.Info)}
+	} else {
+		gormConfig = &gorm.Config{}
+	}
+
+	dbInstance, dbError := gorm.Open(postgres.Open(connectionString), gormConfig)
 
 	if dbError != nil {
 		log.Fatal(dbError)
@@ -21,8 +30,7 @@ func InitializePostgresDB(connectionString string) *gorm.DB {
 	}
 
 	log.Println("Connected to Database!")
-	// Uncomment to use for testing purposes
-	//dbInstance.Migrator().DropTable(&models.User{})
+
 	dbInstance.AutoMigrate(&models.User{},
 		&models.Address{},
 		&models.ContactInfo{},
@@ -49,4 +57,36 @@ func InitializeRedisDB(dsn string) *redis.Client {
 	}
 
 	return client
+}
+
+func DropAllTables(db *gorm.DB) error {
+	tableNames, err := getListOfDBTables(db)
+	if err != nil {
+		return err
+	}
+
+	var hasDropTableErrors bool = false
+	errorTables := make(map[string]error)
+	for _, tableName := range tableNames {
+		err := db.Migrator().DropTable(tableName)
+		if err != nil {
+			hasDropTableErrors = true
+			errorTables[tableName] = err
+		}
+	}
+
+	if hasDropTableErrors {
+		var customErrorMessage string = fmt.Sprintf("Unable to drop the following table(s) (func DropAllTables):\n\n%v", errorTables)
+		return errors.New(customErrorMessage)
+	} else {
+		return nil
+	}
+}
+
+func getListOfDBTables(db *gorm.DB) (tableNames []string, err error) {
+	if err := db.Table("information_schema.tables").Where("table_schema = ?", "public").Pluck("table_name", &tableNames).Error; err != nil {
+		return tableNames, err
+	} else {
+		return tableNames, nil
+	}
 }
