@@ -31,14 +31,7 @@ func InitializePostgresDB(connectionString string, debug bool) *gorm.DB {
 
 	log.Println("Connected to Database!")
 
-	dbInstance.AutoMigrate(&models.User{},
-		&models.Address{},
-		&models.ContactInfo{},
-		&models.Business{},
-		&models.Office{},
-		&models.Service{},
-		&models.ServiceOffering{},
-		&models.Appointment{})
+	setupTables(dbInstance)
 
 	log.Println("Database Migration Completed!")
 
@@ -59,7 +52,26 @@ func InitializeRedisDB(dsn string) *redis.Client {
 	return client
 }
 
-func DropAllTables(db *gorm.DB) error {
+// TODO: Add comment documentation (func FormatAllTables)
+func FormatAllTables(db *gorm.DB) {
+	dropAllTables(db)
+	setupTables(db)
+}
+
+// TODO: Add comment documentation (func setupTables)
+func setupTables(db *gorm.DB) {
+	db.AutoMigrate(&models.User{},
+		&models.Address{},
+		&models.ContactInfo{},
+		&models.Business{},
+		&models.Office{},
+		&models.Service{},
+		&models.ServiceOffering{},
+		&models.Appointment{})
+}
+
+// TODO: Add comment documentation (func dropAllTables)
+func dropAllTables(db *gorm.DB) error {
 	tableNames, err := getListOfDBTables(db)
 	if err != nil {
 		return err
@@ -83,6 +95,7 @@ func DropAllTables(db *gorm.DB) error {
 	}
 }
 
+// TODO: Add comment documentation (func getListOfDBTables)
 func getListOfDBTables(db *gorm.DB) (tableNames []string, err error) {
 	if err := db.Table("information_schema.tables").Where("table_schema = ?", "public").Pluck("table_name", &tableNames).Error; err != nil {
 		return tableNames, err
