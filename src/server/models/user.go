@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -27,6 +29,107 @@ type UserPermissions struct {
 	gorm.Model
 	Label       string `gorm:"not null;column:label" json:"label"`
 	Description string `gorm:"not null;column:desc" json:"desc"`
+}
+
+// Equal determines if two different User objects are equal to each other (i.e. all fields match).
+//
+// Parameters:
+// -compareUser: The User object that the calling User object is being compared to.
+//
+// Returns:
+// -unequalFields []string: The list of fields that did not match between the two User objects being compared
+// -equal bool: If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
+//
+// Description:
+// This function determines if two User object instances are equal to each other. The primary purpose of this function
+// is to test the functionality of database and handler calls to ensure that the correct objects are being returned and/or
+// updated in the database.
+func (user *User) Equal(compareUser *User) (unequalFields []string, equal bool) {
+	equal = true
+
+	if user.ID != compareUser.ID {
+		equal = false
+		unequalFields = append(unequalFields, "ID")
+	}
+
+	if user.Email != compareUser.Email {
+		equal = false
+		unequalFields = append(unequalFields, "Email")
+	}
+
+	if user.Username != compareUser.Username {
+		equal = false
+		unequalFields = append(unequalFields, "Username")
+	}
+
+	if user.Password != compareUser.Password {
+		equal = false
+		unequalFields = append(unequalFields, "Password")
+	}
+
+	if user.AccountType != compareUser.AccountType {
+		equal = false
+		unequalFields = append(unequalFields, "AccountType")
+	}
+
+	if user.FirstName != compareUser.FirstName {
+		equal = false
+		unequalFields = append(unequalFields, "FirstName")
+	}
+
+	if user.LastName != compareUser.LastName {
+		equal = false
+		unequalFields = append(unequalFields, "LastName")
+	}
+
+	if user.ContactInfoID != compareUser.ContactInfoID {
+		equal = false
+		unequalFields = append(unequalFields, "ContactInfoID")
+	}
+
+	if user.BusinessID != compareUser.BusinessID {
+		equal = false
+		unequalFields = append(unequalFields, "BusinessID")
+	}
+
+	if user.UserPermissionsID != compareUser.UserPermissionsID {
+		equal = false
+		unequalFields = append(unequalFields, "UserPermissionsID")
+	}
+
+	if user.BusinessID != compareUser.UserPreferencesID {
+		equal = false
+		unequalFields = append(unequalFields, "BusinessID")
+	}
+
+	if user.UserPermissionsID != compareUser.ProfilePicID {
+		equal = false
+		unequalFields = append(unequalFields, "UserPermissionsID")
+	}
+
+	if user.CreatedAt.Equal(compareUser.CreatedAt) {
+		equal = false
+		unequalFields = append(unequalFields, "CreatedAt")
+	}
+
+	if user.UpdatedAt.Equal(compareUser.UpdatedAt) {
+		equal = false
+		unequalFields = append(unequalFields, "UpdatedAt")
+	}
+
+	if !user.DeletedAt.Time.Equal(compareUser.DeletedAt.Time) {
+		equal = false
+		log.Printf("DeletedAt.Time (User):  %s\nDeletedAt.Time (compareUser):  %s", user.DeletedAt.Time, compareUser.DeletedAt.Time)
+		unequalFields = append(unequalFields, "DeletedAt.Time")
+	}
+
+	if user.DeletedAt.Valid != compareUser.DeletedAt.Valid {
+		equal = false
+		log.Printf("DeletedAt.Valid (User):  %t\nDeletedAt.Valid (compareUser):  %t", user.DeletedAt.Valid, compareUser.DeletedAt.Valid)
+		unequalFields = append(unequalFields, "DeletedAt.Valid")
+	}
+
+	return unequalFields, equal
 }
 
 // CheckPassword checks if a given password matches the hashed password stored in a User struct.

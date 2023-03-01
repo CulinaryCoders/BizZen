@@ -9,7 +9,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TODO:  Add documentation (func TestCreateAddress)
 func TestCreateAddress(t *testing.T) {
+	// Refresh database to control testing environment
 	database.FormatAllTables(testAppDB)
 
 	testCreateAddress := models.Address{
@@ -34,4 +36,19 @@ func TestCreateAddress(t *testing.T) {
 
 	unequalFields, equal := createdAddress.Equal(returnedAddress)
 	assert.Truef(t, equal, "ERROR: The following fields did not match between the created and returned object  --  %s", unequalFields)
+}
+
+// TODO:  Add documentation (func TestGetAddress)
+func TestGetAddress(t *testing.T) {
+	assert.True(t, true)
+}
+
+// TODO:  Add documentation (func TestUpdateAddress)
+func TestUpdateAddress(t *testing.T) {
+	assert.True(t, true)
+}
+
+// TODO:  Add documentation (func TestDeleteAddress)
+func TestDeleteAddress(t *testing.T) {
+	assert.True(t, true)
 }

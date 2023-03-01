@@ -7,8 +7,11 @@ import (
 	"testing"
 
 	"server/utils"
+
+	"github.com/gorilla/mux"
 )
 
+// TODO:  Add documentation (func TestRespondWithJSON)
 func TestRespondWithJSON(t *testing.T) {
 	// Create a mock HTTP response writer
 	w := httptest.NewRecorder()
@@ -42,6 +45,7 @@ func TestRespondWithJSON(t *testing.T) {
 	}
 }
 
+// TODO:  Add documentation (func TestRespondWithError)
 func TestRespondWithError(t *testing.T) {
 	// Create a mock HTTP response
 	w := httptest.NewRecorder()
@@ -66,5 +70,22 @@ func TestRespondWithError(t *testing.T) {
 	}
 	if _, ok := response["error"]; !ok {
 		t.Errorf("Response body is missing expected 'error' field")
+	}
+}
+
+// TODO:  Add documentation (func TestParseRequestID)
+func TestParseRequestID(t *testing.T) {
+	req, err := http.NewRequest("GET", "/users/123", nil)
+	if err != nil {
+		t.Fatalf("Failed to create request: %v", err)
+	}
+	req = mux.SetURLVars(req, map[string]string{"id": "123"})
+
+	id, err := utils.ParseRequestID(req)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	if id != 123 {
+		t.Errorf("Unexpected id value: %d", id)
 	}
 }
