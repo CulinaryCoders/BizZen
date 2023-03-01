@@ -135,6 +135,10 @@ func (env *Env) Authenticate(writer http.ResponseWriter, request *http.Request) 
 
 	user, err := env.users.FindUserByEmail(credentials.Email)
 	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			"User not found.")
 		return
 	}
 
@@ -236,6 +240,7 @@ func (env *Env) UpdateUser(writer http.ResponseWriter, request *http.Request) {
 			writer,
 			http.StatusInternalServerError,
 			err.Error())
+		return
 	}
 
 	updatedUser, err := decodeUser(request)
@@ -290,6 +295,7 @@ func (env *Env) DeleteUser(writer http.ResponseWriter, request *http.Request) {
 			writer,
 			http.StatusInternalServerError,
 			err.Error())
+		return
 	}
 
 	deleteSuccess, err := env.users.DeleteUser(userId)

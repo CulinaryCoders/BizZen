@@ -80,6 +80,16 @@ func (user *User) CheckPassword(providedPassword string) error {
 	return nil
 }
 
+/*
+CreateUser creates a new user in the database and returns the inserted ID and any errors that occur.
+
+Parameters:
+- user: A pointer to a User object submitted in the request
+
+Returns:
+- The insertedID (uint64): The ID of the inserted user.
+- An error object, which is nil if no error is encountered or non-nil if an error occurs while retrieving the user.
+*/
 func (u *UserEnv) CreateUser(user *User) (insertedID uint64, err error) {
 	result := u.DB.Create(&user)
 	if result.Error != nil {
@@ -88,6 +98,16 @@ func (u *UserEnv) CreateUser(user *User) (insertedID uint64, err error) {
 	return user.ID, nil
 }
 
+/*
+FindUser retrieves a user with a given ID from the database and returns a pointer to the user and an error if encountered.
+
+Parameters:
+- userId: A uint64 value representing the ID of the user to be retrieved from the database.
+
+Returns:
+- A pointer to a User object representing the user with the given ID.
+- An error object, which is nil if no error is encountered or non-nil if an error occurs while retrieving the user.
+*/
 func (u *UserEnv) FindUser(userId uint64) (*User, error) {
 	var user User
 
