@@ -21,7 +21,8 @@ func InitializePostgresDB(connectionString string) *gorm.DB {
 	}
 
 	log.Println("Connected to Database!")
-	dbInstance.Migrator().DropTable(&models.User{})
+	// Uncomment to use for testing purposes
+	//dbInstance.Migrator().DropTable(&models.User{})
 	dbInstance.AutoMigrate(&models.User{},
 		&models.Address{},
 		&models.ContactInfo{},

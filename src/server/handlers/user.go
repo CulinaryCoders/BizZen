@@ -11,7 +11,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// TODO: Add comment documentation (type Credentials)
+/*
+The Credentials struct defines the format for user login credentials. It contains two fields: Email and Password. The Email field is a string that represents the user's email address, while the Password field is a string that represents the user's password.
+*/
 type Credentials struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`

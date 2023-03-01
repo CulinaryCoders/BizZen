@@ -213,3 +213,19 @@ func TestDeleteUser(t *testing.T) {
 		t.Errorf("handler returned unexpected body: got %v want %v", rr.Body.String(), expected)
 	}
 }
+
+func TestParseRequestID(t *testing.T) {
+	req, err := http.NewRequest("GET", "/users/123", nil)
+	if err != nil {
+		t.Fatalf("Failed to create request: %v", err)
+	}
+	req = mux.SetURLVars(req, map[string]string{"id": "123"})
+
+	id, err := parseRequestID(req)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	if id != 123 {
+		t.Errorf("Unexpected id value: %d", id)
+	}
+}

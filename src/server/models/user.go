@@ -105,8 +105,8 @@ Parameters:
 - userId: A uint64 value representing the ID of the user to be retrieved from the database.
 
 Returns:
-- A pointer to a User object representing the user with the given ID.
-- An error object, which is nil if no error is encountered or non-nil if an error occurs while retrieving the user.
+- *User: A pointer to a User object representing the user with the given ID.
+- error: An error object, which is nil if no error is encountered or non-nil if an error occurs while retrieving the user.
 */
 func (u *UserEnv) FindUser(userId uint64) (*User, error) {
 	var user User
@@ -118,6 +118,16 @@ func (u *UserEnv) FindUser(userId uint64) (*User, error) {
 	return &user, nil
 }
 
+/*
+FindUserByEmail finds a user in the database by email address and returns a pointer to the User object.
+
+Parameters:
+- userEmail: The email address of the user to find.
+
+Returns:
+- *User: A pointer to the User object representing the updated user.
+- error: An error object, if any errors occurred during the search process.
+*/
 func (u *UserEnv) FindUserByEmail(userEmail string) (*User, error) {
 	var user User
 
@@ -128,6 +138,17 @@ func (u *UserEnv) FindUserByEmail(userEmail string) (*User, error) {
 	return &user, nil
 }
 
+/*
+UpdateUser finds a user in the database by email address and returns a pointer to the User object.
+
+Parameters:
+- userId: A uint64 value representing the ID of the user to be retrieved from the database.
+- updatedUser: A pointer to a User object containing updated information
+
+Returns:
+- *User: A pointer to the User object representing the found user.
+- error: An error object, if any errors occurred during the search process.
+*/
 func (u *UserEnv) UpdateUser(userId uint64, updatedUser *User) (*User, error) {
 	currentUser, err := u.FindUser(userId)
 	if err != nil {
@@ -141,6 +162,16 @@ func (u *UserEnv) UpdateUser(userId uint64, updatedUser *User) (*User, error) {
 	return currentUser, nil
 }
 
+/*
+DeleteUser finds a user in the database by email address and returns a pointer to the User object.
+
+Parameters:
+- userId: A uint64 value representing the ID of the user to be deleted from the database.
+
+Returns:
+- bool: Returns true if user was successfully deleted and false if otherwise.
+- error: An error object, if any errors occurred during the search process.
+*/
 func (u *UserEnv) DeleteUser(userId uint64) (bool, error) {
 	userToDelete, err := u.FindUser(userId)
 	if err != nil {
