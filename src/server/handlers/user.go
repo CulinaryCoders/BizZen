@@ -3,30 +3,20 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"server/models"
 	"server/utils"
-	"strconv"
 
 	"github.com/gorilla/mux"
 )
 
 /*
-The Credentials struct defines the format for user login credentials. It contains two fields: Email and Password. The Email field is a string that represents the user's email address, while the Password field is a string that represents the user's password.
+Credentials struct defines the format for user login credentials. It contains two fields: Email and Password. The Email field is a string that represents the user's email address, while the Password field is a string that represents the user's password.
 */
 type Credentials struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
-}
-
-/*
-Helper function to parse the user's id from the request
-*/
-func parseRequestID(request *http.Request) (uint64, error) {
-	userId := mux.Vars(request)["id"]
-	convertedToUint64, err := strconv.ParseUint(userId, 10, 64)
-	fmt.Print(convertedToUint64)
-	return convertedToUint64, err
 }
 
 /*
@@ -61,38 +51,44 @@ Response:
 	  "id": "123456",
 	}
 */
-func (env *Env) RegisterUser(writer http.ResponseWriter, request *http.Request) {
-	user, err := decodeUser(request)
-	if err != nil {
-		utils.RespondWithError(writer, http.StatusBadRequest, err.Error())
+func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Request) {
+	user := models.User{}
+
+	decoder := json.NewDecoder(request.Body)
+	if err := decoder.Decode(&user); err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
 		return
 	}
+
+	defer request.Body.Close()
 
 	if err := user.HashPassword(user.Password); err != nil {
-		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
 		return
 	}
 
-	insertedID, err := env.users.CreateUser(user)
+	createdUser, err := user.CreateUser(app.AppDB)
 	if err != nil {
-		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
 		return
 	}
 
-	utils.RespondWithJSON(writer, http.StatusCreated, insertedID)
-}
-
-/*
-Helper function to unmarshal the request body into the User model
-*/
-func decodeUser(request *http.Request) (*models.User, error) {
-	user := &models.User{}
-	decoder := json.NewDecoder(request.Body)
-	if err := decoder.Decode(user); err != nil {
-		return nil, err
-	}
-	defer request.Body.Close()
-	return user, nil
+	utils.RespondWithJSON(
+		writer,
+		http.StatusCreated,
+		createdUser)
 }
 
 /*
@@ -122,11 +118,10 @@ Response:
 	Content-Type: application/json
 	Payload: "User logged in."
 */
-func (env *Env) Authenticate(writer http.ResponseWriter, request *http.Request) {
+func (app *Application) Authenticate(writer http.ResponseWriter, request *http.Request) {
 	var credentials Credentials
+	user := models.User{}
 
-	// ? Duplicative code block for decoding request body and error checking/response.
-	// TODO:  Create new function to consolidate duplicative code (decoding request body / error handling).
 	decoder := json.NewDecoder(request.Body)
 	if err := decoder.Decode(&credentials); err != nil {
 		utils.RespondWithError(writer, http.StatusBadRequest, err.Error())
@@ -135,16 +130,12 @@ func (env *Env) Authenticate(writer http.ResponseWriter, request *http.Request) 
 
 	defer request.Body.Close()
 
-	user, err := env.users.FindUserByEmail(credentials.Email)
+	returnedUser, err := user.GetUserByEmail(app.AppDB, credentials.Email)
 	if err != nil {
-		utils.RespondWithError(
-			writer,
-			http.StatusBadRequest,
-			"User not found.")
 		return
 	}
 
-	if err := user.CheckPassword(credentials.Password); err != nil {
+	if err := returnedUser.CheckPassword(credentials.Password); err != nil {
 		utils.RespondWithError(
 			writer,
 			http.StatusBadRequest,
@@ -154,11 +145,11 @@ func (env *Env) Authenticate(writer http.ResponseWriter, request *http.Request) 
 	}
 	/*
 		PLEASE DO NOT REMOVE
-		TODO: Implement this later...
+		TODO: Implement authentication logic (func Authenticate)
 		session, _ := env.Store.Get(request, "sessionID")
 		session.Values["authenticated"] = true
 		session.Save(request, writer)
-		//validToken, err := GenerateToken(user.Email, user.AccountType, config.AppConfig.GetSigningKey())
+		//validToken, err := utils.GenerateToken(user.Email, user.AccountType, config.AppConfig.GetSigningKey())
 	*/
 	if err != nil {
 		utils.RespondWithError(
@@ -185,24 +176,37 @@ Response:
 If there is an error getting the user (e.g. if the email does not exist), this handler returns a JSON response with the following fields:
   - "error" (string): a message describing the error that occurred
 */
-func (env *Env) GetUser(writer http.ResponseWriter, request *http.Request) {
-	userId, err := parseRequestID(request)
+func (app *Application) GetUser(writer http.ResponseWriter, request *http.Request) {
+	user := models.User{}
+	userID := mux.Vars(request)["id"]
+
+	// DO NOT DELETE -- KEPT FOR REFERENCE PURPOSES
+	// userID, err := utils.ParseRequestID(request)
+	// if err != nil {
+	// 	utils.RespondWithError(
+	// 		writer,
+	// 		http.StatusInternalServerError,
+	// 		err.Error())
+	// }
+
+	returnedUser, err := user.GetUser(app.AppDB, userID)
 	if err != nil {
+		var errorMessage string = fmt.Sprintf("User ID (%s) does not exist in the database.\n%s", userID, err)
+
 		utils.RespondWithError(
 			writer,
-			http.StatusInternalServerError,
-			err.Error())
-	}
+			http.StatusNotFound,
+			errorMessage)
 
-	user, err := env.users.FindUser(userId)
-	if err != nil {
+		log.Panicf(errorMessage)
+
 		return
 	}
 
 	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
-		user)
+		returnedUser)
 }
 
 /*
@@ -235,36 +239,38 @@ Response:
 
 	The handler function responds with a JSON-encoded User object representing the updated user. If the user is not found in the database, the function responds with a 404 Not Found error. If the request body is invalid or the update fails for some other reason, the function responds with a 400 Bad Request error or a 500 Internal Server error.
 */
-func (env *Env) UpdateUser(writer http.ResponseWriter, request *http.Request) {
-	userId, err := parseRequestID(request)
+func (app *Application) UpdateUser(writer http.ResponseWriter, request *http.Request) {
+	user := models.User{}
+	userID := mux.Vars(request)["id"]
+
+	var updates map[string]interface{}
+
+	decoder := json.NewDecoder(request.Body)
+	if err := decoder.Decode(&updates); err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
+
+	defer request.Body.Close()
+
+	updatedUser, err := user.UpdateUser(app.AppDB, userID, updates)
 	if err != nil {
 		utils.RespondWithError(
 			writer,
 			http.StatusInternalServerError,
 			err.Error())
-		return
-	}
 
-	updatedUser, err := decodeUser(request)
-	if err != nil {
-		utils.RespondWithError(
-			writer,
-			http.StatusBadRequest,
-			err.Error())
-		return
-	}
-
-	updateID, err := env.users.UpdateUser(userId, updatedUser)
-
-	if err != nil {
-		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
-		updateID)
+		updatedUser)
 
 }
 
@@ -290,24 +296,22 @@ Response:
 
 	The handler function responds with a JSON-encoded success message indicating that the user has been successfully deleted. If the user is not found in the database, the function responds with a 404 Not Found error. If the delete operation fails for some other reason, the function responds with a 500 Internal Server Error.
 */
-func (env *Env) DeleteUser(writer http.ResponseWriter, request *http.Request) {
-	userId, err := parseRequestID(request)
+func (app *Application) DeleteUser(writer http.ResponseWriter, request *http.Request) {
+	user := models.User{}
+	userID := mux.Vars(request)["id"]
+
+	deletedUser, err := user.DeleteUser(app.AppDB, userID)
 	if err != nil {
 		utils.RespondWithError(
 			writer,
 			http.StatusInternalServerError,
 			err.Error())
-		return
-	}
 
-	deleteSuccess, err := env.users.DeleteUser(userId)
-	if err != nil || !deleteSuccess {
-		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
-		"User deleted")
+		deletedUser)
 }

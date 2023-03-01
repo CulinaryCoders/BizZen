@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/gorilla/sessions"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -11,30 +10,23 @@ import (
 // TODO: Add constraint for AccountType column to limit user types
 type User struct {
 	gorm.Model
-	ID                uint64 `gorm:"primaryKey;serial"`
-	Email             string `gorm:"not null;unique"`
-	Username          string `gorm:"not null;unique"`
-	Password          string `gorm:"not null;unique"`
-	AccountType       string `gorm:"not null;"`
-	FirstName         string
-	LastName          string
-	ContactInfoID     uint
-	BusinessID        uint
-	UserPermissionsID uint
-	UserPreferencesID uint
-	ProfilePicID      uint
+	Email             string `gorm:"not null;unique;column:email" json:"email"`
+	Username          string `gorm:"not null;unique;column:username" json:"username"`
+	Password          string `gorm:"not null;unique;column:password" json:"password"`
+	AccountType       string `gorm:"not null;unique;column:account_type" json:"account_type"`
+	FirstName         string `gorm:"not null;column:first_name" json:"first_name"`
+	LastName          string `gorm:"not null;column:last_name" json:"last_name"`
+	ContactInfoID     uint   `gorm:"column:contact_info_id" json:"contact_info_id"`
+	BusinessID        uint   `gorm:"column:business_id" json:"business_id"`
+	UserPermissionsID uint   `gorm:"column:permissions_id" json:"permissions_id"`
+	UserPreferencesID uint   `gorm:"column:user_pref_id" json:"user_pref_id"`
+	ProfilePicID      uint   `gorm:"column:profile_pic_id" json:"profile_pic_id"`
 }
 
 type UserPermissions struct {
 	gorm.Model
-	ID          uint   `gorm:"primaryKey;serial"`
-	Label       string `gorm:"not null"`
-	Description string `gorm:"not null"`
-}
-
-type UserEnv struct {
-	DB    *gorm.DB
-	Store *sessions.CookieStore
+	Label       string `gorm:"not null;column:label" json:"label"`
+	Description string `gorm:"not null;column:desc" json:"desc"`
 }
 
 // CheckPassword checks if a given password matches the hashed password stored in a User struct.
@@ -90,16 +82,17 @@ Returns:
 - The insertedID (uint64): The ID of the inserted user.
 - An error object, which is nil if no error is encountered or non-nil if an error occurs while retrieving the user.
 */
-func (u *UserEnv) CreateUser(user *User) (insertedID uint64, err error) {
-	result := u.DB.Create(&user)
-	if result.Error != nil {
-		return 0, result.Error
+func (user *User) CreateUser(db *gorm.DB) (*User, error) {
+	// TODO: Add field validation logic (func CreateUser) -- add as BeforeCreate gorm hook definition at the top of this file
+	if err := db.Create(&user).Error; err != nil {
+		return user, err
 	}
-	return user.ID, nil
+
+	return user, nil
 }
 
 /*
-FindUser retrieves a user with a given ID from the database and returns a pointer to the user and an error if encountered.
+GetUser retrieves a user with a given ID from the database and returns a pointer to the user and an error if encountered.
 
 Parameters:
 - userId: A uint64 value representing the ID of the user to be retrieved from the database.
@@ -108,18 +101,18 @@ Returns:
 - *User: A pointer to a User object representing the user with the given ID.
 - error: An error object, which is nil if no error is encountered or non-nil if an error occurs while retrieving the user.
 */
-func (u *UserEnv) FindUser(userId uint64) (*User, error) {
-	var user User
+func (user *User) GetUser(db *gorm.DB, userID string) (*User, error) {
+	err := db.First(&user, userID).Error
 
-	if err := u.DB.First(&user, User{ID: userId}).Error; err != nil {
-		return nil, err
+	if err != nil {
+		return user, err
 	}
 
-	return &user, nil
+	return user, nil
 }
 
 /*
-FindUserByEmail finds a user in the database by email address and returns a pointer to the User object.
+GetUserByEmail finds a user in the database by email address and returns a pointer to the User object.
 
 Parameters:
 - userEmail: The email address of the user to find.
@@ -128,14 +121,14 @@ Returns:
 - *User: A pointer to the User object representing the updated user.
 - error: An error object, if any errors occurred during the search process.
 */
-func (u *UserEnv) FindUserByEmail(userEmail string) (*User, error) {
-	var user User
+func (user *User) GetUserByEmail(db *gorm.DB, userEmail string) (*User, error) {
+	err := db.First(&user, userEmail).Error
 
-	if err := u.DB.First(&user, User{Email: userEmail}).Error; err != nil {
-		return nil, err
+	if err != nil {
+		return user, err
 	}
 
-	return &user, nil
+	return user, nil
 }
 
 /*
@@ -149,17 +142,21 @@ Returns:
 - *User: A pointer to the User object representing the found user.
 - error: An error object, if any errors occurred during the search process.
 */
-func (u *UserEnv) UpdateUser(userId uint64, updatedUser *User) (*User, error) {
-	currentUser, err := u.FindUser(userId)
+func (user *User) UpdateUser(db *gorm.DB, userID string, updates map[string]interface{}) (*User, error) {
+	// Confirm user exists and get current object
+	var err error
+	user, err = user.GetUser(db, userID)
 	if err != nil {
-		return nil, err
+		return user, err
 	}
 
-	if err := u.DB.Model(&currentUser).Updates(&updatedUser).Error; err != nil {
-		return nil, err
+	// TODO: Add field validation logic (func UpdateUser) -- add as BeforeUpdate gorm hook definition at the top of this file
+
+	if err := db.Model(&user).Where("id = ?", userID).Updates(updates).Error; err != nil {
+		return user, err
 	}
 
-	return currentUser, nil
+	return user, nil
 }
 
 /*
@@ -172,14 +169,17 @@ Returns:
 - bool: Returns true if user was successfully deleted and false if otherwise.
 - error: An error object, if any errors occurred during the search process.
 */
-func (u *UserEnv) DeleteUser(userId uint64) (bool, error) {
-	userToDelete, err := u.FindUser(userId)
+func (user *User) DeleteUser(db *gorm.DB, userID string) (*User, error) {
+	// Confirm user exists and get current object
+	var err error
+	user, err = user.GetUser(db, userID)
 	if err != nil {
-		return false, err
-	}
-	if err := u.DB.Delete(userToDelete).Error; err != nil {
-		return false, err
+		return user, err
 	}
 
-	return true, nil
+	if err := db.Delete(&user).Error; err != nil {
+		return user, err
+	}
+
+	return user, nil
 }
