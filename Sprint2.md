@@ -3,9 +3,9 @@
 
 </br>
 
-Frontend: https://www.youtube.com/watch?v=o8U-HqkyJN4
+Frontend: https://www.youtube.com/watch?v=5NSP9TG9MUE
 
-Backend: https://www.youtube.com/watch?v=mbtpTFUQO1Y
+Backend: 
 
 </br>
 
