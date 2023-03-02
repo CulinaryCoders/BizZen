@@ -12,7 +12,16 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-// TODO: Add comment documentation (func InitializePostgresDB)
+/*
+InitializePostgresDB initializes and connects to a Postgres database using the provided command.
+
+Parameters:
+  - connectionString (string): The connection command used to establish the connection with the Postgres database.
+  - debug (bool): A flag variable used to trigger additional logging in the &gorm.Config definition for the returned *gorm.DB instance.
+
+Returns:
+  - *gorm.DB
+*/
 func InitializePostgresDB(connectionString string, debug bool) *gorm.DB {
 	var gormConfig *gorm.Config
 
@@ -38,7 +47,15 @@ func InitializePostgresDB(connectionString string, debug bool) *gorm.DB {
 	return dbInstance
 }
 
-// TODO: Add comment documentation (func InitializeRedisDB)
+/*
+InitializeRedisDB initializes and connects to a Redis database using the provided dsn
+
+Parameters:
+  - dsn (string): The host address and port number the Redis DB is hosted on in 'host:port' format.
+
+Returns:
+  - *redis.Client
+*/
 func InitializeRedisDB(dsn string) *redis.Client {
 	client := redis.NewClient(&redis.Options{
 		Addr: dsn, //redis port
@@ -52,7 +69,15 @@ func InitializeRedisDB(dsn string) *redis.Client {
 	return client
 }
 
-// TODO: Add comment documentation (func FormatAllTables)
+/*
+FormatAllTables drops all of the tables in the specified database and sets them back up using GORM's AutoMigrate function.
+
+Parameters:
+  - db (*gorm.DB): The database instance that will be formatted.
+
+Returns:
+  - None
+*/
 func FormatAllTables(db *gorm.DB) {
 	dropAllTables(db)
 	setupTables(db)
