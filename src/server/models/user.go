@@ -14,12 +14,12 @@ type User struct {
 	gorm.Model
 	Email             string `gorm:"not null;unique;column:email" json:"email"`
 	Username          string `gorm:"not null;unique;column:username" json:"username"`
-	Password          string `gorm:"not null;unique;column:password" json:"password"`
-	AccountType       string `gorm:"not null;unique;column:account_type" json:"account_type"`
+	Password          string `gorm:"not null;column:password" json:"password"`
+	AccountType       string `gorm:"not null;column:account_type" json:"account_type"`
 	FirstName         string `gorm:"not null;column:first_name" json:"first_name"`
 	LastName          string `gorm:"not null;column:last_name" json:"last_name"`
 	ContactInfoID     uint   `gorm:"column:contact_info_id" json:"contact_info_id"`
-	BusinessID        uint   `gorm:"column:business_id" json:"business_id"`
+	BusinessID        uint   `gorm:"column:business_id;default:null" json:"business_id"`
 	UserPermissionsID uint   `gorm:"column:permissions_id" json:"permissions_id"`
 	UserPreferencesID uint   `gorm:"column:user_pref_id" json:"user_pref_id"`
 	ProfilePicID      uint   `gorm:"column:profile_pic_id" json:"profile_pic_id"`
