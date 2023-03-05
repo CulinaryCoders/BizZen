@@ -23,4 +23,4 @@ BizZen is a B2B software-as-a-service platform designed to help small and medium
 
 **Backend**
 -  Ryan Brooks
--  Angelina Uriarte-Wilson
+-  <del>Angelina Uriarte-Wilson</del>
