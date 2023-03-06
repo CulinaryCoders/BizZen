@@ -18,11 +18,11 @@ type User struct {
 	AccountType       string `gorm:"not null;column:account_type" json:"account_type"`
 	FirstName         string `gorm:"not null;column:first_name" json:"first_name"`
 	LastName          string `gorm:"not null;column:last_name" json:"last_name"`
-	ContactInfoID     uint   `gorm:"column:contact_info_id" json:"contact_info_id"`
-	BusinessID        uint   `gorm:"column:business_id;default:null" json:"business_id"`
-	UserPermissionsID uint   `gorm:"column:permissions_id" json:"permissions_id"`
-	UserPreferencesID uint   `gorm:"column:user_pref_id" json:"user_pref_id"`
-	ProfilePicID      uint   `gorm:"column:profile_pic_id" json:"profile_pic_id"`
+	ContactInfoID     *uint  `gorm:"column:contact_info_id" json:"contact_info_id" sql:"DEFAULT:NULL"`
+	BusinessID        *uint  `gorm:"column:business_id;default:null" json:"business_id" sql:"DEFAULT:NULL"`
+	UserPermissionsID *uint  `gorm:"column:permissions_id" json:"permissions_id" sql:"DEFAULT:NULL"`
+	UserPreferencesID *uint  `gorm:"column:user_pref_id" json:"user_pref_id" sql:"DEFAULT:NULL"`
+	ProfilePicID      *uint  `gorm:"column:profile_pic_id" json:"profile_pic_id" sql:"DEFAULT:NULL"`
 }
 
 type UserPermissions struct {

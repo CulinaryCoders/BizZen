@@ -15,41 +15,118 @@ import (
 Credentials struct defines the format for user login credentials. It contains two fields: Email and Password. The Email field is a string that represents the user's email address, while the Password field is a string that represents the user's password.
 */
 type Credentials struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email"`    // User's email
+	Password string `json:"password"` // User's password
 }
 
 /*
-CreateUser is an HTTP handler that creates a new user.
+Creates a new user account record in the database.
 
-This handler expects a POST request with a JSON body containing the following fields:
-  - "username" (string): the username of the new user
-  - "email" (string): the email address of the new user
-  - "password" (string): the password for the new user
+# Expected request format
 
-If the user is successfully created, this handler returns a JSON response with the following field:
-  - "id" (string): the unique ID of the new user
+	Type:  POST
 
-If there is an error creating the user (e.g. if the username is already taken), this handler returns a JSON response with the following fields:
-  - "error" (string): a message describing the error that occurred
+	Body:
+		Format:	JSON
 
-Example usage:
+		Required fields:
+
+			username  <string>
+
+				The username for the new user account
+
+	  		email  <string>
+
+				The email address associated with the new user account
+
+	  		password  <string>
+
+				The password for the new user account
+
+			account_type  <string>
+
+				The user account type
+
+				Permitted values:
+					Individual
+					Business
+					System
+
+			first_name  <string>
+
+				The user's first name
+
+			last_name  <string>
+
+				The user's last name
+
+		Optional fields:
+
+			contact_info_id  <uint>
+
+				The ID of the ContactInfo record associated with the new user account
+
+			business_id  <uint>
+
+				The ID of the Business record associated with the new user account (only applicable for 'Business' account types)
+
+			permissions_id  <uint>
+
+				The ID of the UserPermissions record associated with the new user account
+
+			user_pref_id  <uint>
+
+				The ID of the UserPrefences record associated with the new user account
+
+			profile_pic_id  <uint>
+
+				The ID of the ProfilePic record associated with the new user account
+
+# Example request(s)
 
 	POST /users
 	{
 	  "username": "johndoe",
 	  "email": "johndoe@example.com",
-	  "password": "secretpassword"
+	  "password": "secretpassword",
+	  "account_type": "Individual",
+	  "first_name": "John",
+	  "last_name": "Doe"
 	}
 
-Response:
+# Response format
 
-	HTTP/1.1 201 Created
-	Content-Type: application/json
+	Success:
 
-	{
-	  "id": "123456",
-	}
+		HTTP/1.1 201 Created
+		Content-Type: application/json
+
+		{
+		"ID": "123456",
+		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+		"DeletedAt": null,
+		"username": "johndoe",
+		"email": "johndoe@example.com",
+		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
+		"account_type": "Individual",
+		"first_name": "John",
+		"last_name": "Doe",
+		"contact_info_id": 45,
+		"business_id": null,
+		"permissions_id": 123,
+		"user_pref_id": 88,
+		"profile_pic_id": 79
+		}
+
+	Failure:
+
+		HTTP/1.1 500 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
 */
 func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
