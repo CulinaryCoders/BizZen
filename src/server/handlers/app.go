@@ -17,16 +17,38 @@ import (
 
 var App *Application = &Application{}
 
-// TODO:  Add documentation (type Application)
+/*
+*Description*
+
+type Application
+
+Application is intended to be used as a singleton object for storing/accessing global application state
+*/
 type Application struct {
-	Router      *mux.Router
-	CookieStore *sessions.CookieStore
-	AppDB       *gorm.DB
-	CacheDB     *redis.Client
-	NGHandler   *AngularHandler
+	Router      *mux.Router           // Gorilla Mux Router (used to define/configure API endpoints)
+	CookieStore *sessions.CookieStore // Gorilla Sessions CookieStore for storing session/cookie data
+	AppDB       *gorm.DB              // gorm.DB instance used as main application database
+	CacheDB     *redis.Client         // redis.Client instance used for caching database
+	NGHandler   *AngularHandler       // AngularHandler that allows the frontend to connect to the backend API server
 }
 
-// TODO:  Add documentation (func Initialize)
+/*
+*Description*
+
+func Initialize
+
+Initializes the various components of the Application instance (router, database(s), cookies/session, handlers, etc.)
+
+*Parameters*
+
+	appDBName  <string>
+
+		The name of the database that will be used as the main application database.
+
+*Returns*
+
+	None
+*/
 func (app *Application) Initialize(appDBName string) {
 	// Initialize main app database
 	var dbConnectionString string = config.AppConfig.GetPostgresDBConnectionString(appDBName)
@@ -53,7 +75,21 @@ func (app *Application) Initialize(appDBName string) {
 	app.initializeRoutes()
 }
 
-// TODO:  Add documentation (func initializeRoutes)
+/*
+*Description*
+
+func initializeRoutes
+
+Defines the the API endpoints/routes for the application and their behavior using the application's Gorilla Mux Router.
+
+*Parameters*
+
+	None
+
+*Returns*
+
+	None
+*/
 func (app *Application) initializeRoutes() {
 	// Define routes
 	app.Router.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
@@ -63,7 +99,7 @@ func (app *Application) initializeRoutes() {
 
 	// User routes
 	app.Router.HandleFunc("/register", app.CreateUser).Methods("POST")
-	app.Router.HandleFunc("/authenticate", app.Authenticate).Methods("POST")
+	app.Router.HandleFunc("/login", app.Authenticate).Methods("POST")
 	app.Router.HandleFunc("/user/{id}", app.GetUser).Methods("GET")
 	app.Router.HandleFunc("/user/{id}", app.UpdateUser).Methods("PUT")
 	app.Router.HandleFunc("/user/{id}", app.DeleteUser).Methods("DELETE")
@@ -85,7 +121,23 @@ func (app *Application) initializeRoutes() {
 	app.Router.PathPrefix("/").Handler(app.NGHandler.ReverseProxy).Methods("GET")
 }
 
-// TODO:  Add documentation (func Run)
+/*
+*Description*
+
+func Run
+
+Serves the application on the specified network address.
+
+*Parameters*
+
+	networkAddress <string>
+
+	   The network address to use for the application server in 'host:port' format.
+
+*Returns*
+
+	None
+*/
 func (app *Application) Run(networkAddress string) {
 	var appHTTPAddress string = fmt.Sprintf("http://%s", networkAddress)
 
