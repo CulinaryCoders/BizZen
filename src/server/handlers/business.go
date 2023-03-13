@@ -390,7 +390,6 @@ func (app *Application) UpdateBusiness(writer http.ResponseWriter, request *http
 		updatedBusiness)
 }
 
-// TODO: Cascade delete all records associated with business (operating hours, offices, contact info, etc.)
 /*
 *Description*
 

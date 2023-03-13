@@ -7,24 +7,56 @@ import (
 )
 
 // TODO: Add foreign key logic to ContactInfo model
+// GORM model for all ContactInfo records in the database
 type ContactInfo struct {
 	gorm.Model
-	OwnerID      uint   `gorm:"column:owner_id" json:"owner_id"`
-	AddressID    uint   `gorm:"column:address_id" json:"address_id"`
-	PhoneNumber1 string `gorm:"column:phone1" json:"phone1"`
-	PhoneNumber2 string `gorm:"column:phone2" json:"phone2"`
-	FaxNumber    string `gorm:"column:fax" json:"fax"`
+	OwnerID      uint   `gorm:"column:owner_id" json:"owner_id"`     // ID of User record that the ContactInfo record is associated with
+	AddressID    uint   `gorm:"column:address_id" json:"address_id"` // ID of Address record associated with the ContactInfo record
+	PhoneNumber1 string `gorm:"column:phone1" json:"phone1"`         // Primary phone number
+	PhoneNumber2 string `gorm:"column:phone2" json:"phone2"`         // Secondary phone number
+	FaxNumber    string `gorm:"column:fax" json:"fax"`               // Fax number
 }
 
+// GORM model for all Address records in the database
 type Address struct {
 	gorm.Model
-	Address1 string `gorm:"not null;column:address1" json:"address1"`
-	Address2 string `gorm:"column:address2" json:"address2"`
-	City     string `gorm:"not null;column:city" json:"city"`
-	State    string `gorm:"not null;column:state" json:"state"`
-	ZipCode  string `gorm:"not null;column:zip" json:"zip"`
+	Address1 string `gorm:"not null;column:address1" json:"address1"` // Address line 1
+	Address2 string `gorm:"column:address2" json:"address2"`          // Address line 2
+	City     string `gorm:"not null;column:city" json:"city"`         // City
+	State    string `gorm:"not null;column:state" json:"state"`       // State (2 letter abbreviation)
+	ZipCode  string `gorm:"not null;column:zip" json:"zip"`           // Zip code
 }
 
+/*
+*Description*
+
+func Equal
+
+Determines if two different Address objects are equal to each other (i.e. all fields match).
+
+The primary purpose of this function is to test the functionality of database and handler calls to ensure that
+the correct objects are being returned and/or updated in the database.
+
+*Parameters*
+
+	compareAddress  <*Address>
+
+		The Address object that the calling Address object is being compared to
+
+*Returns*
+
+	unequalFields  <[]string>
+
+		The list of fields that did not match between the two Address objects being compared
+
+	equal  <bool>
+
+		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
+
+*Response format*
+
+	N/A (None)
+*/
 func (address *Address) Equal(compareAddress *Address) (unequalFields []string, equal bool) {
 	equal = true
 
@@ -83,7 +115,33 @@ func (address *Address) Equal(compareAddress *Address) (unequalFields []string, 
 	return unequalFields, equal
 }
 
-// TODO:  Add comment documentation (func CreateAddress)
+/*
+*Description*
+
+func CreateAddress
+
+Creates a new Address record in the database and returns the created record along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+*Returns*
+
+	_  <*Address>
+
+		The created Address record.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+
+*Response format*
+
+	N/A (None)
+*/
 func (address *Address) CreateAddress(db *gorm.DB) (*Address, error) {
 	// TODO: Add field validation logic (func CreateAddress) -- add as BeforeCreate gorm hook definition at the top of this file
 	if err := db.Create(&address).Error; err != nil {
@@ -93,7 +151,37 @@ func (address *Address) CreateAddress(db *gorm.DB) (*Address, error) {
 	return address, nil
 }
 
-// TODO:  Add comment documentation (func GetAddress)
+/*
+*Description*
+
+func GetAddress
+
+Retrieves an Address record in the database by ID if it exists and returns that record along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be used to retrieve the specified record.
+
+	addressID  <uint>
+
+		The ID of the address record being requested.
+
+*Returns*
+
+	_  <*Address>
+
+		The Address record that is retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+
+*Response format*
+
+	N/A (None)
+*/
 func (address *Address) GetAddress(db *gorm.DB, addressID uint) (*Address, error) {
 	err := db.First(&address, addressID).Error
 
@@ -104,7 +192,53 @@ func (address *Address) GetAddress(db *gorm.DB, addressID uint) (*Address, error
 	return address, nil
 }
 
-// TODO:  Add comment documentation (func UpdateAddress)
+/*
+*Description*
+
+func UpdateAddress
+
+Updates the specified Address record in the database with the specified changes if the record exists.
+
+Returns the updated record along with any errors that are thrown.
+
+This function behaves like a PATCH method, rather than a true PUT. Any fields that aren't specified in the request body for the PUT request will not be altered for the specified record.
+
+If a specified field's value should be deleted from the record, the appropriate null/blank should be specified for that key in the JSON request body (e.g. "type": "").
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be used to retrieve and update the specified record.
+
+	addressID  <uint>
+
+		The ID of the address record being updated.
+
+	updates  <map[string]interface{}>
+
+		JSON with the fields that will be updated as keys and the updated values as values.
+
+		Ex:
+			{
+				"name": "New name",
+				"address": "New address"
+			}
+
+*Returns*
+
+	_  <*Address>
+
+		The Address record that is updated in the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+
+*Response format*
+
+	N/A (None)
+*/
 func (address *Address) UpdateAddress(db *gorm.DB, addressID uint, updates map[string]interface{}) (*Address, error) {
 	// Confirm address exists and get current object
 	var err error
@@ -122,7 +256,39 @@ func (address *Address) UpdateAddress(db *gorm.DB, addressID uint, updates map[s
 	return address, nil
 }
 
-// TODO:  Add comment documentation (func DeleteAddress)
+/*
+*Description*
+
+func DeleteAddress
+
+Deletes the specified Address record from the database if it exists.
+
+Deleted record is returned along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be deleted from.
+
+	addressID  <uint>
+
+		The ID of the address record being deleted.
+
+*Returns*
+
+	_  <*Address>
+
+		The deleted Address record.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+
+*Response format*
+
+	N/A (None)
+*/
 func (address *Address) DeleteAddress(db *gorm.DB, addressID uint) (*Address, error) {
 	// Confirm address exists and get current object
 	var err error

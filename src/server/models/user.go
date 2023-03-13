@@ -176,14 +176,31 @@ func (user *User) CheckPassword(providedPassword string) error {
 }
 
 /*
-CreateUser creates a new user in the database and returns the inserted ID and any errors that occur.
+*Description*
 
-Parameters:
-- user: A pointer to a User object submitted in the request
+func CreateUser
 
-Returns:
-- The insertedID (uint64): The ID of the inserted user.
-- An error object, which is nil if no error is encountered or non-nil if an error occurs while retrieving the user.
+Creates a new User record in the database and returns the created record along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+*Returns*
+
+	_  <*User>
+
+		The created User record.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+
+*Response format*
+
+	N/A (None)
 */
 func (user *User) CreateUser(db *gorm.DB) (*User, error) {
 	// TODO: Add field validation logic (func CreateUser) -- add as BeforeCreate gorm hook definition at the top of this file
@@ -195,14 +212,35 @@ func (user *User) CreateUser(db *gorm.DB) (*User, error) {
 }
 
 /*
-GetUser retrieves a user with a given ID from the database and returns a pointer to the user and an error if encountered.
+*Description*
 
-Parameters:
-- userId: A uint64 value representing the ID of the user to be retrieved from the database.
+func GetUser
 
-Returns:
-- *User: A pointer to a User object representing the user with the given ID.
-- error: An error object, which is nil if no error is encountered or non-nil if an error occurs while retrieving the user.
+Retrieves a User record in the database by ID if it exists and returns that record along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be used to retrieve the specified record.
+
+	userID <uint>
+
+		The ID of the User record being requested.
+
+*Returns*
+
+	_  <*User>
+
+		The User record that is retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+
+*Response format*
+
+	N/A (None)
 */
 func (user *User) GetUser(db *gorm.DB, userID uint) (*User, error) {
 	err := db.First(&user, userID).Error
@@ -215,14 +253,35 @@ func (user *User) GetUser(db *gorm.DB, userID uint) (*User, error) {
 }
 
 /*
-GetUserByEmail finds a user in the database by email address and returns a pointer to the User object.
+*Description*
 
-Parameters:
-- userEmail: The email address of the user to find.
+func GetUserByEmail
 
-Returns:
-- *User: A pointer to the User object representing the updated user.
-- error: An error object, if any errors occurred during the search process.
+Retrieves a User record in the database by email if it exists and returns that record along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be used to retrieve the specified record.
+
+	userEmail  <string>
+
+		The email of the User record being requested.
+
+*Returns*
+
+	_  <*User>
+
+		The User record that is retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+
+*Response format*
+
+	N/A (None)
 */
 func (user *User) GetUserByEmail(db *gorm.DB, userEmail string) (*User, error) {
 	err := db.First(&user, userEmail).Error
@@ -235,15 +294,51 @@ func (user *User) GetUserByEmail(db *gorm.DB, userEmail string) (*User, error) {
 }
 
 /*
-UpdateUser finds a user in the database by email address and returns a pointer to the User object.
+*Description*
 
-Parameters:
-- userId: A uint64 value representing the ID of the user to be retrieved from the database.
-- updatedUser: A pointer to a User object containing updated information
+func UpdateUser
 
-Returns:
-- *User: A pointer to the User object representing the found user.
-- error: An error object, if any errors occurred during the search process.
+Updates the specified User record in the database with the specified changes if the record exists.
+
+Returns the updated record along with any errors that are thrown.
+
+This function behaves like a PATCH method, rather than a true PUT. Any fields that aren't specified in the request body for the PUT request will not be altered for the specified record.
+
+If a specified field's value should be deleted from the record, the appropriate null/blank should be specified for that key in the JSON request body (e.g. "type": "").
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be used to retrieve and update the specified record.
+
+	userID  <uint>
+
+		The ID of the User record being updated.
+
+	updates  <map[string]interface{}>
+
+		JSON with the fields that will be updated as keys and the updated values as values.
+
+		Ex:
+			{
+				"name": "New name",
+				"address": "New address"
+			}
+
+*Returns*
+
+	_  <*User>
+
+		The User record that is updated in the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+
+*Response format*
+
+	N/A (None)
 */
 func (user *User) UpdateUser(db *gorm.DB, userID uint, updates map[string]interface{}) (*User, error) {
 	// Confirm user exists and get current object
@@ -263,14 +358,37 @@ func (user *User) UpdateUser(db *gorm.DB, userID uint, updates map[string]interf
 }
 
 /*
-DeleteUser finds a user in the database by email address and returns a pointer to the User object.
+*Description*
 
-Parameters:
-- userId: A uint64 value representing the ID of the user to be deleted from the database.
+func DeleteUser
 
-Returns:
-- bool: Returns true if user was successfully deleted and false if otherwise.
-- error: An error object, if any errors occurred during the search process.
+Deletes the specified User record from the database by ID if it exists.
+
+Deleted record is returned along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be deleted from.
+
+	userID  <uint>
+
+		The ID of the User record being deleted.
+
+*Returns*
+
+	_  <*User>
+
+		The deleted User record.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+
+*Response format*
+
+	N/A (None)
 */
 func (user *User) DeleteUser(db *gorm.DB, userID uint) (*User, error) {
 	// Confirm user exists and get current object

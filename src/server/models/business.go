@@ -63,19 +63,36 @@ type OperatingHours struct {
 	SaturdayCloseTime time.Time `gorm:"column:saturday_close_time" json:"saturday_close_time"` // Saturday closing time (24 hour format)
 }
 
-// Equal determines if two different Business objects are equal to each other (i.e. all fields match).
-//
-// Parameters:
-// -compareBusiness: The Business object that the calling Business object is being compared to.
-//
-// Returns:
-// -unequalFields []string: The list of fields that did not match between the two Business objects being compared
-// -equal bool: If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
-//
-// Description:
-// This function determines if two Business object instances are equal to each other. The primary purpose of this function
-// is to test the functionality of database and handler calls to ensure that the correct objects are being returned and/or
-// updated in the database.
+/*
+*Description*
+
+func Equal
+
+Determines if two different Business objects are equal to each other (i.e. all fields match).
+
+The primary purpose of this function is to test the functionality of database and handler calls to ensure that
+the correct objects are being returned and/or updated in the database.
+
+*Parameters*
+
+	compareBusiness  <*Business>
+
+		The Business object that the calling Business object is being compared to
+
+*Returns*
+
+	unequalFields  <[]string>
+
+		The list of fields that did not match between the two Business objects being compared
+
+	equal  <bool>
+
+		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
+
+*Response format*
+
+	N/A (None)
+*/
 func (business *Business) Equal(compareBusiness *Business) (unequalFields []string, equal bool) {
 	equal = true
 
@@ -129,7 +146,37 @@ func (business *Business) Equal(compareBusiness *Business) (unequalFields []stri
 	return unequalFields, equal
 }
 
-// TODO:  Add comment documentation (func CreateBusiness)
+/*
+*Description*
+
+func CreateBusiness
+
+Creates a new Business record in the database and returns the created record along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+*Returns*
+
+	_  <*Business>
+
+		The created Business record.
+
+	_  <*Office>
+
+		The created Office record.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+
+*Response format*
+
+	N/A (None)
+*/
 func (business *Business) CreateBusiness(db *gorm.DB) (*Business, *Office, error) {
 	var office *Office
 	// TODO: Add field validation logic (func CreateBusiness) -- add as BeforeCreate gorm hook definition at the top of this file
@@ -157,7 +204,37 @@ func (business *Business) CreateBusiness(db *gorm.DB) (*Business, *Office, error
 	return createdBusiness, createdOffice, nil
 }
 
-// TODO:  Add comment documentation (func GetBusiness)
+/*
+*Description*
+
+func GetBusiness
+
+Retrieves a Business record in the database by ID if it exists and returns that record along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be used to retrieve the specified record.
+
+	businessID  <uint>
+
+		The ID of the business record being requested.
+
+*Returns*
+
+	_  <*Business>
+
+		The Business record that is retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+
+*Response format*
+
+	N/A (None)
+*/
 func (business *Business) GetBusiness(db *gorm.DB, businessID uint) (*Business, error) {
 	err := db.First(&business, businessID).Error
 
@@ -168,7 +245,53 @@ func (business *Business) GetBusiness(db *gorm.DB, businessID uint) (*Business, 
 	return business, nil
 }
 
-// TODO:  Add comment documentation (func UpdateBusiness)
+/*
+*Description*
+
+func UpdateBusiness
+
+Updates the specified Business record in the database with the specified changes if the record exists.
+
+Returns the updated record along with any errors that are thrown.
+
+This function behaves like a PATCH method, rather than a true PUT. Any fields that aren't specified in the request body for the PUT request will not be altered for the specified record.
+
+If a specified field's value should be deleted from the record, the appropriate null/blank should be specified for that key in the JSON request body (e.g. "type": "").
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be used to retrieve and update the specified record.
+
+	businessID  <uint>
+
+		The ID of the business record being updated.
+
+	updates  <map[string]interface{}>
+
+		JSON with the fields that will be updated as keys and the updated values as values.
+
+		Ex:
+			{
+				"name": "New name",
+				"address": "New address"
+			}
+
+*Returns*
+
+	_  <*Business>
+
+		The Business record that is updated in the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+
+*Response format*
+
+	N/A (None)
+*/
 func (business *Business) UpdateBusiness(db *gorm.DB, businessID uint, updates map[string]interface{}) (*Business, error) {
 	// Confirm business exists and get current object
 	var err error
@@ -186,7 +309,40 @@ func (business *Business) UpdateBusiness(db *gorm.DB, businessID uint, updates m
 	return business, nil
 }
 
-// TODO:  Add comment documentation (func DeleteBusiness)
+// TODO: Cascade delete all records associated with business (operating hours, offices, contact info, etc.)
+/*
+*Description*
+
+func DeleteBusiness
+
+Deletes the specified Business record from the database if it exists.
+
+Deleted record is returned along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+	businessID  <uint>
+
+		The ID of the business record being deleted.
+
+*Returns*
+
+	_  <*Business>
+
+		The deleted Business record.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+
+*Response format*
+
+	N/A (None)
+*/
 func (business *Business) DeleteBusiness(db *gorm.DB, businessID uint) (*Business, error) {
 	// Confirm business exists and get current object
 	var err error
@@ -202,7 +358,33 @@ func (business *Business) DeleteBusiness(db *gorm.DB, businessID uint) (*Busines
 	return business, nil
 }
 
-// TODO:  Add comment documentation (func CreateOffice)
+/*
+*Description*
+
+func CreateOffice
+
+Creates a new Office record in the database and returns the created record along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+*Returns*
+
+	_  <*Office>
+
+		The created Office record.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+
+*Response format*
+
+	N/A (None)
+*/
 func (office *Office) CreateOffice(db *gorm.DB) (*Office, error) {
 	// TODO: Add field validation logic (func CreateOffice) -- add as BeforeCreate gorm hook definition at the top of this file
 	if err := db.Create(&office).Error; err != nil {
