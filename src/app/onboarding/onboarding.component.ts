@@ -46,10 +46,10 @@ export class OnboardingComponent {
     if (this.errorMsg === "") {
       this.onboardingForm.value.interests = this.selectedInterests;
 
-      // CONNECT BACKEND this.onboardingForm.value has all the info needed to add to DB User object
+      // CONNECT BACKEND this.newApptForm.value has all the info needed to add to DB User object
       console.log(this.onboardingForm.value);
 
-      this.router.navigate(['/profile']);
+      this.router.navigateByUrl('/profile', {state: {idToPass: fname }});
     }
   }
 

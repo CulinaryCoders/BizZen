@@ -23,5 +23,8 @@ export class ProfileComponent {
     routeToHome() {
       this.router.navigate(['/']);
     }
+    routeToClasses() {
+      this.router.navigate(['/find-classes']);
+    }
 
 }

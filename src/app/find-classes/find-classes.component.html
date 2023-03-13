@@ -1,0 +1,28 @@
+
+<div class="container">
+
+    <h2 class="display-2">Find a Class</h2>
+
+    <br><br>
+
+    <div class="scrollbar scrollbar-primary">
+    <cdk-virtual-scroll-viewport itemSize="50" class="scroll-view">
+
+        <div *cdkVirtualFor="let item of testArray" class="scroll-item">    
+            <div class="card">
+                <div class="card-header">
+                    <h4>Class Name</h4>
+                </div>
+                <div class="card-body">
+                <p class="card-text">Class Details</p>
+                <button class="btn btn-primary">Find out more</button>
+                </div>
+            </div>
+            <br>
+        </div>
+
+      </cdk-virtual-scroll-viewport>
+    </div>
+
+
+</div>

@@ -1,0 +1,39 @@
+<div class="container">
+  <h1 (click)="routeToHome()" style="background-color: antiquewhite; border-radius: 5px; display: inline-block; padding: 15px; margin-top:15px; cursor: pointer">[bizZen]</h1>
+  <h2>Welcome to Bizzen!</h2>
+  <h4>Please answer a few questions about your business to get your account set up!</h4>
+  <form [formGroup]="onboardingForm" (ngSubmit)="onSubmit()" class="form-group">
+    <div class="form-group">
+      <label for="business-name">Business Name: </label>
+      <input id="business-name" type="text" formControlName="businessName" class="form-control" style="width: 200px">
+    </div>
+    <div class="form-group">
+      <label for="business-name">Business Description: </label>
+      <textarea id="business-description" formControlName="businessDescription" class="form-control" placeholder="Tell us a bit about your business!"></textarea>
+    </div>
+    <div style="display: flex; flex-direction: row">
+      <div class="form-group">
+        <label for="opening-time">Opening Time: </label>
+        <input id="opening-time" type="time" formControlName="openingTime" class="form-control" style="width: 200px" >
+      </div>
+      <div class="form-group">
+        <label for="closing-time">Closing Time: </label>
+        <input id="closing-time" type="time" formControlName="closingTime" class="form-control" style="width: 200px" >
+      </div>
+    </div>
+    <h3>Select some tags that describe your business (at least one)</h3>
+    <ul>
+      <li
+        *ngFor="let tag of tags"
+        class="list-group-item"
+        (click)="toggleInterest(tag)"
+        [ngClass]="{'active': selectedTags.includes(tag)}"
+      >
+        {{tag}}
+      </li>
+    </ul>
+    <p id="errorMsg" style="color: red; font-weight: bold">{{errorMsg}}</p>
+    <br/>
+    <button type="submit" [disabled]="!onboardingForm.valid" class="btn btn-primary" style="float: right; margin: 10px">Next</button>
+  </form>
+</div>
