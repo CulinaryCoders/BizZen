@@ -1,7 +1,7 @@
 | **URI**        | **DB Object** | **Function Called** | **Request Type** |
 |----------------|---------------|---------------------|------------------|
 | /register      | User          | CreateUser          | POST             |
-| /authenticate  | User          | Authenticate        | POST             |
+| /login         | User          | Authenticate        | POST             |
 | /user/{id}     | User          | GetUser             | GET              |
 | /user/{id}     | User          | UpdateUser          | PUT              |
 | /user/{id}     | User          | DeleteUser          | DELETE           |
