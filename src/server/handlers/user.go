@@ -12,19 +12,31 @@ import (
 )
 
 /*
-Credentials struct defines the format for user login credentials. It contains two fields: Email and Password. The Email field is a string that represents the user's email address, while the Password field is a string that represents the user's password.
-*/
-type Credentials struct {
-	Email    string `json:"email"`    // User's email
-	Password string `json:"password"` // User's password
-}
+*Description*
 
-/*
+func CreateUser
+
 Creates a new user account record in the database.
 
-# Expected request format
+*Parameters*
 
-	Type:  POST
+	writer  <http.ResponseWriter>
+
+	   The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:  	POST
+
+	Route:	/register
 
 	Body:
 		Format:	JSON
@@ -82,9 +94,9 @@ Creates a new user account record in the database.
 
 				The ID of the ProfilePic record associated with the new user account
 
-# Example request(s)
+*Example request(s)*
 
-	POST /users
+	POST /register
 	{
 	  "username": "johndoe",
 	  "email": "johndoe@example.com",
@@ -94,7 +106,7 @@ Creates a new user account record in the database.
 	  "last_name": "Doe"
 	}
 
-# Response format
+*Response format*
 
 	Success:
 
@@ -120,7 +132,15 @@ Creates a new user account record in the database.
 		}
 
 	Failure:
+		-- Case = Bad request body
+		HTTP/1.1 400 Internal Server Error
+		Content-Type: application/json
 
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
+		-- Case = Database operation error
 		HTTP/1.1 500 Internal Server Error
 		Content-Type: application/json
 
@@ -146,7 +166,7 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 	if err := user.HashPassword(user.Password); err != nil {
 		utils.RespondWithError(
 			writer,
-			http.StatusInternalServerError,
+			http.StatusBadRequest,
 			err.Error())
 
 		return
@@ -169,89 +189,73 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 }
 
 /*
-Authenticate is an HTTP handler that authenticates a user.
+*Description*
 
-This handler expects a POST request with a JSON body containing the following fields:
-- "email" (string): the username of the user to authenticate
-- "password" (string): the password of the user to authenticate
+func GetUser
 
-If the user is successfully authenticated, this handler returns a JSON response indicating the user has logged in
-and sets a session cookie in the browser.
+Retrieves a user account record from the database by user ID if the ID exists in the database.
 
-If there is an error authenticating the user (e.g. if the username or password is incorrect), this handler returns a JSON response with the following fields:
-- "error" (string): a message describing the error that occurred
+*Parameters*
 
-Example usage:
+	writer  <http.ResponseWriter>
 
-	POST /login
-	{
-	"email": "johndoe@example.com",
-	"password": "secretpassword"
-	}
+	   The HTTP response writer
 
-Response:
+	request  <*http.Request>
 
-	HTTP/1.1 200 OK
-	Content-Type: application/json
-	Payload: "User logged in."
-*/
-func (app *Application) Authenticate(writer http.ResponseWriter, request *http.Request) {
-	var credentials Credentials
-	user := models.User{}
+		The HTTP request
 
-	decoder := json.NewDecoder(request.Body)
-	if err := decoder.Decode(&credentials); err != nil {
-		utils.RespondWithError(writer, http.StatusBadRequest, err.Error())
-		return
-	}
+*Returns*
 
-	defer request.Body.Close()
+	None
 
-	returnedUser, err := user.GetUserByEmail(app.AppDB, credentials.Email)
-	if err != nil {
-		return
-	}
+*Expected request format*
 
-	if err := returnedUser.CheckPassword(credentials.Password); err != nil {
-		utils.RespondWithError(
-			writer,
-			http.StatusBadRequest,
-			"Incorrect password.")
+	Type:  	GET
 
-		return
-	}
-	/*
-		PLEASE DO NOT REMOVE
-		TODO: Implement authentication logic (func Authenticate)
-		session, _ := env.Store.Get(request, "sessionID")
-		session.Values["authenticated"] = true
-		session.Save(request, writer)
-		//validToken, err := utils.GenerateToken(user.Email, user.AccountType, config.AppConfig.GetSigningKey())
-	*/
-	if err != nil {
-		utils.RespondWithError(
-			writer,
-			http.StatusInternalServerError,
-			err.Error())
-	}
+	Route:	/user/{id}
 
-	utils.RespondWithJSON(
-		writer,
-		http.StatusOK,
-		"User logged in.")
-}
+	Body:
 
-/*
-GetUser is an HTTP handler that creates a new user.
+		None
 
-This handler expects a GET request with a URL path that includes the Email of the user to retrieve:
-  - GET /users/{email}
+*Example request(s)*
 
-Response:
-  - If the user is successfully found, the handler function responds with a JSON-encoded User object.
+	GET /user/123456
 
-If there is an error getting the user (e.g. if the email does not exist), this handler returns a JSON response with the following fields:
-  - "error" (string): a message describing the error that occurred
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		{
+		"ID": "123456",
+		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+		"DeletedAt": null,
+		"username": "johndoe",
+		"email": "johndoe@example.com",
+		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
+		"account_type": "Individual",
+		"first_name": "John",
+		"last_name": "Doe",
+		"contact_info_id": 45,
+		"business_id": null,
+		"permissions_id": 123,
+		"user_pref_id": 88,
+		"profile_pic_id": 79
+		}
+
+	Failure:
+		-- Case = User ID does not exist in the database
+		HTTP/1.1 404 Not Found
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
 */
 func (app *Application) GetUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
@@ -287,34 +291,143 @@ func (app *Application) GetUser(writer http.ResponseWriter, request *http.Reques
 }
 
 /*
-UpdateUser is an HTTP handler function that updates a user's information in the database and responds with a JSON-encoded User object.
+*Description*
 
-Parameters:
-  - writer (http.ResponseWriter): an HTTP response writer for writing the response.
-  - request (*http.Request): an HTTP request object containing the user email in the URL path and the updated user data in the request body.
+func UpdateUser
 
-HTTP Request:
+Updates the user record associated with the specified user ID in the database.
 
-	The handler function expects a PUT or POST request with a URL path that includes the email of the user to update:
+This function behaves like a PATCH method, rather than a true PUT. Any fields that aren't specified in the request body for the PUT request will not be altered for the specified record.
 
-	   PUT /users/{email}
-	   POST /users/{email}
+If a specified field's value should be deleted from the record, the appropriate null/blank should be specified for that key in the JSON request body (e.g. "first_name": "").
 
-	The {email} path parameter should be replaced with the email of the user to update.
+*Parameters*
 
-	The request body should contain a JSON object with the updated user data. For example:
+	   writer  <http.ResponseWriter>
 
-	   {
-	     "first_name": "New Name",
-	     "email": "new-email@example.com"
-	   }
+		   The HTTP response writer
 
-Returns:
-  - none
+	   request  <*http.Request>
 
-Response:
+		   The HTTP request
 
-	The handler function responds with a JSON-encoded User object representing the updated user. If the user is not found in the database, the function responds with a 404 Not Found error. If the request body is invalid or the update fails for some other reason, the function responds with a 400 Bad Request error or a 500 Internal Server error.
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:   PUT
+
+	Route:  /user/{id}
+
+	Body:
+		Format: JSON
+
+		Required fields:
+
+			N/A  --  At least one field should be present in the request body, but no fields are specifically required to be present in the request body.
+
+		Optional fields:
+
+			username  <string>
+
+				The username for the new user account
+
+			email  <string>
+
+				The email address associated with the new user account
+
+			password  <string>
+
+				The password for the new user account
+
+			account_type  <string>
+
+				The user account type
+
+				Permitted values:
+					Individual
+					Business
+					System
+
+			first_name  <string>
+
+				The user's first name
+
+			last_name  <string>
+
+				The user's last name
+
+			contact_info_id  <uint>
+
+				The ID of the ContactInfo record associated with the new user account
+
+			business_id  <uint>
+
+				The ID of the Business record associated with the new user account (only applicable for 'Business' account types)
+
+			permissions_id  <uint>
+
+				The ID of the UserPermissions record associated with the new user account
+
+			user_pref_id  <uint>
+
+				The ID of the UserPrefences record associated with the new user account
+
+			profile_pic_id  <uint>
+
+				The ID of the ProfilePic record associated with the new user account
+
+*Example request(s)*
+
+	PUT /user/123456
+	{
+		"first_name":"Luke",
+		"last_name":"Skywalker"
+	}
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		{
+		"ID": "123456",
+		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+		"UpdatedAt": "2022-07-11T01:23:45.6789012-14:25",
+		"DeletedAt": null,
+		"username": "johndoe",
+		"email": "johndoe@example.com",
+		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
+		"account_type": "Individual",
+		"first_name": "Luke",
+		"last_name": "Skywalker",
+		"contact_info_id": 45,
+		"business_id": null,
+		"permissions_id": 123,
+		"user_pref_id": 88,
+		"profile_pic_id": 79
+		}
+
+	Failure:
+		-- Case = Bad request body
+		HTTP/1.1 400 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
+		-- Case = Database operation error
+		HTTP/1.1 500 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
 */
 func (app *Application) UpdateUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
@@ -352,26 +465,75 @@ func (app *Application) UpdateUser(writer http.ResponseWriter, request *http.Req
 }
 
 /*
-DeleteUser is an HTTP handler function that deletes a user from the database by email and responds with a JSON-encoded success message.
+*Description*
 
-Parameters:
-  - writer (http.ResponseWriter): an HTTP response writer for writing the response.
-  - request (*http.Request): an HTTP request object containing the user email in the URL path.
+func DeleteUser
 
-HTTP Request:
+Delete a user account record from the database by user ID if the ID exists in the database.
 
-	The handler function expects a DELETE request with a URL path that includes the email of the user to delete:
+Deleted user record is returned in the response body if the operation is sucessful.
 
-	   DELETE /users/email/{email}
+*Parameters*
 
-	The {email} path parameter should be replaced with the email of the user to delete.
+	writer  <http.ResponseWriter>
 
-Returns:
-  - none
+	   The HTTP response writer
 
-Response:
+	request  <*http.Request>
 
-	The handler function responds with a JSON-encoded success message indicating that the user has been successfully deleted. If the user is not found in the database, the function responds with a 404 Not Found error. If the delete operation fails for some other reason, the function responds with a 500 Internal Server Error.
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:  	DELETE
+
+	Route:	/user/{id}
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	DELETE /user/123456
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		{
+		"ID": "123456",
+		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+		"DeletedAt": null,
+		"username": "johndoe",
+		"email": "johndoe@example.com",
+		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
+		"account_type": "Individual",
+		"first_name": "John",
+		"last_name": "Doe",
+		"contact_info_id": 45,
+		"business_id": null,
+		"permissions_id": 123,
+		"user_pref_id": 88,
+		"profile_pic_id": 79
+		}
+
+	Failure:
+		-- Case = Database operation error
+		HTTP/1.1 500 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
 */
 func (app *Application) DeleteUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
