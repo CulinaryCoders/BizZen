@@ -25,6 +25,7 @@ type Configuration struct {
 	API_SERVER_PORT   int    `mapstructure:"API_SERVER_PORT"`
 	FRONTEND_HOST     string `mapstructure:"FRONTEND_HOST"`
 	FRONTEND_PORT     int    `mapstructure:"FRONTEND_PORT"`
+	DEBUG_MODE        bool   `mapstructure:"DEBUG_MODE"`
 }
 
 // Initialize method creates and initializes new Configuration object
@@ -35,6 +36,7 @@ func InitializeConfig() (config *Configuration) {
 // loadEnvironmentVariables reads in the variables found in the 'server/config/config.json' file and returns a struct with those variables loaded as properties
 func loadEnvironmentVariables() (config *Configuration) {
 	viper.AddConfigPath("./config")
+	viper.AddConfigPath("../config")
 	viper.SetConfigName("config.json")
 	viper.SetConfigType("json")
 
