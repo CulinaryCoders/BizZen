@@ -8,42 +8,60 @@ import (
 )
 
 // TODO: Add foreign key logic to User model
-// TODO: Update time columns type / formatting to ensure behavior/values are expected
 // TODO: Add constraint for AccountType column to limit user types
+// GORM model for all User records in the database
 type User struct {
 	gorm.Model
-	Email             string `gorm:"not null;unique;column:email" json:"email"`
-	Username          string `gorm:"not null;unique;column:username" json:"username"`
-	Password          string `gorm:"not null;column:password" json:"password"`
-	AccountType       string `gorm:"not null;column:account_type" json:"account_type"`
-	FirstName         string `gorm:"not null;column:first_name" json:"first_name"`
-	LastName          string `gorm:"not null;column:last_name" json:"last_name"`
-	ContactInfoID     *uint  `gorm:"column:contact_info_id" json:"contact_info_id" sql:"DEFAULT:NULL"`
-	BusinessID        *uint  `gorm:"column:business_id;default:null" json:"business_id" sql:"DEFAULT:NULL"`
-	UserPermissionsID *uint  `gorm:"column:permissions_id" json:"permissions_id" sql:"DEFAULT:NULL"`
-	UserPreferencesID *uint  `gorm:"column:user_pref_id" json:"user_pref_id" sql:"DEFAULT:NULL"`
-	ProfilePicID      *uint  `gorm:"column:profile_pic_id" json:"profile_pic_id" sql:"DEFAULT:NULL"`
+	Email             string `gorm:"not null;unique;column:email" json:"email"`                             // User's email address
+	Username          string `gorm:"not null;unique;column:username" json:"username"`                       // Username
+	Password          string `gorm:"not null;column:password" json:"password"`                              // User's hashed password
+	AccountType       string `gorm:"not null;column:account_type" json:"account_type"`                      // Account type of the User record (Individual, Business, System)
+	FirstName         string `gorm:"not null;column:first_name" json:"first_name"`                          // User's first name
+	LastName          string `gorm:"not null;column:last_name" json:"last_name"`                            // User's last name
+	ContactInfoID     *uint  `gorm:"column:contact_info_id" json:"contact_info_id" sql:"DEFAULT:NULL"`      // ID of ContactInfo record associated with the User record
+	BusinessID        *uint  `gorm:"column:business_id;default:null" json:"business_id" sql:"DEFAULT:NULL"` // ID of the Business record associated with the User record
+	UserPermissionsID *uint  `gorm:"column:permissions_id" json:"permissions_id" sql:"DEFAULT:NULL"`        // ID of the UserPermissions record associated with the User
+	UserPreferencesID *uint  `gorm:"column:user_pref_id" json:"user_pref_id" sql:"DEFAULT:NULL"`            // ID of the UserPreferences record associated with the User record
+	ProfilePicID      *uint  `gorm:"column:profile_pic_id" json:"profile_pic_id" sql:"DEFAULT:NULL"`        // ID of the ProfilePic record associated with the User record
 }
 
+// GORM model for all UserPermissions records in the database
 type UserPermissions struct {
 	gorm.Model
-	Label       string `gorm:"not null;column:label" json:"label"`
-	Description string `gorm:"not null;column:desc" json:"desc"`
+	Label       string `gorm:"not null;column:label" json:"label"` // Label / shortname for the permissions set
+	Description string `gorm:"not null;column:desc" json:"desc"`   // Description of permissions
 }
 
-// Equal determines if two different User objects are equal to each other (i.e. all fields match).
-//
-// Parameters:
-// -compareUser: The User object that the calling User object is being compared to.
-//
-// Returns:
-// -unequalFields []string: The list of fields that did not match between the two User objects being compared
-// -equal bool: If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
-//
-// Description:
-// This function determines if two User object instances are equal to each other. The primary purpose of this function
-// is to test the functionality of database and handler calls to ensure that the correct objects are being returned and/or
-// updated in the database.
+/*
+*Description*
+
+func Equal
+
+Determines if two different User objects are equal to each other (i.e. all fields match).
+
+The primary purpose of this function is to test the functionality of database and handler calls to ensure that
+the correct objects are being returned and/or updated in the database.
+
+*Parameters*
+
+	compareUser  <*User>
+
+		The User object that the calling User object is being compared to
+
+*Returns*
+
+	unequalFields  <[]string>
+
+		The list of fields that did not match between the two User objects being compared
+
+	equal  <bool>
+
+		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
+
+*Response format*
+
+	N/A (None)
+*/
 func (user *User) Equal(compareUser *User) (unequalFields []string, equal bool) {
 	equal = true
 
@@ -132,19 +150,31 @@ func (user *User) Equal(compareUser *User) (unequalFields []string, equal bool) 
 	return unequalFields, equal
 }
 
-// CheckPassword checks if a given password matches the hashed password stored in a User struct.
-//
-// Parameters:
-// -hashedPassword: The hashed password to be compared with the given password.
-// -password: The password to be checked against the hashed password.
-//
-// Returns:
-// -bool: If the given password matches the hashed password, true is returned. Otherwise, false is returned.
-//
-// Description:
-// This function uses the bcrypt algorithm to compare the given password with the hashed password
-// stored in a User struct. If the given password matches the hashed password, true is returned.
-// Otherwise, false is returned.
+/*
+*Description*
+
+func HashPassword
+
+Generates a hash from the provided password string and assigns it to the calling User's Password attribute.
+
+This conforms to best practice of storing hashed passwords in the application database, rather than plain text.
+
+*Parameters*
+
+	password  <string>
+
+		The plain text password that will be hashed.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors encountered).
+
+*Response format*
+
+	N/A (None)
+*/
 func (user *User) HashPassword(password string) error {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
@@ -154,19 +184,33 @@ func (user *User) HashPassword(password string) error {
 	return nil
 }
 
-// CheckPassword method compares a provided password with the hashed password stored in a User struct.
-//
-// Parameters:
-// - providedPassword: The password to be checked against the hashed password stored in the User struct.
-//
-// Returns:
-// - error: If the provided password does not match the hashed password, an error is returned.
-// Otherwise, nil is returned.
-//
-// Description:
-// This method uses the bcrypt algorithm to compare the provided password with the hashed password
-// stored in the User struct. If the provided password does not match the hashed password, an error is returned.
-// Otherwise, nil is returned.
+/*
+*Description*
+
+func CheckPassword
+
+Checks if a given password matches the hashed password associated with the calling User record's account.
+
+This function uses the bcrypt algorithm to compare the given password with the hashed password stored in the calling User struct.
+
+If the given password matches the hashed password, nil is returned.
+
+*Parameters*
+
+	password  <string>
+
+		The password to be checked against the calling User's hashed password.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+
+*Response format*
+
+	N/A (None)
+*/
 func (user *User) CheckPassword(providedPassword string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(providedPassword))
 	if err != nil {
