@@ -12,6 +12,7 @@ import { RegisterComponent } from './register/register.component';
 import { LandingComponent } from './landing/landing.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { BusinessOnboardingComponent } from './business-onboarding/business-onboarding.component';
+import { CreateServiceComponent } from './create-service/create-service.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { BusinessOnboardingComponent } from './business-onboarding/business-onbo
     RegisterComponent,
     LandingComponent,
     OnboardingComponent,
-    BusinessOnboardingComponent
+    BusinessOnboardingComponent,
+    CreateServiceComponent,
   ],
   imports: [
     BrowserModule,
