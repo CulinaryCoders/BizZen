@@ -204,7 +204,7 @@ Returns:
 - *User: A pointer to a User object representing the user with the given ID.
 - error: An error object, which is nil if no error is encountered or non-nil if an error occurs while retrieving the user.
 */
-func (user *User) GetUser(db *gorm.DB, userID string) (*User, error) {
+func (user *User) GetUser(db *gorm.DB, userID uint) (*User, error) {
 	err := db.First(&user, userID).Error
 
 	if err != nil {
@@ -245,7 +245,7 @@ Returns:
 - *User: A pointer to the User object representing the found user.
 - error: An error object, if any errors occurred during the search process.
 */
-func (user *User) UpdateUser(db *gorm.DB, userID string, updates map[string]interface{}) (*User, error) {
+func (user *User) UpdateUser(db *gorm.DB, userID uint, updates map[string]interface{}) (*User, error) {
 	// Confirm user exists and get current object
 	var err error
 	user, err = user.GetUser(db, userID)
@@ -272,7 +272,7 @@ Returns:
 - bool: Returns true if user was successfully deleted and false if otherwise.
 - error: An error object, if any errors occurred during the search process.
 */
-func (user *User) DeleteUser(db *gorm.DB, userID string) (*User, error) {
+func (user *User) DeleteUser(db *gorm.DB, userID uint) (*User, error) {
 	// Confirm user exists and get current object
 	var err error
 	user, err = user.GetUser(db, userID)

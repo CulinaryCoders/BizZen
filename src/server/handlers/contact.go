@@ -8,8 +8,6 @@ import (
 	"server/models"
 	"server/utils"
 	_ "time"
-
-	"github.com/gorilla/mux"
 )
 
 /*
@@ -74,7 +72,7 @@ Creates a new address record in the database.
 		"address2":"",
 		"city":"Gainesville",
 		"state":"FL",
-		"zip":12345
+		"zip":"12345"
 	}
 
 *Response format*
@@ -85,7 +83,7 @@ Creates a new address record in the database.
 		Content-Type: application/json
 
 		{
-			"ID": "123456",
+			"ID": 123456,
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"DeletedAt": null,
@@ -93,7 +91,7 @@ Creates a new address record in the database.
 			"address2":"",
 			"city":"Gainesville",
 			"state":"FL",
-			"zip": 12345
+			"zip": "12345"
 		}
 
 	Failure:
@@ -188,7 +186,7 @@ Get address record from the database by ID.
 		Content-Type: application/json
 
 		{
-			"ID": "123456",
+			"ID": 123456,
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"DeletedAt": null,
@@ -196,10 +194,17 @@ Get address record from the database by ID.
 			"address2":"",
 			"city":"Gainesville",
 			"state":"FL",
-			"zip": 12345
+			"zip": "12345"
 		}
 
 	Failure:
+		-- Case = ID missing from or incorrectly formatted in request url
+		HTTP/1.1 400 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
 
 		HTTP/1.1 404 Resource Not Found
 		Content-Type: application/json
@@ -210,11 +215,20 @@ Get address record from the database by ID.
 */
 func (app *Application) GetAddress(writer http.ResponseWriter, request *http.Request) {
 	address := models.Address{}
-	addressID := mux.Vars(request)["id"]
+	addressID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
 
 	returnedAddress, err := address.GetAddress(app.AppDB, addressID)
 	if err != nil {
-		var errorMessage string = fmt.Sprintf("Address ID (%s) does not exist in the database.\n%s", addressID, err)
+		var errorMessage string = fmt.Sprintf("Address ID (%d) does not exist in the database.\n%s", addressID, err)
 
 		utils.RespondWithError(
 			writer,
@@ -298,7 +312,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 	{
 		"address1":"789 Updated Address Blvd",
 		"city":"Orlando",
-		"zip":45678
+		"zip":"45678"
 	}
 
 *Response format*
@@ -309,7 +323,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 		Content-Type: application/json
 
 		{
-			"ID": "123456",
+			"ID": 123456,
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"UpdatedAt": "2022-07-11T01:23:45.6789012-14:25",
 			"DeletedAt": null,
@@ -317,11 +331,11 @@ If a specified field's value should be deleted from the record, the appropriate 
 			"address2":"",
 			"city":"Orlando",
 			"state":"FL",
-			"zip": 45678
+			"zip": "45678"
 		}
 
 	Failure:
-		-- Case = Bad request body
+		-- Case = Bad request body or missing/misformatted ID in request URL
 		HTTP/1.1 400 Internal Server Error
 		Content-Type: application/json
 
@@ -339,7 +353,16 @@ If a specified field's value should be deleted from the record, the appropriate 
 */
 func (app *Application) UpdateAddress(writer http.ResponseWriter, request *http.Request) {
 	address := models.Address{}
-	addressID := mux.Vars(request)["id"]
+	addressID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
 
 	var updates map[string]interface{}
 
@@ -416,7 +439,7 @@ Deleted address record is returned in the response body if the operation is suce
 		Content-Type: application/json
 
 		{
-			"ID": "123456",
+			"ID": 123456,
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"DeletedAt": "2022-07-11T01:23:45.6789012-14:25",
@@ -424,10 +447,18 @@ Deleted address record is returned in the response body if the operation is suce
 			"address2":"",
 			"city":"Gainesville",
 			"state":"FL",
-			"zip": 12345
+			"zip": "12345"
 		}
 
 	Failure:
+		-- Case = ID missing from or incorrectly formatted in request url
+		HTTP/1.1 400 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
 		-- Case = Database operation error
 		HTTP/1.1 500 Internal Server Error
 		Content-Type: application/json
@@ -438,7 +469,16 @@ Deleted address record is returned in the response body if the operation is suce
 */
 func (app *Application) DeleteAddress(writer http.ResponseWriter, request *http.Request) {
 	address := models.Address{}
-	addressID := mux.Vars(request)["id"]
+	addressID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
 
 	deletedAddress, err := address.DeleteAddress(app.AppDB, addressID)
 	if err != nil {

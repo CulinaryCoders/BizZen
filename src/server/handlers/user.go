@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"server/models"
 	"server/utils"
-
-	"github.com/gorilla/mux"
 )
 
 /*
@@ -114,7 +112,7 @@ Creates a new user account record in the database.
 		Content-Type: application/json
 
 		{
-		"ID": "123456",
+		"ID": 123456,
 		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"DeletedAt": null,
@@ -231,7 +229,7 @@ Retrieves a user account record from the database by user ID if the ID exists in
 		Content-Type: application/json
 
 		{
-		"ID": "123456",
+		"ID": 123456,
 		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"DeletedAt": null,
@@ -249,6 +247,14 @@ Retrieves a user account record from the database by user ID if the ID exists in
 		}
 
 	Failure:
+		-- Case = ID missing from or incorrectly formatted in request url
+		HTTP/1.1 400 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
 		-- Case = User ID does not exist in the database
 		HTTP/1.1 404 Not Found
 		Content-Type: application/json
@@ -259,20 +265,20 @@ Retrieves a user account record from the database by user ID if the ID exists in
 */
 func (app *Application) GetUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
-	userID := mux.Vars(request)["id"]
+	userID, err := utils.ParseRequestID(request)
 
-	// DO NOT DELETE -- KEPT FOR REFERENCE PURPOSES
-	// userID, err := utils.ParseRequestID(request)
-	// if err != nil {
-	// 	utils.RespondWithError(
-	// 		writer,
-	// 		http.StatusInternalServerError,
-	// 		err.Error())
-	// }
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
 
 	returnedUser, err := user.GetUser(app.AppDB, userID)
 	if err != nil {
-		var errorMessage string = fmt.Sprintf("User ID (%s) does not exist in the database.\n%s", userID, err)
+		var errorMessage string = fmt.Sprintf("User ID (%d) does not exist in the database.\n%s", userID, err)
 
 		utils.RespondWithError(
 			writer,
@@ -395,7 +401,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 		Content-Type: application/json
 
 		{
-		"ID": "123456",
+		"ID": 123456,
 		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"UpdatedAt": "2022-07-11T01:23:45.6789012-14:25",
 		"DeletedAt": null,
@@ -413,7 +419,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 		}
 
 	Failure:
-		-- Case = Bad request body
+		-- Case = Bad request body or missing/bad ID in request URL
 		HTTP/1.1 400 Internal Server Error
 		Content-Type: application/json
 
@@ -431,7 +437,16 @@ If a specified field's value should be deleted from the record, the appropriate 
 */
 func (app *Application) UpdateUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
-	userID := mux.Vars(request)["id"]
+	userID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
 
 	var updates map[string]interface{}
 
@@ -509,7 +524,7 @@ Deleted user record is returned in the response body if the operation is sucessf
 		Content-Type: application/json
 
 		{
-		"ID": "123456",
+		"ID": 123456,
 		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"DeletedAt": "2022-07-11T01:23:45.6789012-14:25",
@@ -527,6 +542,14 @@ Deleted user record is returned in the response body if the operation is sucessf
 		}
 
 	Failure:
+		-- Case = ID missing from or incorrectly formatted in request url
+		HTTP/1.1 400 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
 		-- Case = Database operation error
 		HTTP/1.1 500 Internal Server Error
 		Content-Type: application/json
@@ -537,7 +560,16 @@ Deleted user record is returned in the response body if the operation is sucessf
 */
 func (app *Application) DeleteUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
-	userID := mux.Vars(request)["id"]
+	userID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
 
 	deletedUser, err := user.DeleteUser(app.AppDB, userID)
 	if err != nil {

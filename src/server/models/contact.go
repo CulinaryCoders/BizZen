@@ -94,7 +94,7 @@ func (address *Address) CreateAddress(db *gorm.DB) (*Address, error) {
 }
 
 // TODO:  Add comment documentation (func GetAddress)
-func (address *Address) GetAddress(db *gorm.DB, addressID string) (*Address, error) {
+func (address *Address) GetAddress(db *gorm.DB, addressID uint) (*Address, error) {
 	err := db.First(&address, addressID).Error
 
 	if err != nil {
@@ -105,7 +105,7 @@ func (address *Address) GetAddress(db *gorm.DB, addressID string) (*Address, err
 }
 
 // TODO:  Add comment documentation (func UpdateAddress)
-func (address *Address) UpdateAddress(db *gorm.DB, addressID string, updates map[string]interface{}) (*Address, error) {
+func (address *Address) UpdateAddress(db *gorm.DB, addressID uint, updates map[string]interface{}) (*Address, error) {
 	// Confirm address exists and get current object
 	var err error
 	address, err = address.GetAddress(db, addressID)
@@ -123,7 +123,7 @@ func (address *Address) UpdateAddress(db *gorm.DB, addressID string, updates map
 }
 
 // TODO:  Add comment documentation (func DeleteAddress)
-func (address *Address) DeleteAddress(db *gorm.DB, addressID string) (*Address, error) {
+func (address *Address) DeleteAddress(db *gorm.DB, addressID uint) (*Address, error) {
 	// Confirm address exists and get current object
 	var err error
 	address, err = address.GetAddress(db, addressID)
