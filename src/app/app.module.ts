@@ -13,6 +13,8 @@ import { LandingComponent } from './landing/landing.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { BusinessOnboardingComponent } from './business-onboarding/business-onboarding.component';
 import { CreateServiceComponent } from './create-service/create-service.component';
+import { FindClassesComponent } from './find-classes/find-classes.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { CreateServiceComponent } from './create-service/create-service.componen
     OnboardingComponent,
     BusinessOnboardingComponent,
     CreateServiceComponent,
+    FindClassesComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +34,8 @@ import { CreateServiceComponent } from './create-service/create-service.componen
     AppRoutingModule,
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ScrollingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

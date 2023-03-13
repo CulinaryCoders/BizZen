@@ -2,12 +2,14 @@ package main
 
 import (
 	"server/config"
+	"server/database"
+	"server/handlers"
 )
 
 func main() {
 	var prodDBName string = config.AppConfig.APP_DB_NAME
 
-	app := Application{}
-	app.Initialize(prodDBName)
-	app.Run(config.AppConfig.GetAPIServerNetworkAddress())
+	handlers.App.Initialize(prodDBName)
+	database.FormatAllTables(handlers.App.AppDB)
+	handlers.App.Run(config.AppConfig.GetAPIServerNetworkAddress())
 }

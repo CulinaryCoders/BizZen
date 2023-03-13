@@ -2,7 +2,11 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 /*
@@ -56,4 +60,24 @@ func RespondWithError(writer http.ResponseWriter, code int, message string) {
 		code,
 		map[string]string{"error": message},
 	)
+}
+
+// ParseRequestID is a helper function to parse the ID variable present in the request and convert to uint64
+func ParseRequestID(request *http.Request) (uint64, error) {
+	userId := mux.Vars(request)["id"]
+	convertedToUint64, err := strconv.ParseUint(userId, 10, 64)
+	fmt.Print(convertedToUint64)
+	return convertedToUint64, err
+}
+
+/*
+DecodeJSON is a helper function to unmarshal the request body into the provided gorm Model object
+*/
+func DecodeJSON(request *http.Request, modelObj interface{}) (interface{}, error) {
+	decoder := json.NewDecoder(request.Body)
+	if err := decoder.Decode(modelObj); err != nil {
+		return modelObj, err
+	}
+	defer request.Body.Close()
+	return modelObj, nil
 }
