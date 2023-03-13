@@ -2,7 +2,6 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -63,11 +62,10 @@ func RespondWithError(writer http.ResponseWriter, code int, message string) {
 }
 
 // ParseRequestID is a helper function to parse the ID variable present in the request and convert to uint64
-func ParseRequestID(request *http.Request) (uint64, error) {
+func ParseRequestID(request *http.Request) (uint, error) {
 	userId := mux.Vars(request)["id"]
 	convertedToUint64, err := strconv.ParseUint(userId, 10, 64)
-	fmt.Print(convertedToUint64)
-	return convertedToUint64, err
+	return uint(convertedToUint64), err
 }
 
 /*
