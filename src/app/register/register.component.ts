@@ -84,7 +84,11 @@ export class RegisterComponent {
 
         // Send to db!
         this.addUser();
-        this.router.navigate(["/onboarding"])
+        if (this.isBusiness) {
+          this.router.navigate(["/onboarding"])
+        } else {
+          this.router.navigate(["/businessOnboarding"])
+        }
       }
     }
   }
