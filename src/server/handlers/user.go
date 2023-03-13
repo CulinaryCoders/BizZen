@@ -512,7 +512,7 @@ Deleted user record is returned in the response body if the operation is sucessf
 		"ID": "123456",
 		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
-		"DeletedAt": null,
+		"DeletedAt": "2022-07-11T01:23:45.6789012-14:25",
 		"username": "johndoe",
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
