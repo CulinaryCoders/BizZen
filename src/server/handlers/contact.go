@@ -21,7 +21,7 @@ Creates a new address record in the database.
 
 	writer  <http.ResponseWriter>
 
-	   The HTTP response writer
+		The HTTP response writer
 
 	request  <*http.Request>
 
@@ -152,13 +152,13 @@ Get address record from the database by ID.
 
 *Parameters*
 
-	   writer  <http.ResponseWriter>
+	writer  <http.ResponseWriter>
 
-		   The HTTP response writer
+		The HTTP response writer
 
-	   request  <*http.Request>
+	request  <*http.Request>
 
-		   The HTTP request
+		The HTTP request
 
 *Returns*
 
@@ -259,13 +259,13 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 *Parameters*
 
-	   writer  <http.ResponseWriter>
+	writer  <http.ResponseWriter>
 
-		   The HTTP response writer
+		The HTTP response writer
 
-	   request  <*http.Request>
+	request  <*http.Request>
 
-		   The HTTP request
+		The HTTP request
 
 *Returns*
 
@@ -407,7 +407,7 @@ Deleted address record is returned in the response body if the operation is suce
 
 	writer  <http.ResponseWriter>
 
-	   The HTTP response writer
+		The HTTP response writer
 
 	request  <*http.Request>
 

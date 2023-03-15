@@ -26,6 +26,20 @@ func Authenticate
 
 Authenticates that the provided user account exists in the database and that the provided password is correct for that account.
 
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
 *Expected request format*
 
 	Type:   POST
