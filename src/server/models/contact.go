@@ -118,7 +118,28 @@ func (address *Address) Equal(compareAddress *Address) (unequalFields []string, 
 /*
 *Description*
 
-func CreateAddress
+func getID
+
+# Returns ID field from Address object
+
+*Parameters*
+
+	N/A (None)
+
+*Returns*
+
+	_  <uint>
+
+		The ID of the address object
+*/
+func (address *Address) getID() uint {
+	return address.ID
+}
+
+/*
+*Description*
+
+func Create
 
 Creates a new Address record in the database and returns the created record along with any errors that are thrown.
 
@@ -142,19 +163,17 @@ Creates a new Address record in the database and returns the created record alon
 
 	N/A (None)
 */
-func (address *Address) CreateAddress(db *gorm.DB) (*Address, error) {
-	// TODO: Add field validation logic (func CreateAddress) -- add as BeforeCreate gorm hook definition at the top of this file
-	if err := db.Create(&address).Error; err != nil {
-		return address, err
-	}
-
-	return address, nil
+func (address *Address) Create(db *gorm.DB) (map[string]Model, error) {
+	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
+	err := db.Create(&address).Error
+	returnRecords := map[string]Model{"address": address}
+	return returnRecords, err
 }
 
 /*
 *Description*
 
-func GetAddress
+func Get
 
 Retrieves an Address record in the database by ID if it exists and returns that record along with any errors that are thrown.
 
@@ -182,20 +201,16 @@ Retrieves an Address record in the database by ID if it exists and returns that 
 
 	N/A (None)
 */
-func (address *Address) GetAddress(db *gorm.DB, addressID uint) (*Address, error) {
+func (address *Address) Get(db *gorm.DB, addressID uint) (map[string]Model, error) {
 	err := db.First(&address, addressID).Error
-
-	if err != nil {
-		return address, err
-	}
-
-	return address, nil
+	returnRecords := map[string]Model{"address": address}
+	return returnRecords, err
 }
 
 /*
 *Description*
 
-func UpdateAddress
+func Update
 
 Updates the specified Address record in the database with the specified changes if the record exists.
 
@@ -239,27 +254,26 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 	N/A (None)
 */
-func (address *Address) UpdateAddress(db *gorm.DB, addressID uint, updates map[string]interface{}) (*Address, error) {
+func (address *Address) Update(db *gorm.DB, addressID uint, updates map[string]interface{}) (map[string]Model, error) {
 	// Confirm address exists and get current object
-	var err error
-	address, err = address.GetAddress(db, addressID)
+	returnRecords, err := address.Get(db, addressID)
+	updateAddress := returnRecords["address"]
+
 	if err != nil {
-		return address, err
+		return returnRecords, err
 	}
 
-	// TODO: Add field validation logic (func UpdateAddress) -- add as BeforeUpdate gorm hook definition at the top of this file
+	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
+	err = db.Model(&updateAddress).Where("id = ?", addressID).Updates(updates).Error
+	returnRecords = map[string]Model{"address": updateAddress}
 
-	if err := db.Model(&address).Where("id = ?", addressID).Updates(updates).Error; err != nil {
-		return address, err
-	}
-
-	return address, nil
+	return returnRecords, err
 }
 
 /*
 *Description*
 
-func DeleteAddress
+func Delete
 
 Deletes the specified Address record from the database if it exists.
 
@@ -289,17 +303,17 @@ Deleted record is returned along with any errors that are thrown.
 
 	N/A (None)
 */
-func (address *Address) DeleteAddress(db *gorm.DB, addressID uint) (*Address, error) {
+func (address *Address) Delete(db *gorm.DB, addressID uint) (map[string]Model, error) {
 	// Confirm address exists and get current object
-	var err error
-	address, err = address.GetAddress(db, addressID)
+	returnRecords, err := address.Get(db, addressID)
+	deleteAddress := returnRecords["address"]
+
 	if err != nil {
-		return address, err
+		return returnRecords, err
 	}
 
-	if err := db.Delete(&address).Error; err != nil {
-		return address, err
-	}
+	err = db.Delete(&address).Error
+	returnRecords = map[string]Model{"address": deleteAddress}
 
-	return address, nil
+	return returnRecords, err
 }

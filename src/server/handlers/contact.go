@@ -127,7 +127,8 @@ func (app *Application) CreateAddress(writer http.ResponseWriter, request *http.
 
 	defer request.Body.Close()
 
-	createdAddress, err := address.CreateAddress(app.AppDB)
+	returnedRecords, err := address.Create(app.AppDB)
+	createdAddress := returnedRecords["address"]
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -226,7 +227,7 @@ func (app *Application) GetAddress(writer http.ResponseWriter, request *http.Req
 		return
 	}
 
-	returnedAddress, err := address.GetAddress(app.AppDB, addressID)
+	returnedAddress, err := address.Get(app.AppDB, addressID)
 	if err != nil {
 		var errorMessage string = fmt.Sprintf("Address ID (%d) does not exist in the database.\n%s", addressID, err)
 
@@ -378,7 +379,8 @@ func (app *Application) UpdateAddress(writer http.ResponseWriter, request *http.
 
 	defer request.Body.Close()
 
-	updatedAddress, err := address.UpdateAddress(app.AppDB, addressID, updates)
+	returnedRecords, err := address.Update(app.AppDB, addressID, updates)
+	updatedAddress := returnedRecords["address"]
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -480,7 +482,8 @@ func (app *Application) DeleteAddress(writer http.ResponseWriter, request *http.
 		return
 	}
 
-	deletedAddress, err := address.DeleteAddress(app.AppDB, addressID)
+	returnedRecords, err := address.Delete(app.AppDB, addressID)
+	deletedAddress := returnedRecords["address"]
 	if err != nil {
 		utils.RespondWithError(
 			writer,
