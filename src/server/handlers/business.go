@@ -128,7 +128,7 @@ func (app *Application) CreateBusiness(writer http.ResponseWriter, request *http
 
 	defer request.Body.Close()
 
-	createdBusiness, createdOffice, err := business.CreateBusiness(app.AppDB)
+	returnRecords, err := business.Create(app.AppDB)
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -138,15 +138,10 @@ func (app *Application) CreateBusiness(writer http.ResponseWriter, request *http
 		return
 	}
 
-	returnedJSON := map[string]interface{}{
-		"business": createdBusiness,
-		"office":   createdOffice,
-	}
-
 	utils.RespondWithJSON(
 		writer,
 		http.StatusCreated,
-		returnedJSON)
+		returnRecords)
 }
 
 /*
@@ -232,7 +227,8 @@ func (app *Application) GetBusiness(writer http.ResponseWriter, request *http.Re
 		return
 	}
 
-	returnedBusiness, err := business.GetBusiness(app.AppDB, businessID)
+	returnRecords, err := business.Get(app.AppDB, businessID)
+	returnedBusiness := returnRecords["business"]
 	if err != nil {
 		var errorMessage string = fmt.Sprintf("Business ID (%d) does not exist in the database.\n%s", businessID, err)
 
@@ -374,7 +370,8 @@ func (app *Application) UpdateBusiness(writer http.ResponseWriter, request *http
 
 	defer request.Body.Close()
 
-	updatedBusiness, err := business.UpdateBusiness(app.AppDB, businessID, updates)
+	returnRecords, err := business.Update(app.AppDB, businessID, updates)
+	updatedBusiness := returnRecords["business"]
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -475,7 +472,8 @@ func (app *Application) DeleteBusiness(writer http.ResponseWriter, request *http
 		return
 	}
 
-	deletedBusiness, err := business.DeleteBusiness(app.AppDB, businessID)
+	returnRecords, err := business.Delete(app.AppDB, businessID)
+	deletedBusiness := returnRecords["business"]
 	if err != nil {
 		utils.RespondWithError(writer, http.StatusInternalServerError, err.Error())
 		return

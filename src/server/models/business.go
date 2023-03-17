@@ -149,7 +149,28 @@ func (business *Business) Equal(compareBusiness *Business) (unequalFields []stri
 /*
 *Description*
 
-func CreateBusiness
+func getID
+
+# Returns ID field from Business object
+
+*Parameters*
+
+	N/A (None)
+
+*Returns*
+
+	_  <uint>
+
+		The ID of the business object
+*/
+func (business *Business) getID() uint {
+	return business.ID
+}
+
+/*
+*Description*
+
+func Create
 
 Creates a new Business record in the database and returns the created record along with any errors that are thrown.
 
@@ -177,37 +198,52 @@ Creates a new Business record in the database and returns the created record alo
 
 	N/A (None)
 */
-func (business *Business) CreateBusiness(db *gorm.DB) (*Business, *Office, error) {
-	var office *Office
-	// TODO: Add field validation logic (func CreateBusiness) -- add as BeforeCreate gorm hook definition at the top of this file
-	if err := db.Create(&business).Error; err != nil {
-		return business, office, err
+func (business *Business) Create(db *gorm.DB) (map[string]Model, error) {
+	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
+	err := db.Create(&business).Error
+	if err != nil {
+		returnRecords := map[string]Model{"business": business, "office": &Office{}}
+		return returnRecords, err
 	}
 
 	// Automatically generate a new Office record associated with the business with generic defaults
 	var mainOfficeName string = fmt.Sprintf("%s - Main Office", business.Name)
-	office.BusinessID = business.ID
-	office.ManagerID = business.OwnerID
-	office.Name = mainOfficeName
 
-	createdOffice, err := office.CreateOffice(db)
-	if err != nil {
-		return business, createdOffice, err
+	office := Office{
+		BusinessID: business.ID,
+		ManagerID:  business.OwnerID,
+		Name:       mainOfficeName,
 	}
 
-	officeIDUpdate := map[string]interface{}{"main_office_id": createdOffice.ID}
-	createdBusiness, err := business.UpdateBusiness(db, business.ID, officeIDUpdate)
+	returnRecords, err := office.Create(db)
+	createdOffice := returnRecords["office"]
+
+	returnRecords = map[string]Model{"business": business, "office": createdOffice}
+
 	if err != nil {
-		return createdBusiness, createdOffice, err
+		log.Panicln("Could not create new Office record.")
+
+		return returnRecords, err
 	}
 
-	return createdBusiness, createdOffice, nil
+	//  Set MainOfficeID for new Business record to new Office record that was created
+	officeIDUpdate := map[string]interface{}{"main_office_id": createdOffice.getID()}
+	returnRecords, err = business.Update(db, business.ID, officeIDUpdate)
+	updatedBusiness := returnRecords["business"]
+
+	returnRecords = map[string]Model{"business": updatedBusiness, "office": createdOffice}
+
+	if err != nil {
+		log.Panicln("Could not update Office ID for Business object.")
+	}
+
+	return returnRecords, err
 }
 
 /*
 *Description*
 
-func GetBusiness
+func Get
 
 Retrieves a Business record in the database by ID if it exists and returns that record along with any errors that are thrown.
 
@@ -235,20 +271,16 @@ Retrieves a Business record in the database by ID if it exists and returns that 
 
 	N/A (None)
 */
-func (business *Business) GetBusiness(db *gorm.DB, businessID uint) (*Business, error) {
+func (business *Business) Get(db *gorm.DB, businessID uint) (map[string]Model, error) {
 	err := db.First(&business, businessID).Error
-
-	if err != nil {
-		return business, err
-	}
-
-	return business, nil
+	returnRecords := map[string]Model{"business": business}
+	return returnRecords, err
 }
 
 /*
 *Description*
 
-func UpdateBusiness
+func Update
 
 Updates the specified Business record in the database with the specified changes if the record exists.
 
@@ -292,28 +324,28 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 	N/A (None)
 */
-func (business *Business) UpdateBusiness(db *gorm.DB, businessID uint, updates map[string]interface{}) (*Business, error) {
-	// Confirm business exists and get current object
-	var err error
-	business, err = business.GetBusiness(db, businessID)
+func (business *Business) Update(db *gorm.DB, businessID uint, updates map[string]interface{}) (map[string]Model, error) {
+	// Confirm businessID exists in the database and get current object
+	returnRecords, err := business.Get(db, businessID)
+	updateBusiness := returnRecords["business"]
+
 	if err != nil {
-		return business, err
+		return returnRecords, err
 	}
 
-	// TODO: Add field validation logic (func UpdateBusiness) -- add as BeforeUpdate gorm hook definition at the top of this file
+	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 
-	if err := db.Model(&business).Where("id = ?", businessID).Updates(updates).Error; err != nil {
-		return business, err
-	}
+	err = db.Model(&updateBusiness).Where("id = ?", businessID).Updates(updates).Error
+	returnRecords = map[string]Model{"business": updateBusiness}
 
-	return business, nil
+	return returnRecords, err
 }
 
 // TODO: Cascade delete all records associated with business (operating hours, offices, contact info, etc.)
 /*
 *Description*
 
-func DeleteBusiness
+func Delete
 
 Deletes the specified Business record from the database if it exists.
 
@@ -343,25 +375,47 @@ Deleted record is returned along with any errors that are thrown.
 
 	N/A (None)
 */
-func (business *Business) DeleteBusiness(db *gorm.DB, businessID uint) (*Business, error) {
-	// Confirm business exists and get current object
-	var err error
-	business, err = business.GetBusiness(db, businessID)
+func (business *Business) Delete(db *gorm.DB, businessID uint) (map[string]Model, error) {
+	// Confirm businessID exists in the database and get current object
+	returnRecords, err := business.Get(db, businessID)
+	deleteBusiness := returnRecords["business"]
+
 	if err != nil {
-		return business, err
+		return returnRecords, err
 	}
 
-	if err := db.Delete(&business).Error; err != nil {
-		return business, err
-	}
+	// TODO:  Extend delete operations to all of the other object types associated with the Business record as is appropriate (Offices, Services, etc.)
+	err = db.Delete(&deleteBusiness).Error
+	returnRecords = map[string]Model{"business": deleteBusiness}
 
-	return business, nil
+	return returnRecords, err
 }
 
 /*
 *Description*
 
-func CreateOffice
+func getID
+
+# Returns ID field from Business object
+
+*Parameters*
+
+	N/A (None)
+
+*Returns*
+
+	_  <uint>
+
+		The ID of the business object
+*/
+func (office *Office) getID() uint {
+	return office.ID
+}
+
+/*
+*Description*
+
+func Create
 
 Creates a new Office record in the database and returns the created record along with any errors that are thrown.
 
@@ -385,11 +439,157 @@ Creates a new Office record in the database and returns the created record along
 
 	N/A (None)
 */
-func (office *Office) CreateOffice(db *gorm.DB) (*Office, error) {
-	// TODO: Add field validation logic (func CreateOffice) -- add as BeforeCreate gorm hook definition at the top of this file
-	if err := db.Create(&office).Error; err != nil {
-		return office, err
+func (office *Office) Create(db *gorm.DB) (map[string]Model, error) {
+	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
+	err := db.Create(&office).Error
+	returnRecords := map[string]Model{"office": office}
+	return returnRecords, err
+}
+
+/*
+*Description*
+
+func Get
+
+Retrieves an Address record in the database by ID if it exists and returns that record along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be used to retrieve the specified record.
+
+	addressID  <uint>
+
+		The ID of the address record being requested.
+
+*Returns*
+
+	_  <*Address>
+
+		The Address record that is retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+
+*Response format*
+
+	N/A (None)
+*/
+func (office *Office) Get(db *gorm.DB, officeID uint) (map[string]Model, error) {
+	err := db.First(&office, officeID).Error
+	returnRecords := map[string]Model{"office": office}
+	return returnRecords, err
+}
+
+/*
+*Description*
+
+func Update
+
+Updates the specified Address record in the database with the specified changes if the record exists.
+
+Returns the updated record along with any errors that are thrown.
+
+This function behaves like a PATCH method, rather than a true PUT. Any fields that aren't specified in the request body for the PUT request will not be altered for the specified record.
+
+If a specified field's value should be deleted from the record, the appropriate null/blank should be specified for that key in the JSON request body (e.g. "type": "").
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be used to retrieve and update the specified record.
+
+	addressID  <uint>
+
+		The ID of the address record being updated.
+
+	updates  <map[string]interface{}>
+
+		JSON with the fields that will be updated as keys and the updated values as values.
+
+		Ex:
+			{
+				"name": "New name",
+				"address": "New address"
+			}
+
+*Returns*
+
+	_  <*Address>
+
+		The Address record that is updated in the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+
+*Response format*
+
+	N/A (None)
+*/
+func (office *Office) Update(db *gorm.DB, officeID uint, updates map[string]interface{}) (map[string]Model, error) {
+	// Confirm officeID exists in the database and get current object
+	returnRecords, err := office.Get(db, officeID)
+	updateOffice := returnRecords["office"]
+
+	if err != nil {
+		return returnRecords, err
 	}
 
-	return office, nil
+	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
+	err = db.Model(&updateOffice).Where("id = ?", officeID).Updates(updates).Error
+	returnRecords = map[string]Model{"office": updateOffice}
+
+	return returnRecords, err
+}
+
+/*
+*Description*
+
+func Delete
+
+Deletes the specified Address record from the database if it exists.
+
+Deleted record is returned along with any errors that are thrown.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be deleted from.
+
+	addressID  <uint>
+
+		The ID of the address record being deleted.
+
+*Returns*
+
+	_  <*Address>
+
+		The deleted Address record.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+
+*Response format*
+
+	N/A (None)
+*/
+func (office *Office) Delete(db *gorm.DB, officeID uint) (map[string]Model, error) {
+	// Confirm address exists and get current object
+	returnRecords, err := office.Get(db, officeID)
+	deleteOffice := returnRecords["office"]
+
+	if err != nil {
+		return returnRecords, err
+	}
+
+	err = db.Delete(&office).Error
+	returnRecords = map[string]Model{"office": deleteOffice}
+
+	return returnRecords, err
 }
