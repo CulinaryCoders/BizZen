@@ -97,6 +97,7 @@ func (app *Application) initializeRoutes() {
 		fmt.Fprint(writer, "Hello, World!")
 	})
 
+	// TODO: Possible to create generic handler method(s) to reduce duplicate code?
 	// User routes
 	app.Router.HandleFunc("/register", app.CreateUser).Methods("POST")
 	app.Router.HandleFunc("/login", app.Authenticate).Methods("POST")

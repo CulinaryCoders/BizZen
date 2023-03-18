@@ -227,7 +227,8 @@ func (app *Application) GetAddress(writer http.ResponseWriter, request *http.Req
 		return
 	}
 
-	returnedAddress, err := address.Get(app.AppDB, addressID)
+	returnRecords, err := address.Get(app.AppDB, addressID)
+	returnedAddress := returnRecords["address"]
 	if err != nil {
 		var errorMessage string = fmt.Sprintf("Address ID (%d) does not exist in the database.\n%s", addressID, err)
 
@@ -309,7 +310,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 *Example request(s)*
 
-	PUT /user/123456
+	PUT /address/123456
 	{
 		"address1":"789 Updated Address Blvd",
 		"city":"Orlando",
