@@ -428,7 +428,7 @@ func (office *Office) Create(db *gorm.DB) (map[string]Model, error) {
 
 func Get
 
-Retrieves an Address record in the database by ID if it exists and returns that record along with any errors that are thrown.
+Retrieves an Office record in the database by ID if it exists and returns that record along with any errors that are thrown.
 
 *Parameters*
 
@@ -436,15 +436,15 @@ Retrieves an Address record in the database by ID if it exists and returns that 
 
 		A pointer to the database instance that will be used to retrieve the specified record.
 
-	addressID  <uint>
+	officeID  <uint>
 
-		The ID of the address record being requested.
+		The ID of the office record being requested.
 
 *Returns*
 
-	_  <*Address>
+	_  <*Office>
 
-		The Address record that is retrieved from the database.
+		The Office record that is retrieved from the database.
 
 	_  <error>
 
@@ -461,7 +461,7 @@ func (office *Office) Get(db *gorm.DB, officeID uint) (map[string]Model, error) 
 
 func Update
 
-Updates the specified Address record in the database with the specified changes if the record exists.
+Updates the specified Office record in the database with the specified changes if the record exists.
 
 Returns the updated record along with any errors that are thrown.
 
@@ -475,9 +475,9 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 		A pointer to the database instance that will be used to retrieve and update the specified record.
 
-	addressID  <uint>
+	officeID  <uint>
 
-		The ID of the address record being updated.
+		The ID of the office record being updated.
 
 	updates  <map[string]interface{}>
 
@@ -491,9 +491,9 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 *Returns*
 
-	_  <*Address>
+	_  <*Office>
 
-		The Address record that is updated in the database.
+		The Office record that is updated in the database.
 
 	_  <error>
 
@@ -520,7 +520,7 @@ func (office *Office) Update(db *gorm.DB, officeID uint, updates map[string]inte
 
 func Delete
 
-Deletes the specified Address record from the database if it exists.
+Deletes the specified Office record from the database if it exists.
 
 Deleted record is returned along with any errors that are thrown.
 
@@ -530,22 +530,22 @@ Deleted record is returned along with any errors that are thrown.
 
 		A pointer to the database instance where the record will be deleted from.
 
-	addressID  <uint>
+	officeID  <uint>
 
-		The ID of the address record being deleted.
+		The ID of the office record being deleted.
 
 *Returns*
 
-	_  <*Address>
+	_  <*Office>
 
-		The deleted Address record.
+		The deleted Office record.
 
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
 */
 func (office *Office) Delete(db *gorm.DB, officeID uint) (map[string]Model, error) {
-	// Confirm address exists and get current object
+	// Confirm office exists and get current object
 	returnRecords, err := office.Get(db, officeID)
 	deleteOffice := returnRecords["office"]
 
