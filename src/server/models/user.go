@@ -210,7 +210,28 @@ func (user *User) CheckPassword(providedPassword string) error {
 /*
 *Description*
 
-func CreateUser
+func getID
+
+# Returns ID field from User object
+
+*Parameters*
+
+	N/A (None)
+
+*Returns*
+
+	_  <uint>
+
+		The ID of the User object
+*/
+func (user *User) getID() uint {
+	return user.ID
+}
+
+/*
+*Description*
+
+func Create
 
 Creates a new User record in the database and returns the created record along with any errors that are thrown.
 
@@ -230,19 +251,17 @@ Creates a new User record in the database and returns the created record along w
 
 		Encountered error (nil if no errors are encountered).
 */
-func (user *User) CreateUser(db *gorm.DB) (*User, error) {
-	// TODO: Add field validation logic (func CreateUser) -- add as BeforeCreate gorm hook definition at the top of this file
-	if err := db.Create(&user).Error; err != nil {
-		return user, err
-	}
-
-	return user, nil
+func (user *User) Create(db *gorm.DB) (map[string]Model, error) {
+	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
+	err := db.Create(&user).Error
+	returnRecords := map[string]Model{"user": user}
+	return returnRecords, err
 }
 
 /*
 *Description*
 
-func GetUser
+func Get
 
 Retrieves a User record in the database by ID if it exists and returns that record along with any errors that are thrown.
 
@@ -266,14 +285,10 @@ Retrieves a User record in the database by ID if it exists and returns that reco
 
 		Encountered error (nil if no errors are encountered)
 */
-func (user *User) GetUser(db *gorm.DB, userID uint) (*User, error) {
+func (user *User) Get(db *gorm.DB, userID uint) (map[string]Model, error) {
 	err := db.First(&user, userID).Error
-
-	if err != nil {
-		return user, err
-	}
-
-	return user, nil
+	returnRecords := map[string]Model{"user": user}
+	return returnRecords, err
 }
 
 /*
@@ -316,7 +331,7 @@ func (user *User) GetUserByEmail(db *gorm.DB, userEmail string) (*User, error) {
 /*
 *Description*
 
-func UpdateUser
+func Update
 
 Updates the specified User record in the database with the specified changes if the record exists.
 
@@ -356,27 +371,26 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 		Encountered error (nil if no errors are encountered)
 */
-func (user *User) UpdateUser(db *gorm.DB, userID uint, updates map[string]interface{}) (*User, error) {
-	// Confirm user exists and get current object
-	var err error
-	user, err = user.GetUser(db, userID)
+func (user *User) Update(db *gorm.DB, userID uint, updates map[string]interface{}) (map[string]Model, error) {
+	// Confirm userID exists in the database and get current object
+	returnRecords, err := user.Get(db, userID)
+	updateUser := returnRecords["user"]
+
 	if err != nil {
-		return user, err
+		return returnRecords, err
 	}
 
-	// TODO: Add field validation logic (func UpdateUser) -- add as BeforeUpdate gorm hook definition at the top of this file
+	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
+	err = db.Model(&updateUser).Where("id = ?", userID).Updates(updates).Error
+	returnRecords = map[string]Model{"user": updateUser}
 
-	if err := db.Model(&user).Where("id = ?", userID).Updates(updates).Error; err != nil {
-		return user, err
-	}
-
-	return user, nil
+	return returnRecords, err
 }
 
 /*
 *Description*
 
-func DeleteUser
+func Delete
 
 Deletes the specified User record from the database by ID if it exists.
 
@@ -402,17 +416,17 @@ Deleted record is returned along with any errors that are thrown.
 
 		Encountered error (nil if no errors are encountered).
 */
-func (user *User) DeleteUser(db *gorm.DB, userID uint) (*User, error) {
-	// Confirm user exists and get current object
-	var err error
-	user, err = user.GetUser(db, userID)
+func (user *User) Delete(db *gorm.DB, userID uint) (map[string]Model, error) {
+	// Confirm userID exists in the database and get current object
+	returnRecords, err := user.Get(db, userID)
+	deleteUser := returnRecords["user"]
+
 	if err != nil {
-		return user, err
+		return returnRecords, err
 	}
 
-	if err := db.Delete(&user).Error; err != nil {
-		return user, err
-	}
+	err = db.Delete(&user).Error
+	returnRecords = map[string]Model{"user": deleteUser}
 
-	return user, nil
+	return returnRecords, err
 }

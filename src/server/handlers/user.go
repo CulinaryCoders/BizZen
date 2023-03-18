@@ -170,7 +170,8 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 		return
 	}
 
-	createdUser, err := user.CreateUser(app.AppDB)
+	returnRecords, err := user.Create(app.AppDB)
+	createdUser := returnRecords["user"]
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -276,7 +277,8 @@ func (app *Application) GetUser(writer http.ResponseWriter, request *http.Reques
 		return
 	}
 
-	returnedUser, err := user.GetUser(app.AppDB, userID)
+	returnRecords, err := user.Get(app.AppDB, userID)
+	returnedUser := returnRecords["user"]
 	if err != nil {
 		var errorMessage string = fmt.Sprintf("User ID (%d) does not exist in the database.\n%s", userID, err)
 
@@ -462,7 +464,8 @@ func (app *Application) UpdateUser(writer http.ResponseWriter, request *http.Req
 
 	defer request.Body.Close()
 
-	updatedUser, err := user.UpdateUser(app.AppDB, userID, updates)
+	returnRecords, err := user.Update(app.AppDB, userID, updates)
+	updatedUser := returnRecords["user"]
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -571,7 +574,8 @@ func (app *Application) DeleteUser(writer http.ResponseWriter, request *http.Req
 		return
 	}
 
-	deletedUser, err := user.DeleteUser(app.AppDB, userID)
+	returnRecords, err := user.Delete(app.AppDB, userID)
+	deletedUser := returnRecords["user"]
 	if err != nil {
 		utils.RespondWithError(
 			writer,

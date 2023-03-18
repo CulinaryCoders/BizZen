@@ -239,7 +239,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 		Encountered error (nil if no errors are encountered)
 */
 func (address *Address) Update(db *gorm.DB, addressID uint, updates map[string]interface{}) (map[string]Model, error) {
-	// Confirm address exists and get current object
+	// Confirm addressID exists in the database and get current object
 	returnRecords, err := address.Get(db, addressID)
 	updateAddress := returnRecords["address"]
 
@@ -284,7 +284,7 @@ Deleted record is returned along with any errors that are thrown.
 		Encountered error (nil if no errors are encountered).
 */
 func (address *Address) Delete(db *gorm.DB, addressID uint) (map[string]Model, error) {
-	// Confirm address exists and get current object
+	// Confirm addressID exists in the database and get current object
 	returnRecords, err := address.Get(db, addressID)
 	deleteAddress := returnRecords["address"]
 
