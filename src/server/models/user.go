@@ -210,7 +210,7 @@ func (user *User) CheckPassword(providedPassword string) error {
 /*
 *Description*
 
-func getID
+func GetID
 
 # Returns ID field from User object
 
@@ -224,7 +224,7 @@ func getID
 
 		The ID of the User object
 */
-func (user *User) getID() uint {
+func (user *User) GetID() uint {
 	return user.ID
 }
 

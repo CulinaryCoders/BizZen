@@ -145,7 +145,7 @@ func (business *Business) Equal(compareBusiness *Business) (unequalFields []stri
 /*
 *Description*
 
-func getID
+func GetID
 
 # Returns ID field from Business object
 
@@ -159,7 +159,7 @@ func getID
 
 		The ID of the business object
 */
-func (business *Business) getID() uint {
+func (business *Business) GetID() uint {
 	return business.ID
 }
 
@@ -219,7 +219,7 @@ func (business *Business) Create(db *gorm.DB) (map[string]Model, error) {
 	}
 
 	//  Set MainOfficeID for new Business record to new Office record that was created
-	officeIDUpdate := map[string]interface{}{"main_office_id": createdOffice.getID()}
+	officeIDUpdate := map[string]interface{}{"main_office_id": createdOffice.GetID()}
 	returnRecords, err = business.Update(db, business.ID, officeIDUpdate)
 	updatedBusiness := returnRecords["business"]
 
@@ -375,7 +375,7 @@ func (business *Business) Delete(db *gorm.DB, businessID uint) (map[string]Model
 /*
 *Description*
 
-func getID
+func GetID
 
 # Returns ID field from Business object
 
@@ -389,7 +389,7 @@ func getID
 
 		The ID of the business object
 */
-func (office *Office) getID() uint {
+func (office *Office) GetID() uint {
 	return office.ID
 }
 

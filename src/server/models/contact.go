@@ -114,7 +114,7 @@ func (address *Address) Equal(compareAddress *Address) (unequalFields []string, 
 /*
 *Description*
 
-func getID
+func GetID
 
 # Returns ID field from Address object
 
@@ -128,7 +128,7 @@ func getID
 
 		The ID of the address object
 */
-func (address *Address) getID() uint {
+func (address *Address) GetID() uint {
 	return address.ID
 }
 

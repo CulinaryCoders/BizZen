@@ -12,7 +12,7 @@ type Model interface {
 	Get(db *gorm.DB, id uint) (map[string]Model, error)
 	Update(db *gorm.DB, id uint, updates map[string]interface{}) (map[string]Model, error)
 	Delete(db *gorm.DB, id uint) (map[string]Model, error)
-	getID() uint
+	GetID() uint
 }
 
 /*
