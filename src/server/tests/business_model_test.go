@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"fmt"
 	"server/database"
 	"server/models"
 	"testing"
@@ -14,6 +13,7 @@ func TestCreateBusiness(t *testing.T) {
 	// Refresh database to control testing environment
 	database.FormatAllTables(testAppDB)
 
+	// Create business record
 	testCreateBusiness := models.Business{
 		OwnerID:      1,
 		MainOfficeID: 1,
@@ -21,19 +21,22 @@ func TestCreateBusiness(t *testing.T) {
 		Type:         "Tutoring",
 	}
 
-	createdBusiness, err := testCreateBusiness.CreateBusiness(testAppDB)
+	returnRecords, err := testCreateBusiness.Create(testAppDB)
+	createdBusiness := returnRecords["business"]
 	if err != nil {
 		t.Fatalf("ERROR:  Could not create test Business. %s", err)
 	}
-	createdBusinessID := fmt.Sprintf("%d", createdBusiness.ID)
 
+	// Attempt to retrieve newly created business record from database
 	testGetBusiness := models.Business{}
-	returnedBusiness, err := testGetBusiness.GetBusiness(testAppDB, createdBusinessID)
+
+	returnRecords, err = testGetBusiness.Get(testAppDB, createdBusiness.GetID())
+	returnedBusiness := returnRecords["business"]
 	if err != nil {
 		t.Fatalf("ERROR:  func GetBusiness failed to return test Business. %s", err)
 	}
 
-	unequalFields, equal := createdBusiness.Equal(returnedBusiness)
+	unequalFields, equal := models.Equal(createdBusiness, returnedBusiness)
 	assert.Truef(t, equal, "ERROR: The following fields did not match between the created and returned object  --  %s", unequalFields)
 }
 

@@ -2,7 +2,6 @@ package tests
 
 import (
 	"encoding/json"
-	"fmt"
 	"server/database"
 	"server/models"
 	"testing"
@@ -48,6 +47,7 @@ func TestCreateAddress(t *testing.T) {
 	// Refresh database to control testing environment
 	database.FormatAllTables(testAppDB)
 
+	// Create address record
 	testCreateAddress := models.Address{
 		Address1: "1234 Gator Way",
 		Address2: "",
@@ -56,19 +56,22 @@ func TestCreateAddress(t *testing.T) {
 		ZipCode:  "12345",
 	}
 
-	createdAddress, err := testCreateAddress.CreateAddress(testAppDB)
+	returnRecords, err := testCreateAddress.Create(testAppDB)
+	createdAddress := returnRecords["address"]
 	if err != nil {
 		t.Errorf("ERROR:  Could not create test address. %s", err)
 	}
-	createdAddressID := fmt.Sprintf("%d", createdAddress.ID)
 
+	// Attempt to retrieve newly created address record from database
 	testGetAddress := models.Address{}
-	returnedAddress, err := testGetAddress.GetAddress(testAppDB, createdAddressID)
+
+	returnRecords, err = testGetAddress.Get(testAppDB, createdAddress.GetID())
+	returnedAddress := returnRecords["address"]
 	if err != nil {
 		t.Errorf("ERROR:  func GetAddress failed to return test address. %s", err)
 	}
 
-	unequalFields, equal := createdAddress.Equal(returnedAddress)
+	unequalFields, equal := models.Equal(createdAddress, returnedAddress)
 	assert.Truef(t, equal, "ERROR: The following fields did not match between the created and returned object  --  %s", unequalFields)
 }
 
@@ -124,18 +127,19 @@ func TestGetAddress(t *testing.T) {
 	for _, testCase := range addressTests {
 		address := models.Address{}
 
-		createdAddress, err := testCase.input.CreateAddress(testAppDB)
+		returnRecords, err := testCase.input.Create(testAppDB)
+		createdAddress := returnRecords["address"]
 		if err != nil {
 			t.Errorf("ERROR:  Could not create test address. %s", err)
 		}
-		createdAddressID := fmt.Sprintf("%d", createdAddress.ID)
 
-		returnedAddress, err := address.GetAddress(testAppDB, createdAddressID)
+		returnRecords, err = address.Get(testAppDB, createdAddress.GetID())
+		returnedAddress := returnRecords["address"]
 		if err != nil {
 			t.Errorf("ERROR:  func GetAddress failed to return test address. %s", err)
 		}
 
-		unequalFields, equal := returnedAddress.Equal(createdAddress)
+		unequalFields, equal := models.Equal(returnedAddress, createdAddress)
 		returnedAddressJSON, _ := json.Marshal(returnedAddress)
 		createdAddressJSON, _ := json.Marshal(createdAddress)
 
