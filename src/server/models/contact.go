@@ -52,10 +52,6 @@ the correct objects are being returned and/or updated in the database.
 	equal  <bool>
 
 		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
-
-*Response format*
-
-	N/A (None)
 */
 func (address *Address) Equal(compareAddress *Address) (unequalFields []string, equal bool) {
 	equal = true
@@ -158,10 +154,6 @@ Creates a new Address record in the database and returns the created record alon
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
-*Response format*
-
-	N/A (None)
 */
 func (address *Address) Create(db *gorm.DB) (map[string]Model, error) {
 	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
@@ -196,10 +188,6 @@ Retrieves an Address record in the database by ID if it exists and returns that 
 	_  <error>
 
 		Encountered error (nil if no errors are encountered)
-
-*Response format*
-
-	N/A (None)
 */
 func (address *Address) Get(db *gorm.DB, addressID uint) (map[string]Model, error) {
 	err := db.First(&address, addressID).Error
@@ -249,10 +237,6 @@ If a specified field's value should be deleted from the record, the appropriate 
 	_  <error>
 
 		Encountered error (nil if no errors are encountered)
-
-*Response format*
-
-	N/A (None)
 */
 func (address *Address) Update(db *gorm.DB, addressID uint, updates map[string]interface{}) (map[string]Model, error) {
 	// Confirm address exists and get current object
@@ -298,10 +282,6 @@ Deleted record is returned along with any errors that are thrown.
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
-*Response format*
-
-	N/A (None)
 */
 func (address *Address) Delete(db *gorm.DB, addressID uint) (map[string]Model, error) {
 	// Confirm address exists and get current object

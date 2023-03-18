@@ -57,10 +57,6 @@ the correct objects are being returned and/or updated in the database.
 	equal  <bool>
 
 		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
-
-*Response format*
-
-	N/A (None)
 */
 func (user *User) Equal(compareUser *User) (unequalFields []string, equal bool) {
 	equal = true
@@ -170,10 +166,6 @@ This conforms to best practice of storing hashed passwords in the application da
 	_  <error>
 
 		Encountered error (nil if no errors encountered).
-
-*Response format*
-
-	N/A (None)
 */
 func (user *User) HashPassword(password string) error {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
@@ -206,10 +198,6 @@ If the given password matches the hashed password, nil is returned.
 	_  <error>
 
 		Encountered error (nil if no errors are encountered)
-
-*Response format*
-
-	N/A (None)
 */
 func (user *User) CheckPassword(providedPassword string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(providedPassword))
@@ -241,10 +229,6 @@ Creates a new User record in the database and returns the created record along w
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
-*Response format*
-
-	N/A (None)
 */
 func (user *User) CreateUser(db *gorm.DB) (*User, error) {
 	// TODO: Add field validation logic (func CreateUser) -- add as BeforeCreate gorm hook definition at the top of this file
@@ -281,10 +265,6 @@ Retrieves a User record in the database by ID if it exists and returns that reco
 	_  <error>
 
 		Encountered error (nil if no errors are encountered)
-
-*Response format*
-
-	N/A (None)
 */
 func (user *User) GetUser(db *gorm.DB, userID uint) (*User, error) {
 	err := db.First(&user, userID).Error
@@ -322,10 +302,6 @@ Retrieves a User record in the database by email if it exists and returns that r
 	_  <error>
 
 		Encountered error (nil if no errors are encountered)
-
-*Response format*
-
-	N/A (None)
 */
 func (user *User) GetUserByEmail(db *gorm.DB, userEmail string) (*User, error) {
 	err := db.First(&user, userEmail).Error
@@ -379,10 +355,6 @@ If a specified field's value should be deleted from the record, the appropriate 
 	_  <error>
 
 		Encountered error (nil if no errors are encountered)
-
-*Response format*
-
-	N/A (None)
 */
 func (user *User) UpdateUser(db *gorm.DB, userID uint, updates map[string]interface{}) (*User, error) {
 	// Confirm user exists and get current object
@@ -429,10 +401,6 @@ Deleted record is returned along with any errors that are thrown.
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
-*Response format*
-
-	N/A (None)
 */
 func (user *User) DeleteUser(db *gorm.DB, userID uint) (*User, error) {
 	// Confirm user exists and get current object

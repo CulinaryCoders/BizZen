@@ -44,10 +44,6 @@ the correct objects are being returned and/or updated in the database.
 	equal  <bool>
 
 		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
-
-*Response format*
-
-	N/A (None)
 */
 func Equal(firstRecord Model, secondRecord Model) (unequalFields []string, equal bool) {
 	equal = true

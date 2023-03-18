@@ -88,10 +88,6 @@ the correct objects are being returned and/or updated in the database.
 	equal  <bool>
 
 		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
-
-*Response format*
-
-	N/A (None)
 */
 func (business *Business) Equal(compareBusiness *Business) (unequalFields []string, equal bool) {
 	equal = true
@@ -193,10 +189,6 @@ Creates a new Business record in the database and returns the created record alo
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
-*Response format*
-
-	N/A (None)
 */
 func (business *Business) Create(db *gorm.DB) (map[string]Model, error) {
 	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
@@ -266,10 +258,6 @@ Retrieves a Business record in the database by ID if it exists and returns that 
 	_  <error>
 
 		Encountered error (nil if no errors are encountered)
-
-*Response format*
-
-	N/A (None)
 */
 func (business *Business) Get(db *gorm.DB, businessID uint) (map[string]Model, error) {
 	err := db.First(&business, businessID).Error
@@ -319,10 +307,6 @@ If a specified field's value should be deleted from the record, the appropriate 
 	_  <error>
 
 		Encountered error (nil if no errors are encountered)
-
-*Response format*
-
-	N/A (None)
 */
 func (business *Business) Update(db *gorm.DB, businessID uint, updates map[string]interface{}) (map[string]Model, error) {
 	// Confirm businessID exists in the database and get current object
@@ -371,9 +355,6 @@ Deleted record is returned along with any errors that are thrown.
 
 		Encountered error (nil if no errors are encountered).
 
-*Response format*
-
-	N/A (None)
 */
 func (business *Business) Delete(db *gorm.DB, businessID uint) (map[string]Model, error) {
 	// Confirm businessID exists in the database and get current object
@@ -434,10 +415,6 @@ Creates a new Office record in the database and returns the created record along
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
-*Response format*
-
-	N/A (None)
 */
 func (office *Office) Create(db *gorm.DB) (map[string]Model, error) {
 	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
@@ -472,10 +449,6 @@ Retrieves an Address record in the database by ID if it exists and returns that 
 	_  <error>
 
 		Encountered error (nil if no errors are encountered)
-
-*Response format*
-
-	N/A (None)
 */
 func (office *Office) Get(db *gorm.DB, officeID uint) (map[string]Model, error) {
 	err := db.First(&office, officeID).Error
@@ -525,10 +498,6 @@ If a specified field's value should be deleted from the record, the appropriate 
 	_  <error>
 
 		Encountered error (nil if no errors are encountered)
-
-*Response format*
-
-	N/A (None)
 */
 func (office *Office) Update(db *gorm.DB, officeID uint, updates map[string]interface{}) (map[string]Model, error) {
 	// Confirm officeID exists in the database and get current object
@@ -574,10 +543,6 @@ Deleted record is returned along with any errors that are thrown.
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
-*Response format*
-
-	N/A (None)
 */
 func (office *Office) Delete(db *gorm.DB, officeID uint) (map[string]Model, error) {
 	// Confirm address exists and get current object
