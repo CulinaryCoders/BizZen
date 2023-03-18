@@ -13,14 +13,27 @@ import (
 )
 
 /*
-InitializePostgresDB initializes and connects to a Postgres database using the provided command.
+*Description*
 
-Parameters:
-  - connectionString (string): The connection command used to establish the connection with the Postgres database.
-  - debug (bool): A flag variable used to trigger additional logging in the &gorm.Config definition for the returned *gorm.DB instance.
+func InitializePostgresDB
 
-Returns:
-  - *gorm.DB
+Initializes and connects to a Postgres database using the provided command.
+
+*Parameters*
+
+	connectionString  <string>
+
+		The connection command used to establish the connection with the Postgres database.
+
+	debug  <bool>
+
+		A flag variable used to trigger additional logging in the &gorm.Config definition for the returned *gorm.DB instance.
+
+*Returns*
+
+	_  <*gorm.DB>
+
+		The Postgres database instance.
 */
 func InitializePostgresDB(connectionString string, debug bool) *gorm.DB {
 	var gormConfig *gorm.Config
@@ -48,13 +61,23 @@ func InitializePostgresDB(connectionString string, debug bool) *gorm.DB {
 }
 
 /*
-InitializeRedisDB initializes and connects to a Redis database using the provided dsn
+*Description*
 
-Parameters:
-  - dsn (string): The host address and port number the Redis DB is hosted on in 'host:port' format.
+func InitializeRedisDB
 
-Returns:
-  - *redis.Client
+Initializes and connects to a Redis database using the provided dsn.
+
+*Parameters*
+
+	dsn  <string>
+
+		The host address and port number the Redis DB is hosted on in 'host:port' format.
+
+*Returns*
+
+	_  <*redis.Client>
+
+		The initialized redis client.
 */
 func InitializeRedisDB(dsn string) *redis.Client {
 	client := redis.NewClient(&redis.Options{
@@ -70,20 +93,44 @@ func InitializeRedisDB(dsn string) *redis.Client {
 }
 
 /*
-FormatAllTables drops all of the tables in the specified database and sets them back up using GORM's AutoMigrate function.
+*Description*
 
-Parameters:
-  - db (*gorm.DB): The database instance that will be formatted.
+func FormatAllTables
 
-Returns:
-  - None
+Performs a complete refresh of the specified database. All tables are dropped/deleted from the database and then new tables are created for all DB models.
+
+*Parameters*
+
+	db <*gorm.DB>
+
+		The database instance that will be formatted and refreshed.
+
+*Returns*
+
+	N/A (None)
 */
 func FormatAllTables(db *gorm.DB) {
 	dropAllTables(db)
 	setupTables(db)
 }
 
-// TODO: Add comment documentation (func setupTables)
+/*
+*Description*
+
+func setupTables
+
+Executes gorm AutoMigrate function for all DB models.
+
+*Parameters*
+
+	db <*gorm.DB>
+
+		The database instance where the tables will be created/updated.
+
+*Returns*
+
+	N/A (None)
+*/
 func setupTables(db *gorm.DB) {
 	db.AutoMigrate(&models.User{},
 		&models.Address{},
@@ -95,7 +142,25 @@ func setupTables(db *gorm.DB) {
 		&models.Appointment{})
 }
 
-// TODO: Add comment documentation (func dropAllTables)
+/*
+*Description*
+
+func dropAllTables
+
+Drops all of the tables present in the specified database instance.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		The database instance that will have all tables dropped from it.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func dropAllTables(db *gorm.DB) error {
 	tableNames, err := getListOfDBTables(db)
 	if err != nil {
@@ -120,7 +185,29 @@ func dropAllTables(db *gorm.DB) error {
 	}
 }
 
-// TODO: Add comment documentation (func getListOfDBTables)
+/*
+*Description*
+
+func getListOfDBTables
+
+Returns the list of names of all the tables present in the specified database instance.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		The database instance that will have all tables dropped from it.
+
+*Returns*
+
+	tableNames  <[]string>
+
+		The list of table names present in the specified database instance.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func getListOfDBTables(db *gorm.DB) (tableNames []string, err error) {
 	if err := db.Table("information_schema.tables").Where("table_schema = ?", "public").Pluck("table_name", &tableNames).Error; err != nil {
 		return tableNames, err
