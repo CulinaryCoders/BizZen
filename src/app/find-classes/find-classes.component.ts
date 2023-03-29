@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-find-classes',
@@ -9,4 +10,16 @@ export class FindClassesComponent {
 
     testArray:String[] = ["A", "B", "C", "D", "E"];
 
+  constructor(private router:Router){}
+
+  routeToService()
+  {
+    this.router.navigate(['class-summary']);
+
+  }
+  routeToUserPage()
+  {
+    this.router.navigate(['profile']);
+
+  }
 }
