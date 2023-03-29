@@ -23,11 +23,11 @@ export class BusinessOnboardingComponent {
   tags = ["Travel", "Cooking", "Yoga", "Technology", "Art"]
   selectedTags: string[] = [];
 
-  toggleInterest(interest: string) {
-    if (this.selectedTags.includes(interest)) {
-      this.selectedTags.splice(this.selectedTags.indexOf(interest), 1)
+  toggleTags(tag: string) {
+    if (this.selectedTags.includes(tag)) {
+      this.selectedTags.splice(this.selectedTags.indexOf(tag), 1)
     } else {
-      this.selectedTags.push(interest)
+      this.selectedTags.push(tag)
     }
   }
 
@@ -59,7 +59,7 @@ export class BusinessOnboardingComponent {
       // CONNECT BACKEND this.onboardingForm.value has all the info needed to add to DB User object
       console.log(this.onboardingForm.value);
 
-      this.router.navigate(['/profile']);
+      this.router.navigate(['/profile'], {state: {idToPass: businessName }});
     }
   }
 

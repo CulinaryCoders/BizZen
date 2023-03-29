@@ -12,12 +12,13 @@ import {UserService} from '../user.service';
 export class RegisterComponent {
   constructor(private router: Router, private activatedRoute:ActivatedRoute, private userService:UserService) {}
 
-  userModel = new User("12345","", "", "business", []);
+  userModel = new User("12345","", "", "user", []);
   isBusiness = false;
   confPass = "";
   errorMsg = "";
 
   registerForm = new FormGroup({
+    userId: new FormControl('123'),
     username: new FormControl(''),
     email: new FormControl(''),
     password: new FormGroup({
@@ -63,7 +64,6 @@ export class RegisterComponent {
     console.log("===confpass: ", this.confPass)
 
     this.errorMsg = "";
-    // console.log(this.registerForm.value);
     console.log(this.userModel);
     let user;
 
@@ -82,12 +82,14 @@ export class RegisterComponent {
         // Update userModel to be sent
         this.userModel.username = this.registerForm.value.username || "test";
 
+        this.userModel.userId = "123"
+
         // Send to db!
         this.addUser();
         if (this.isBusiness) {
-          this.router.navigate(["/onboarding"])
+          this.router.navigate(["/business-onboarding"])
         } else {
-          this.router.navigate(["/businessOnboarding"])
+          this.router.navigate(["/onboarding"])
         }
       }
     }

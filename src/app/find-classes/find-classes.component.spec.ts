@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FindClassesComponent } from './find-classes.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 describe('FindClassesComponent', () => {
   let component: FindClassesComponent;
@@ -13,9 +14,12 @@ describe('FindClassesComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ FindClassesComponent ],
       imports: [
+        FormsModule,
+        ReactiveFormsModule,
         RouterTestingModule,
         ScrollingModule
-      ],
+
+      ]
     })
     .compileComponents();
 

@@ -10,9 +10,9 @@ describe('CreateServiceComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ CreateServiceComponent ],
-      imports: [ 
-        FormsModule, 
-        ReactiveFormsModule 
+      imports: [
+        FormsModule,
+        ReactiveFormsModule
       ]
     })
     .compileComponents();

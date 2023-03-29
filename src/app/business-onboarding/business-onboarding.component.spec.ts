@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BusinessOnboardingComponent } from './business-onboarding.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -24,5 +24,13 @@ describe('BusinessOnboardingComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('toggles whether interest is selected', () => {
+    const tagToAdd = "Technology";
+    component.toggleTags(tagToAdd);
+    expect(component.selectedTags.includes(tagToAdd)).toBeTruthy();
+    component.toggleTags(tagToAdd);
+    expect(component.selectedTags.includes(tagToAdd)).toBeFalse();
   });
 });
