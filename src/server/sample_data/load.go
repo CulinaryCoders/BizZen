@@ -13,31 +13,85 @@ import (
 	"gorm.io/gorm"
 )
 
-// TODO:  Add documentation (type SampleData)
+/*
+SampleData type is used to store a list of object instances for each DB object type in the database.
+
+Records for each object type can be created from a JSON file and then loaded into the appropriate DB instance.
+*/
 type SampleData struct {
-	Users            []*models.User            `json:"users"`
-	Businesses       []*models.Business        `json:"businesses"`
-	Offices          []*models.Office          `json:"offices"`
-	Addresses        []*models.Address         `json:"addresses"`
-	Contacts         []*models.ContactInfo     `json:"contacts"`
-	Services         []*models.Service         `json:"services"`
-	ServiceOfferings []*models.ServiceOffering `json:"service_offerings"`
+	Users            []*models.User            `json:"users"`             // List of User records
+	Businesses       []*models.Business        `json:"businesses"`        // List of Business records
+	Offices          []*models.Office          `json:"offices"`           // List of Office records
+	Addresses        []*models.Address         `json:"addresses"`         // List of Address records
+	Contacts         []*models.ContactInfo     `json:"contacts"`          // List of Contact records
+	Services         []*models.Service         `json:"services"`          // List of Service records
+	ServiceOfferings []*models.ServiceOffering `json:"service_offerings"` // List of ServiceOffering records
 }
 
-// TODO:  Add documentation (type DataLoadMapping)
+// DataLoadMapping type is a generic wrapper struct designed to simplify the creation of records for all GORM DB object types that implement the 'Model' interface.
 type DataLoadMapping[Model models.Model] struct {
-	Records                   []Model
-	PrimaryReturnObjectKey    string
-	SecondaryReturnObjectKeys []string
+	Records                   []Model  // List of records to be created
+	PrimaryReturnObjectKey    string   // The JSON key that is returned for the primary object that is created in the database and returned by the 'Create' function call for that specific object type.
+	SecondaryReturnObjectKeys []string // A list of JSON keys that are returned for any secondary objects that are created in the database and returned by the 'Create' function call for that specific object type.
 }
 
-// TODO:  Add documentation (func LoadJSONSampleData)
+/*
+*Description*
+
+func (dataLoadMapping DataLoadMapping[Model]) createSampleRecords
+
+A generic wrapper function for the DataLoadMapping interface to be able to call the 'createSampleRecords' function for any
+GORM DB object type that implements the 'Model' interface.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func (dataLoadMapping DataLoadMapping[Model]) createSampleRecords(db *gorm.DB) error {
 	err := createSampleRecords(db, dataLoadMapping.Records, dataLoadMapping.PrimaryReturnObjectKey, dataLoadMapping.SecondaryReturnObjectKeys...)
 	return err
 }
 
-// TODO:  Add documentation (func LoadJSONSampleData)
+/*
+*Description*
+
+func createSampleRecords
+
+Creates the list of records that are passed in the specified database instance and logs all of the objects that are created
+and/or errors that are encountered while records are being created in the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+	records  <[]model>
+
+		An array of database object instances whose type implements the generic 'Model' interface.
+
+	primaryObjectKey  <string>
+
+		The JSON key that is returned for the primary object that is created in the database and returned by the 'Create' function call for that specific object type.
+
+	secondaryReturnObjectKeys  <[]string>
+
+		An array of JSON keys that are returned for any secondary objects that are created in the database and returned by the 'Create' function call for that specific object type.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func createSampleRecords[model models.Model](db *gorm.DB, records []model, primaryObjectKey string, secondaryReturnObjectKeys ...string) error {
 
 	log.Printf("Number of '%s' records in JSON file:  %d", primaryObjectKey, len(records))
@@ -74,7 +128,26 @@ func createSampleRecords[model models.Model](db *gorm.DB, records []model, prima
 	return nil
 }
 
-// TODO:  Add documentation (func LoadJSONSampleData)
+/*
+*Description*
+
+func LoadJSONSampleData
+
+Loads all records within the 'sample-data.json' file into the appropriate GORM database object instance
+and creates those records within the specified database instance.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func LoadJSONSampleData(db *gorm.DB) error {
 
 	//  Get path of server.exe and set base path for JSON file that contains sample records for each object type
@@ -127,6 +200,20 @@ func LoadJSONSampleData(db *gorm.DB) error {
 		SecondaryReturnObjectKeys: []string{},
 	}
 	addressLoadMapping.createSampleRecords(db)
+	//  Services
+	serviceLoadMapping := DataLoadMapping[*models.Service]{
+		Records:                   sampleData.Services,
+		PrimaryReturnObjectKey:    "service",
+		SecondaryReturnObjectKeys: []string{},
+	}
+	serviceLoadMapping.createSampleRecords(db)
+	//  ServiceOfferings
+	serviceOfferingLoadMapping := DataLoadMapping[*models.ServiceOffering]{
+		Records:                   sampleData.ServiceOfferings,
+		PrimaryReturnObjectKey:    "service_offering",
+		SecondaryReturnObjectKeys: []string{},
+	}
+	serviceOfferingLoadMapping.createSampleRecords(db)
 
 	return nil
 }
