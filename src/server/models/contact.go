@@ -1,8 +1,6 @@
 package models
 
 import (
-	"log"
-
 	"gorm.io/gorm"
 )
 
@@ -53,63 +51,63 @@ the correct objects are being returned and/or updated in the database.
 
 		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
 */
-func (address *Address) Equal(compareAddress *Address) (unequalFields []string, equal bool) {
-	equal = true
+// func (address *Address) Equal(compareAddress *Address) (unequalFields []string, equal bool) {
+// 	equal = true
 
-	if address.ID != compareAddress.ID {
-		equal = false
-		unequalFields = append(unequalFields, "ID")
-	}
+// 	if address.ID != compareAddress.ID {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "ID")
+// 	}
 
-	if address.Address1 != compareAddress.Address1 {
-		equal = false
-		unequalFields = append(unequalFields, "Address1")
-	}
+// 	if address.Address1 != compareAddress.Address1 {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "Address1")
+// 	}
 
-	if address.Address2 != compareAddress.Address2 {
-		equal = false
-		unequalFields = append(unequalFields, "Address2")
-	}
+// 	if address.Address2 != compareAddress.Address2 {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "Address2")
+// 	}
 
-	if address.City != compareAddress.City {
-		equal = false
-		unequalFields = append(unequalFields, "City")
-	}
+// 	if address.City != compareAddress.City {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "City")
+// 	}
 
-	if address.State != compareAddress.State {
-		equal = false
-		unequalFields = append(unequalFields, "State")
-	}
+// 	if address.State != compareAddress.State {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "State")
+// 	}
 
-	if address.ZipCode != compareAddress.ZipCode {
-		equal = false
-		unequalFields = append(unequalFields, "ZipCode")
-	}
+// 	if address.ZipCode != compareAddress.ZipCode {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "ZipCode")
+// 	}
 
-	if address.CreatedAt.Equal(compareAddress.CreatedAt) {
-		equal = false
-		unequalFields = append(unequalFields, "CreatedAt")
-	}
+// 	if address.CreatedAt.Equal(compareAddress.CreatedAt) {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "CreatedAt")
+// 	}
 
-	if address.UpdatedAt.Equal(compareAddress.UpdatedAt) {
-		equal = false
-		unequalFields = append(unequalFields, "UpdatedAt")
-	}
+// 	if address.UpdatedAt.Equal(compareAddress.UpdatedAt) {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "UpdatedAt")
+// 	}
 
-	if !address.DeletedAt.Time.Equal(compareAddress.DeletedAt.Time) {
-		equal = false
-		log.Printf("DeletedAt.Time (Address):  %s\nDeletedAt.Time (compareAddress):  %s", address.DeletedAt.Time, compareAddress.DeletedAt.Time)
-		unequalFields = append(unequalFields, "DeletedAt.Time")
-	}
+// 	if !address.DeletedAt.Time.Equal(compareAddress.DeletedAt.Time) {
+// 		equal = false
+// 		log.Printf("DeletedAt.Time (Address):  %s\nDeletedAt.Time (compareAddress):  %s", address.DeletedAt.Time, compareAddress.DeletedAt.Time)
+// 		unequalFields = append(unequalFields, "DeletedAt.Time")
+// 	}
 
-	if address.DeletedAt.Valid != compareAddress.DeletedAt.Valid {
-		equal = false
-		log.Printf("DeletedAt.Valid (Address):  %t\nDeletedAt.Valid (compareAddress):  %t", address.DeletedAt.Valid, compareAddress.DeletedAt.Valid)
-		unequalFields = append(unequalFields, "DeletedAt.Valid")
-	}
+// 	if address.DeletedAt.Valid != compareAddress.DeletedAt.Valid {
+// 		equal = false
+// 		log.Printf("DeletedAt.Valid (Address):  %t\nDeletedAt.Valid (compareAddress):  %t", address.DeletedAt.Valid, compareAddress.DeletedAt.Valid)
+// 		unequalFields = append(unequalFields, "DeletedAt.Valid")
+// 	}
 
-	return unequalFields, equal
-}
+// 	return unequalFields, equal
+// }
 
 /*
 *Description*

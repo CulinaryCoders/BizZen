@@ -89,58 +89,58 @@ the correct objects are being returned and/or updated in the database.
 
 		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
 */
-func (business *Business) Equal(compareBusiness *Business) (unequalFields []string, equal bool) {
-	equal = true
+// func (business *Business) Equal(compareBusiness *Business) (unequalFields []string, equal bool) {
+// 	equal = true
 
-	if business.ID != compareBusiness.ID {
-		equal = false
-		unequalFields = append(unequalFields, "ID")
-	}
+// 	if business.ID != compareBusiness.ID {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "ID")
+// 	}
 
-	if business.OwnerID != compareBusiness.OwnerID {
-		equal = false
-		unequalFields = append(unequalFields, "OwnerID")
-	}
+// 	if business.OwnerID != compareBusiness.OwnerID {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "OwnerID")
+// 	}
 
-	if business.MainOfficeID != compareBusiness.MainOfficeID {
-		equal = false
-		unequalFields = append(unequalFields, "MainOfficeID")
-	}
+// 	if business.MainOfficeID != compareBusiness.MainOfficeID {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "MainOfficeID")
+// 	}
 
-	if business.Name != compareBusiness.Name {
-		equal = false
-		unequalFields = append(unequalFields, "Name")
-	}
+// 	if business.Name != compareBusiness.Name {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "Name")
+// 	}
 
-	if business.Type != compareBusiness.Type {
-		equal = false
-		unequalFields = append(unequalFields, "Name")
-	}
+// 	if business.Type != compareBusiness.Type {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "Name")
+// 	}
 
-	if business.CreatedAt.Equal(compareBusiness.CreatedAt) {
-		equal = false
-		unequalFields = append(unequalFields, "CreatedAt")
-	}
+// 	if business.CreatedAt.Equal(compareBusiness.CreatedAt) {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "CreatedAt")
+// 	}
 
-	if business.UpdatedAt.Equal(compareBusiness.UpdatedAt) {
-		equal = false
-		unequalFields = append(unequalFields, "UpdatedAt")
-	}
+// 	if business.UpdatedAt.Equal(compareBusiness.UpdatedAt) {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "UpdatedAt")
+// 	}
 
-	if !business.DeletedAt.Time.Equal(compareBusiness.DeletedAt.Time) {
-		equal = false
-		log.Printf("DeletedAt.Time (Business):  %s\nDeletedAt.Time (compareBusiness):  %s", business.DeletedAt.Time, compareBusiness.DeletedAt.Time)
-		unequalFields = append(unequalFields, "DeletedAt.Time")
-	}
+// 	if !business.DeletedAt.Time.Equal(compareBusiness.DeletedAt.Time) {
+// 		equal = false
+// 		log.Printf("DeletedAt.Time (Business):  %s\nDeletedAt.Time (compareBusiness):  %s", business.DeletedAt.Time, compareBusiness.DeletedAt.Time)
+// 		unequalFields = append(unequalFields, "DeletedAt.Time")
+// 	}
 
-	if business.DeletedAt.Valid != compareBusiness.DeletedAt.Valid {
-		equal = false
-		log.Printf("DeletedAt.Valid (Business):  %t\nDeletedAt.Valid (compareBusiness):  %t", business.DeletedAt.Valid, compareBusiness.DeletedAt.Valid)
-		unequalFields = append(unequalFields, "DeletedAt.Valid")
-	}
+// 	if business.DeletedAt.Valid != compareBusiness.DeletedAt.Valid {
+// 		equal = false
+// 		log.Printf("DeletedAt.Valid (Business):  %t\nDeletedAt.Valid (compareBusiness):  %t", business.DeletedAt.Valid, compareBusiness.DeletedAt.Valid)
+// 		unequalFields = append(unequalFields, "DeletedAt.Valid")
+// 	}
 
-	return unequalFields, equal
-}
+// 	return unequalFields, equal
+// }
 
 /*
 *Description*
