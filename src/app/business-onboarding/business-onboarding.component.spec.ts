@@ -25,7 +25,7 @@ describe('BusinessOnboardingComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('toggles whether interest is selected', () => {
+  it('changes which business tag is selected', () => {
     const tagToAdd = "Technology";
     component.toggleTags(tagToAdd);
     expect(component.selectedTags.includes(tagToAdd)).toBeTruthy();
