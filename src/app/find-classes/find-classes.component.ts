@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Service } from '../service';
+import { User } from '../user';
 import { ServiceOffering } from '../service-offering';
 
 @Component({
@@ -23,16 +24,23 @@ export class FindClassesComponent {
 
   constructor(private router:Router){}
  
+  user:User = {} as User;
+
+  ngOnInit()
+  {
+    if(history.state != null)
+      this.user = history.state.user;
+  }
 
   routeToService(serviceToPass:Service)
   {
 
-    this.router.navigateByUrl('/class-summary', {state: {user:history.state.user, service:serviceToPass}});
+    this.router.navigateByUrl('/class-summary', {state: {user:this.user, service:serviceToPass}});
 
   }
   routeToUserPage()
   {
-    this.router.navigateByUrl('/profile', {state: {user: history.state.user }});
+    this.router.navigateByUrl('/profile', {state: {user: this.user }});
 
   }
 }

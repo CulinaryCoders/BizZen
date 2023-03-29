@@ -48,13 +48,13 @@ export class ServicePageComponent {
 
   routeToFindClass()
   {
-    this.router.navigateByUrl('find-classes', {state:{user: history.state.user}});
+    this.router.navigateByUrl('find-classes', {state:{user: this.currentUser}});
   }
 
   joinClass()
   {
     this.userJoined = true;
-    history.state.user.classes.push(this.service);
+    this.currentUser.classes.push(this.service);
     
   }
 
@@ -64,7 +64,7 @@ export class ServicePageComponent {
     let index:number = this.currentUser.classes.findIndex((findService) => this.service.serviceId == findService.serviceId);
     
     //removes the service
-    history.state.user.classes.splice(index, 1);
+    this.currentUser.classes.splice(index, 1);
 
   }
 

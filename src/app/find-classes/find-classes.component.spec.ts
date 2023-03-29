@@ -33,19 +33,19 @@ describe('FindClassesComponent', () => {
   
   it('should navigate to summary', () => {
 
-    const navigateSpy = spyOn(router, 'navigate');
+    const navigateSpy = spyOn(router, 'navigateByUrl');
 
-    component.routeToService();
-    expect(navigateSpy).toHaveBeenCalledWith(['class-summary']);
+    component.routeToService(component.testService);
+    expect(navigateSpy).toHaveBeenCalledWith('/class-summary', {state:{user:component.user, service:component.testService}});
 
   });
 
   it('should navigate to profile', () => {
 
-    const navigateSpy = spyOn(router, 'navigate');
+    const navigateSpy = spyOn(router, 'navigateByUrl');
 
     component.routeToUserPage();
-    expect(navigateSpy).toHaveBeenCalledWith(['profile']);
+    expect(navigateSpy).toHaveBeenCalledWith('/profile', {state:{user:component.user}});
 
   });
 });

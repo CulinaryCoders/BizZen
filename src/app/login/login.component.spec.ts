@@ -69,10 +69,9 @@ describe('LoginComponent', () => {
 
       const navigateSpy = spyOn(router, 'navigateByUrl');
 
-      component.model.username = "test";
       component.onSubmit();
 
-      expect(navigateSpy).toHaveBeenCalledWith('/profile', {state: {idToPass: "test"}});
+      expect(navigateSpy).toHaveBeenCalledWith('/profile', {state: {user:component.model}});
 
   });
 
