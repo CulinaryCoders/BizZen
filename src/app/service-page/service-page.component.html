@@ -32,7 +32,7 @@
             </div>
 
             <br>
-            
+
             <div class="card">
 
                 <div class="card-header">
@@ -46,7 +46,15 @@
         
             <br>
 
-            <button (click)="joinClass()" class="btn btn-primary">Join</button>
+            <button (click)="joinClass()" [disabled]="userJoined" class="btn btn-primary">Join</button>
+              
+            <button (click) ="leaveClass()" [disabled]="!userJoined" style="margin-left:2em" class="btn btn-primary">Leave</button>
+
+            <div [hidden]="!userJoined"><br></div>
+        
+            <div [hidden]="!userJoined" class="alert alert-success">
+                You have successfully joined this class.
+            </div>
         </div>
     </div>
     <br>

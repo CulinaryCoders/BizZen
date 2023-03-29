@@ -14,7 +14,8 @@ import {Router, ActivatedRoute} from '@angular/router';
 
 export class LoginComponent {
 
-  model = new User("12345","", "", "business");
+
+  model = new User("12345","", "", "business", []);
 
   checkbox : boolean = false;
 
@@ -22,19 +23,6 @@ export class LoginComponent {
   constructor(private router:Router, private activatedRoute:ActivatedRoute, private userService:UserService){}
 
   submitted = false;
-
-  /*
-  async addUser(){
-    // Promise interface
-    this.userService.addUser(this.model.userId, this.model.username, this.model.password, this.model.accountType).then(
-      user => {
-        this.model = user;
-        console.log("success");
-      }, err => {
-          console.log(err);
-      }
-    );
-  }*/
 
   onSubmit() {
     this.submitted = true;
