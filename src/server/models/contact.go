@@ -116,7 +116,7 @@ func (address *Address) Equal(compareAddress *Address) (unequalFields []string, 
 
 func GetID
 
-# Returns ID field from Address object
+Returns ID field from Address object.
 
 *Parameters*
 

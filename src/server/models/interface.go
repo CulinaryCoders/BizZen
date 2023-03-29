@@ -7,6 +7,11 @@ import (
 	"gorm.io/gorm"
 )
 
+/*
+Model is a generic interface that all GORM model database types implement.
+
+This generic interface is intended to reduce the need for duplicative code and logic across this application, since every model implements these core methods.
+*/
 type Model interface {
 	Create(db *gorm.DB) (map[string]Model, error)
 	Get(db *gorm.DB, id uint) (map[string]Model, error)
