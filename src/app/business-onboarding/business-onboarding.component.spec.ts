@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BusinessOnboardingComponent } from './business-onboarding.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('BusinessOnboardingComponent', () => {
   let component: BusinessOnboardingComponent;
