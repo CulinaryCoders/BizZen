@@ -11,18 +11,21 @@
         <div *cdkVirtualFor="let item of testArray" class="scroll-item">    
             <div class="card">
                 <div class="card-header">
-                    <h4>Class Name</h4>
+                    <h4>{{item.name}}</h4>
                 </div>
                 <div class="card-body">
-                <p class="card-text">Class Details</p>
-                <button class="btn btn-primary">Find out more</button>
+                <p class="card-text">{{item.description}}</p>
+                <button (click)="routeToService(item)" class="btn btn-primary">Find out more</button>
                 </div>
             </div>
             <br>
         </div>
 
       </cdk-virtual-scroll-viewport>
+      
     </div>
 
+    <br>
+    <button (click)="routeToUserPage()" class="btn btn-primary">Back</button>
 
 </div>

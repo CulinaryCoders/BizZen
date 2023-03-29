@@ -15,6 +15,7 @@ import { BusinessOnboardingComponent } from './business-onboarding/business-onbo
 import { CreateServiceComponent } from './create-service/create-service.component';
 import { FindClassesComponent } from './find-classes/find-classes.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ServicePageComponent } from './service-page/service-page.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     OnboardingComponent,
     BusinessOnboardingComponent,
     CreateServiceComponent,
-    FindClassesComponent
+    FindClassesComponent,
+    ServicePageComponent
   ],
   imports: [
     BrowserModule,

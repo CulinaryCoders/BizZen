@@ -12,7 +12,7 @@ import {UserService} from '../user.service';
 export class RegisterComponent {
   constructor(private router: Router, private activatedRoute:ActivatedRoute, private userService:UserService) {}
 
-  userModel = new User("","", "", "user");
+  userModel = new User("12345","", "", "user", []);
   isBusiness = false;
   confPass = "";
   errorMsg = "";
@@ -72,7 +72,7 @@ export class RegisterComponent {
         this.errorMsg = "ERROR Passwords must match"
       } else {
         // Note: since first & last name required, might need to test with dummy data
-        user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user");
+        user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user", []);
 
         if (this.isBusiness)
           user.accountType = "business";
