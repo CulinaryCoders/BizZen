@@ -1,9 +1,55 @@
 <div class="container">
 
-{{service.description}}
+    <br>
+    <div class="card">
+        <div class="card-header">
+            <h2 class="display-2">{{service.name}}</h2>
 
+        </div>
 
+        <div class = "card-body">
+            <div class="card">
+                <div class="card-header">
+                    <h4>About</h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{service.description}}</p>
+                </div>
+            </div>
 
-<button (click)="routeToFindClass()" class="btn btn-primary">Back</button>
+            <br>
+
+            <div class="card">
+
+                <div class="card-header">
+                    <h4>Dates</h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><b>Begins: </b>{{service.offering.startDate}}</p>
+                    <p class="card-text"><b>Ends: </b>{{service.offering.endDate}}</p>
+                </div>
+
+            </div>
+
+            <br>
+            
+            <div class="card">
+
+                <div class="card-header">
+                    <h4>Cost</h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><b>Classes start at: </b>${{service.offering.price}}</p>
+                </div>
+                
+            </div>
+        
+            <br>
+
+            <button (click)="joinClass()" class="btn btn-primary">Join</button>
+        </div>
+    </div>
+    <br>
+    <button (click)="routeToFindClass()" class="btn btn-primary">Back</button>
 
 </div>

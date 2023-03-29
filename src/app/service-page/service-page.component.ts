@@ -16,10 +16,13 @@ export class ServicePageComponent {
   serviceOffer : ServiceOffering = new ServiceOffering("01/01/2023", "02/01/2023", 25);
   service:Service = new Service("00000001", "Test Service", "An example of a description for a test service.", this.serviceOffer);
 
-
   routeToFindClass()
   {
     this.router.navigate(['find-classes']);
+  }
+  joinClass()
+  {
+    console.log("class joined");
   }
 
 }
