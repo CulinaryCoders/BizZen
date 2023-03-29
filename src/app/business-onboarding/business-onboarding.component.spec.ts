@@ -32,4 +32,16 @@ describe('BusinessOnboardingComponent', () => {
     component.toggleTags(tagToAdd);
     expect(component.selectedTags.includes(tagToAdd)).toBeFalse();
   });
+
+  it('checks that the stores opening time is before closing', () => {
+    component.onboardingForm.value.openingTime = "11:12";
+    component.onboardingForm.value.closingTime = "12:12";
+    expect(component.validStartEndTime()).toBeTruthy();
+  });
+
+  it('returns error if closing time is before opening', () => {
+    component.onboardingForm.value.openingTime = "13:12";
+    component.onboardingForm.value.closingTime = "11:12";
+    expect(component.validStartEndTime()).toBeFalsy();
+  });
 });

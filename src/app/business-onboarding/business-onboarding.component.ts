@@ -31,6 +31,23 @@ export class BusinessOnboardingComponent {
     }
   }
 
+  validStartEndTime() {
+    let start = this.onboardingForm.value.openingTime;
+    let end = this.onboardingForm.value.closingTime;
+    if (start && end) {
+      let startJSDate = new Date();
+      startJSDate.setHours(Number(start[0]+start[1]));
+      startJSDate.setMinutes(Number(start[3]+start[4]));
+
+      let endJSDate = new Date();
+      endJSDate.setHours(Number(end[0]+end[1]));
+      endJSDate.setMinutes(Number(end[3]+end[4]));
+
+      return startJSDate < endJSDate;
+    }
+    return false;
+  }
+
   onSubmit() {
     this.errorMsg = "";
     let businessName = this.onboardingForm.value.businessName
