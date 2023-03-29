@@ -26,14 +26,18 @@ $DB_PORT=8420
 $OBJ_KEYS = "User" `
             , "Business" `
             , "Address" `
-            #, "Office" `
-            #, "ContactInfo"
+            , "Service" `
+            , "ServiceOffering"
+            # , "Office" `
+            # , "ContactInfo" `
 
 $API_ENDPOINTS = @{
                     User = "register" `
                     ; Business = "business" `
                     ; Address = "address" `
-                    #; Office = "office" `
+                    ; Service = "service"
+                    ; ServiceOffering = "service-offering"
+                    # ; Office = "office" `
                     #; ContactInfo = "contact" `
                   }
 
@@ -41,13 +45,14 @@ $FILE_NAMES = @{ `
                     User = "sample-users.json" `
                     ; Business = "sample-businesses.json" `
                     ; Address = "sample-addresses.json" `
+                    ; Service = "sample-services.json" `
+                    ; ServiceOffering = "sample-service-offerings.json" `
                     #; Office = "sample-offices.json" `
                     #; ContactInfo = "sample-contacts.json" `
                 }
 
 $PS_SCRIPT_FULL_PATH = $MyInvocation.MyCommand.Path
 $PS_SCRIPT_BASE_PATH = Split-Path -Path "$PS_SCRIPT_FULL_PATH"
-
 
 $loaded_objects = [System.Collections.ArrayList]::new()
 # Iterate over keys and execute curl commands for each endpoint/sample data file
