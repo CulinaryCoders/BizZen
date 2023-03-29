@@ -29,33 +29,57 @@ export class CreateServiceComponent {
     this.selectedServiceType = type;
   }
 
-  onSubmit() {
-    this.errorMsg = "";
+  verifyFields() {
+    let errorMsg = "";
     let name = this.newService.value.name
     let description = this.newService.value.description
     let startTime = this.newService.value.startTime
     let endTime = this.newService.value.endTime
     let numParticipants = this.newService.value.numParticipants
     let pricePerUnit = this.newService.value.pricePerUnit
-    console.log("name open close: ", name, startTime, endTime)
     if (!name || name === "") {
-      this.errorMsg += "ERROR Business Name Required -- "
+      errorMsg += "ERROR Business Name Required -- "
     }
     if (!description || description === "") {
-      this.errorMsg += "ERROR Business Description Required -- "
+      errorMsg += "ERROR Business Description Required -- "
     }
     if (!startTime || startTime === "") {
-      this.errorMsg += "ERROR Opening Time Required -- "
+      errorMsg += "ERROR Opening Time Required -- "
     }
     if (!endTime || endTime === "") {
-      this.errorMsg += "ERROR Closing Time Required -- "
+      errorMsg += "ERROR Closing Time Required -- "
+    }
+    if (this.validStartEndTime()) {
+      errorMsg += "ERROR End must be after start --"
     }
     if (numParticipants === 0) {
-      this.errorMsg += "ERROR Please specify how many participants -- "
+      errorMsg += "ERROR Please specify how many participants -- "
     }
     if (!pricePerUnit) {
-      this.errorMsg += "ERROR Please specify a price per unit -- "
+      errorMsg += "ERROR Please specify a price per unit -- "
     }
+    return errorMsg;
+  }
+
+  validStartEndTime() {
+    let start = this.newService.value.startTime;
+    let end = this.newService.value.endTime;
+    if (start && end) {
+      let startJSDate = new Date();
+      startJSDate.setHours(Number(start[0]+start[1]));
+      startJSDate.setMinutes(Number(start[3]+start[4]));
+
+      let endJSDate = new Date();
+      endJSDate.setHours(Number(end[0]+end[1]));
+      endJSDate.setMinutes(Number(end[3]+end[4]));
+
+      return startJSDate > endJSDate;
+    }
+    return false;
+  }
+
+  onSubmit() {
+    this.errorMsg = this.verifyFields();
     if (this.errorMsg === "") {
       // this.newService.value.tags = this.selectedTags;
 
