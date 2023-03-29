@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BusinessOnboardingComponent } from './business-onboarding.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('BusinessOnboardingComponent', () => {
   let component: BusinessOnboardingComponent;
@@ -8,7 +9,11 @@ describe('BusinessOnboardingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BusinessOnboardingComponent ]
+      declarations: [ BusinessOnboardingComponent ],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule
+      ]
     })
     .compileComponents();
 

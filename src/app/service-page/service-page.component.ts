@@ -17,7 +17,10 @@ export class ServicePageComponent {
 
   userJoined : boolean = false;
 
-  constructor(private router:Router){}
+  constructor(private router:Router)
+  {
+    
+  }
 
   routeToFindClass()
   {
@@ -27,9 +30,11 @@ export class ServicePageComponent {
   joinClass()
   {
     this.userJoined = true;
-    console.log("class joined");
+    
+
+
   }
-  
+
   leaveClass()
   {
     this.userJoined = false;

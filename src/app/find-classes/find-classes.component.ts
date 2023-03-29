@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-find-classes',
   templateUrl: './find-classes.component.html',
-  styleUrls: ['./find-classes.component.scss']
+  styleUrls: ['./find-classes.component.scss'],
 })
+
+
 export class FindClassesComponent {
 
     testArray:String[] = ["A", "B", "C", "D", "E"];
