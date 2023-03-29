@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FindClassesComponent } from './find-classes.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 describe('FindClassesComponent', () => {
   let component: FindClassesComponent;
@@ -8,7 +9,11 @@ describe('FindClassesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FindClassesComponent ]
+      declarations: [ FindClassesComponent ],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule
+      ]
     })
     .compileComponents();
 
