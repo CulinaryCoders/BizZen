@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormControl, FormGroup} from "@angular/forms";
+import {User} from "../user";
 
 @Component({
   selector: 'app-business-onboarding',
@@ -67,6 +68,9 @@ export class BusinessOnboardingComponent {
     if (!closingTime || closingTime === "") {
       this.errorMsg += "ERROR Closing Time Required -- "
     }
+    if (!this.validStartEndTime()) {
+      this.errorMsg += "ERROR Closing Time must be after Opening -- "
+    }
     if (this.selectedTags.length === 0) {
       this.errorMsg += "ERROR Please add at least 1 tag "
     }
@@ -76,7 +80,8 @@ export class BusinessOnboardingComponent {
       // CONNECT BACKEND this.onboardingForm.value has all the info needed to add to DB User object
       console.log(this.onboardingForm.value);
 
-      this.router.navigate(['/profile'], {state: {idToPass: businessName }});
+      let user = new User("12345", businessName || "Gatey", "pass", "user", [])
+      this.router.navigate(['/profile'], {state: {user: user }});
     }
   }
 

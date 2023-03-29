@@ -12,7 +12,7 @@ import {UserService} from '../user.service';
 export class RegisterComponent {
   constructor(private router: Router, private activatedRoute:ActivatedRoute, private userService:UserService) {}
 
-  userModel = new User("12345","", "", "user", []);
+  userModel = new User("","", "", "user", []);
   isBusiness = false;
   confPass = "";
   errorMsg = "";
