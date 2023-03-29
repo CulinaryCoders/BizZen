@@ -37,7 +37,7 @@ export class LoginComponent {
       this.model.accountType = "user";
     }
     
-    this.router.navigateByUrl('/profile', {state: {idToPass: this.model.username }});
+    this.router.navigateByUrl('/profile', {state: {user: this.model }});
 
   }
   routeToRegister() {

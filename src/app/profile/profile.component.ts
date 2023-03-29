@@ -16,7 +16,7 @@ export class ProfileComponent {
     {
         //this.route.params.subscribe((params:Params) => this.userIdParameter = params['idToPass'])
         if(history.state != null)
-          this.userIdParameter = history.state.idToPass;
+          this.userIdParameter = history.state.user.username;
         else 
           this.userIdParameter = "ERROR: userIdParameter is null; no user was passed!";
     }
@@ -24,7 +24,7 @@ export class ProfileComponent {
       this.router.navigate(['/']);
     }
     routeToClasses() {
-      this.router.navigate(['/find-classes']);
+      this.router.navigateByUrl('/find-classes', {state: {user: history.state.user}});
     }
 
 }
