@@ -1,8 +1,6 @@
 package models
 
 import (
-	"log"
-
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -58,93 +56,93 @@ the correct objects are being returned and/or updated in the database.
 
 		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
 */
-func (user *User) Equal(compareUser *User) (unequalFields []string, equal bool) {
-	equal = true
+// func (user *User) Equal(compareUser *User) (unequalFields []string, equal bool) {
+// 	equal = true
 
-	if user.ID != compareUser.ID {
-		equal = false
-		unequalFields = append(unequalFields, "ID")
-	}
+// 	if user.ID != compareUser.ID {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "ID")
+// 	}
 
-	if user.Email != compareUser.Email {
-		equal = false
-		unequalFields = append(unequalFields, "Email")
-	}
+// 	if user.Email != compareUser.Email {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "Email")
+// 	}
 
-	if user.Username != compareUser.Username {
-		equal = false
-		unequalFields = append(unequalFields, "Username")
-	}
+// 	if user.Username != compareUser.Username {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "Username")
+// 	}
 
-	if user.Password != compareUser.Password {
-		equal = false
-		unequalFields = append(unequalFields, "Password")
-	}
+// 	if user.Password != compareUser.Password {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "Password")
+// 	}
 
-	if user.AccountType != compareUser.AccountType {
-		equal = false
-		unequalFields = append(unequalFields, "AccountType")
-	}
+// 	if user.AccountType != compareUser.AccountType {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "AccountType")
+// 	}
 
-	if user.FirstName != compareUser.FirstName {
-		equal = false
-		unequalFields = append(unequalFields, "FirstName")
-	}
+// 	if user.FirstName != compareUser.FirstName {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "FirstName")
+// 	}
 
-	if user.LastName != compareUser.LastName {
-		equal = false
-		unequalFields = append(unequalFields, "LastName")
-	}
+// 	if user.LastName != compareUser.LastName {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "LastName")
+// 	}
 
-	if user.ContactInfoID != compareUser.ContactInfoID {
-		equal = false
-		unequalFields = append(unequalFields, "ContactInfoID")
-	}
+// 	if user.ContactInfoID != compareUser.ContactInfoID {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "ContactInfoID")
+// 	}
 
-	if user.BusinessID != compareUser.BusinessID {
-		equal = false
-		unequalFields = append(unequalFields, "BusinessID")
-	}
+// 	if user.BusinessID != compareUser.BusinessID {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "BusinessID")
+// 	}
 
-	if user.UserPermissionsID != compareUser.UserPermissionsID {
-		equal = false
-		unequalFields = append(unequalFields, "UserPermissionsID")
-	}
+// 	if user.UserPermissionsID != compareUser.UserPermissionsID {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "UserPermissionsID")
+// 	}
 
-	if user.BusinessID != compareUser.UserPreferencesID {
-		equal = false
-		unequalFields = append(unequalFields, "BusinessID")
-	}
+// 	if user.BusinessID != compareUser.UserPreferencesID {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "BusinessID")
+// 	}
 
-	if user.UserPermissionsID != compareUser.ProfilePicID {
-		equal = false
-		unequalFields = append(unequalFields, "UserPermissionsID")
-	}
+// 	if user.UserPermissionsID != compareUser.ProfilePicID {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "UserPermissionsID")
+// 	}
 
-	if user.CreatedAt.Equal(compareUser.CreatedAt) {
-		equal = false
-		unequalFields = append(unequalFields, "CreatedAt")
-	}
+// 	if user.CreatedAt.Equal(compareUser.CreatedAt) {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "CreatedAt")
+// 	}
 
-	if user.UpdatedAt.Equal(compareUser.UpdatedAt) {
-		equal = false
-		unequalFields = append(unequalFields, "UpdatedAt")
-	}
+// 	if user.UpdatedAt.Equal(compareUser.UpdatedAt) {
+// 		equal = false
+// 		unequalFields = append(unequalFields, "UpdatedAt")
+// 	}
 
-	if !user.DeletedAt.Time.Equal(compareUser.DeletedAt.Time) {
-		equal = false
-		log.Printf("DeletedAt.Time (User):  %s\nDeletedAt.Time (compareUser):  %s", user.DeletedAt.Time, compareUser.DeletedAt.Time)
-		unequalFields = append(unequalFields, "DeletedAt.Time")
-	}
+// 	if !user.DeletedAt.Time.Equal(compareUser.DeletedAt.Time) {
+// 		equal = false
+// 		log.Printf("DeletedAt.Time (User):  %s\nDeletedAt.Time (compareUser):  %s", user.DeletedAt.Time, compareUser.DeletedAt.Time)
+// 		unequalFields = append(unequalFields, "DeletedAt.Time")
+// 	}
 
-	if user.DeletedAt.Valid != compareUser.DeletedAt.Valid {
-		equal = false
-		log.Printf("DeletedAt.Valid (User):  %t\nDeletedAt.Valid (compareUser):  %t", user.DeletedAt.Valid, compareUser.DeletedAt.Valid)
-		unequalFields = append(unequalFields, "DeletedAt.Valid")
-	}
+// 	if user.DeletedAt.Valid != compareUser.DeletedAt.Valid {
+// 		equal = false
+// 		log.Printf("DeletedAt.Valid (User):  %t\nDeletedAt.Valid (compareUser):  %t", user.DeletedAt.Valid, compareUser.DeletedAt.Valid)
+// 		unequalFields = append(unequalFields, "DeletedAt.Valid")
+// 	}
 
-	return unequalFields, equal
-}
+// 	return unequalFields, equal
+// }
 
 /*
 *Description*

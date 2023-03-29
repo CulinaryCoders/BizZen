@@ -207,6 +207,8 @@ func (business *Business) Create(db *gorm.DB) (map[string]Model, error) {
 		Name:       mainOfficeName,
 	}
 
+	office.ID = business.MainOfficeID
+
 	returnRecords, err := office.Create(db)
 	createdOffice := returnRecords["office"]
 

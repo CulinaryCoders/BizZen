@@ -8,10 +8,13 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"server/config"
 	"server/models"
 
 	"gorm.io/gorm"
 )
+
+var debug bool = config.AppConfig.DEBUG_MODE
 
 /*
 SampleData type is used to store a list of object instances for each DB object type in the database.
@@ -94,9 +97,14 @@ and/or errors that are encountered while records are being created in the databa
 */
 func createSampleRecords[model models.Model](db *gorm.DB, records []model, primaryObjectKey string, secondaryReturnObjectKeys ...string) error {
 
-	log.Printf("Number of '%s' records in JSON file:  %d", primaryObjectKey, len(records))
+	var recordCount int = len(records)
+	var secondaryKeyCount int = len(secondaryReturnObjectKeys)
 
-	for i := 0; i < len(records); i++ {
+	if debug {
+		log.Printf("Number of '%s' records in JSON file:  %d", primaryObjectKey, len(records))
+	}
+
+	for i := 0; i < recordCount; i++ {
 
 		returnRecords, err := records[i].Create(db)
 		primaryRecord, primaryKeyExists := returnRecords[primaryObjectKey]
@@ -107,10 +115,12 @@ func createSampleRecords[model models.Model](db *gorm.DB, records []model, prima
 			return errors.New(errorMessage)
 		}
 
-		log.Printf("Primary object created ('%s'):\n\n%+v\n\n", primaryObjectKey, primaryRecord)
+		if debug {
+			log.Printf("Primary object created ('%s'):\n\n%+v\n\n", primaryObjectKey, primaryRecord)
+		}
 
-		if len(secondaryReturnObjectKeys) > 0 {
-			for j := 0; j < len(secondaryReturnObjectKeys); j++ {
+		if secondaryKeyCount > 0 {
+			for j := 0; j < secondaryKeyCount; j++ {
 
 				secondaryReturnObjectKey := secondaryReturnObjectKeys[j]
 				secondaryRecord, secondaryKeyExists := returnRecords[secondaryReturnObjectKey]
@@ -119,11 +129,22 @@ func createSampleRecords[model models.Model](db *gorm.DB, records []model, prima
 					return errors.New(errorMessage)
 				}
 
-				log.Printf("Secondary object created ('%s' from '%s' object creation):\n\n%+v\n\n", secondaryReturnObjectKey, primaryObjectKey, secondaryRecord)
+				if debug {
+					log.Printf("Secondary object created ('%s' from '%s' object creation):\n\n%+v\n\n", secondaryReturnObjectKey, primaryObjectKey, secondaryRecord)
+				}
 
 			}
 		}
 	}
+
+	var recordKeysLogString string = fmt.Sprintf("'%s'", primaryObjectKey)
+	if secondaryKeyCount > 0 {
+		for i := 0; i < secondaryKeyCount; i++ {
+			recordKeysLogString = fmt.Sprintf("%s, '%s'", recordKeysLogString, secondaryReturnObjectKeys[i])
+		}
+	}
+
+	log.Printf("%d record(s) successfully loaded from JSON file. (DB object types created: %s)", recordCount, recordKeysLogString)
 
 	return nil
 }
@@ -180,40 +201,75 @@ func LoadJSONSampleData(db *gorm.DB) error {
 
 	//  Create DataLoadMapping object for each DB object type and load sample records that are available for each
 	//  Users
+	var userJSONKey string = "user"
+
 	userLoadMapping := DataLoadMapping[*models.User]{
 		Records:                   sampleData.Users,
-		PrimaryReturnObjectKey:    "user",
+		PrimaryReturnObjectKey:    userJSONKey,
 		SecondaryReturnObjectKeys: []string{},
 	}
-	userLoadMapping.createSampleRecords(db)
+
+	err = userLoadMapping.createSampleRecords(db)
+	if err != nil {
+		return err
+	}
+
 	//  Businesses / Main Offices
+	var businessJSONKey string = "business"
+	var officeJSONKey string = "office"
+
 	businessLoadMapping := DataLoadMapping[*models.Business]{
 		Records:                   sampleData.Businesses,
-		PrimaryReturnObjectKey:    "business",
-		SecondaryReturnObjectKeys: []string{"office"},
+		PrimaryReturnObjectKey:    businessJSONKey,
+		SecondaryReturnObjectKeys: []string{officeJSONKey},
 	}
-	businessLoadMapping.createSampleRecords(db)
+
+	err = businessLoadMapping.createSampleRecords(db)
+	if err != nil {
+		return err
+	}
+
 	//  Addresses
+	var addressJSONKey string = "address"
+
 	addressLoadMapping := DataLoadMapping[*models.Address]{
 		Records:                   sampleData.Addresses,
-		PrimaryReturnObjectKey:    "address",
+		PrimaryReturnObjectKey:    addressJSONKey,
 		SecondaryReturnObjectKeys: []string{},
 	}
-	addressLoadMapping.createSampleRecords(db)
+
+	err = addressLoadMapping.createSampleRecords(db)
+	if err != nil {
+		return err
+	}
+
 	//  Services
+	var serviceJSONKey string = "service"
+
 	serviceLoadMapping := DataLoadMapping[*models.Service]{
 		Records:                   sampleData.Services,
-		PrimaryReturnObjectKey:    "service",
+		PrimaryReturnObjectKey:    serviceJSONKey,
 		SecondaryReturnObjectKeys: []string{},
 	}
-	serviceLoadMapping.createSampleRecords(db)
+
+	err = serviceLoadMapping.createSampleRecords(db)
+	if err != nil {
+		return err
+	}
+
 	//  ServiceOfferings
+	var serviceOfferingJSONKey string = "service_offering"
+
 	serviceOfferingLoadMapping := DataLoadMapping[*models.ServiceOffering]{
 		Records:                   sampleData.ServiceOfferings,
-		PrimaryReturnObjectKey:    "service_offering",
+		PrimaryReturnObjectKey:    serviceOfferingJSONKey,
 		SecondaryReturnObjectKeys: []string{},
 	}
-	serviceOfferingLoadMapping.createSampleRecords(db)
+
+	err = serviceOfferingLoadMapping.createSampleRecords(db)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
