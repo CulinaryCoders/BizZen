@@ -49,7 +49,7 @@ export class CreateServiceComponent {
     if (!endTime || endTime === "") {
       errorMsg += "ERROR Closing Time Required -- "
     }
-    if (this.validStartEndTime()) {
+    if (!this.validStartEndTime()) {
       errorMsg += "ERROR End must be after start --"
     }
     if (numParticipants === 0) {
@@ -73,7 +73,7 @@ export class CreateServiceComponent {
       endJSDate.setHours(Number(end[0]+end[1]));
       endJSDate.setMinutes(Number(end[3]+end[4]));
 
-      return startJSDate > endJSDate;
+      return startJSDate < endJSDate;
     }
     return false;
   }

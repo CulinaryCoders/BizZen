@@ -26,28 +26,38 @@ describe('CreateServiceComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should check that all fields are filled in', () => {
-  //   component.userModel.username = "test"
-  //   component.userModel.userId = "test@example.com"
-  //   component.userModel.password = "pass123"
-  //
-  //   const allFilled = component.allFieldsFilled();
-  //   expect(allFilled).toBe(true);
-  // });
-  //
-  // it('should catch when not all fields filled in', () => {
-  //   component.userModel.username = ""
-  //   component.userModel.userId = ""
-  //   component.userModel.password = ""
-  //
-  //   const allFilled = component.allFieldsFilled();
-  //   expect(allFilled).toBe(false);
-  // });
-  //
-  // it('checks that the specified start is before the end', () => {
-  //   component.toggleInterest(interestToAdd);
-  //   expect(component.selectedInterests.includes(interestToAdd)).toBeTruthy();
-  //   component.toggleInterest(interestToAdd);
-  //   expect(component.selectedInterests.includes(interestToAdd)).toBeFalse();
-  // });
+  it('verifies that all fields are entered', () => {
+    component.newService.value.name = "test";
+    component.newService.value.description = "test descr";
+    component.newService.value.startTime = "11:10";
+    component.newService.value.endTime = "12:10";
+    component.newService.value.numParticipants = 5;
+    component.newService.value.pricePerUnit = 15;
+
+    const allFilled = component.verifyFields();
+    // Returns error message, if empty string, no errors
+    expect(allFilled).toBe("");
+  });
+
+  it('adds to error message when not all fields filled in', () => {
+    component.newService.value.name = "";
+    component.newService.value.description = "";
+    component.newService.value.startTime = "11:12";
+    component.newService.value.endTime = "12:11";
+
+    const allFilled = component.verifyFields();
+    expect(allFilled).not.toBe("");
+  });
+
+  it('checks that the specified start is before the end', () => {
+    component.newService.value.startTime = "11:12";
+    component.newService.value.endTime = "12:12";
+    expect(component.validStartEndTime()).toBeTruthy();
+  });
+
+  it('returns error if end time is before start', () => {
+    component.newService.value.startTime = "13:12";
+    component.newService.value.endTime = "11:12";
+    expect(component.validStartEndTime()).toBeFalsy();
+  });
 });
