@@ -3,7 +3,7 @@ Using gomarkdoc package to create markdown files for this project's documentatio
 Example usage (generate markdown documentation for all files in models directory):
 
 ```
-gomarkdoc .\models\ > .\_documentation\models-package.md
+gomarkdoc .\models\ > .\_documentation\packages-models.md
 ```
 
 Additional formatting tweaks applied using 'Replace Rules' extension in VS code to make markdown files more readable.
