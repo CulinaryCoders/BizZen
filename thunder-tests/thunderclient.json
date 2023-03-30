@@ -31,7 +31,7 @@
       },
       {
         "type": "json-query",
-        "custom": "json.ID",
+        "custom": "json.business.ID",
         "action": "equal",
         "value": "666001"
       },
@@ -139,7 +139,7 @@
       },
       {
         "type": "json-query",
-        "custom": "json.officeUpdatedAt",
+        "custom": "json.office.UpdatedAt",
         "action": "notequal",
         "value": ""
       },
@@ -217,186 +217,186 @@
       "form": []
     },
     "tests": [
-          {
-            "type": "res-code",
-            "custom": "",
-            "action": "equal",
-            "value": "201"
-          },
-          {
-            "type": "res-body",
-            "custom": "",
-            "action": "isjson",
-            "value": "true"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.ID",
-            "action": "equal",
-            "value": "666002"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.main_office_id",
-            "action": "equal",
-            "value": "666002"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.owner_id",
-            "action": "equal",
-            "value": "666002"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.name",
-            "action": "equal",
-            "value": "Tampa Electric"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.type",
-            "action": "equal",
-            "value": "Home Improvement"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.CreatedAt",
-            "action": "notequal",
-            "value": ""
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.UpdatedAt",
-            "action": "notequal",
-            "value": ""
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.DeletedAt",
-            "action": "equal",
-            "value": "null"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.ID",
-            "action": "istype",
-            "value": "number"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.ID",
-            "action": "notequal",
-            "value": "null"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.name",
-            "action": "istype",
-            "value": "string"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.type",
-            "action": "istype",
-            "value": "string"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.main_office_id",
-            "action": "istype",
-            "value": "number"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.main_office_id",
-            "action": "notequal",
-            "value": ""
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.ID",
-            "action": "istype",
-            "value": "number"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.ID",
-            "action": "notequal",
-            "value": ""
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.ID",
-            "action": "equal",
-            "value": "666002"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.CreatedAt",
-            "action": "notequal",
-            "value": ""
-          },
-          {
-            "type": "json-query",
-            "custom": "json.officeUpdatedAt",
-            "action": "notequal",
-            "value": ""
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.DeletedAt",
-            "action": "equal",
-            "value": "null"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.business_id",
-            "action": "equal",
-            "value": "666002"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.manager_id",
-            "action": "equal",
-            "value": "666002"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.business_id",
-            "action": "istype",
-            "value": "number"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.manager_id",
-            "action": "istype",
-            "value": "number"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.business_id",
-            "action": "notequal",
-            "value": ""
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.manager_id",
-            "action": "notequal",
-            "value": ""
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.name",
-            "action": "istype",
-            "value": "string"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.office.name",
-            "action": "equal",
-            "value": "Tampa Electric - Main Office"
-          }
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "201"
+      },
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "isjson",
+        "value": "true"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.ID",
+        "action": "equal",
+        "value": "666002"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.main_office_id",
+        "action": "equal",
+        "value": "666002"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.owner_id",
+        "action": "equal",
+        "value": "666002"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.name",
+        "action": "equal",
+        "value": "Tampa Electric"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.type",
+        "action": "equal",
+        "value": "Home Improvement"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.CreatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.UpdatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.DeletedAt",
+        "action": "equal",
+        "value": "null"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.ID",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.ID",
+        "action": "notequal",
+        "value": "null"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.name",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.type",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.main_office_id",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.main_office_id",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.ID",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.ID",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.ID",
+        "action": "equal",
+        "value": "666002"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.CreatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.UpdatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.DeletedAt",
+        "action": "equal",
+        "value": "null"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.business_id",
+        "action": "equal",
+        "value": "666002"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.manager_id",
+        "action": "equal",
+        "value": "666002"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.business_id",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.manager_id",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.business_id",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.manager_id",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.name",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.name",
+        "action": "equal",
+        "value": "Tampa Electric - Main Office"
+      }
     ]
   },
   {
@@ -417,6 +417,206 @@
       "form": []
     },
     "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "201"
+      },
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "isjson",
+        "value": "true"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.ID",
+        "action": "equal",
+        "value": "666003"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.main_office_id",
+        "action": "equal",
+        "value": "666003"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.owner_id",
+        "action": "equal",
+        "value": "666003"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.name",
+        "action": "equal",
+        "value": "Bernie Madoff, CPA"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.type",
+        "action": "equal",
+        "value": "Accounting"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.CreatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.UpdatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.DeletedAt",
+        "action": "equal",
+        "value": "null"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.ID",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.ID",
+        "action": "notequal",
+        "value": "null"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.name",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.type",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.main_office_id",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.main_office_id",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.ID",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.ID",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.ID",
+        "action": "equal",
+        "value": "666003"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.CreatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.UpdatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.DeletedAt",
+        "action": "equal",
+        "value": "null"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.business_id",
+        "action": "equal",
+        "value": "666003"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.manager_id",
+        "action": "equal",
+        "value": "666003"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.business_id",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.manager_id",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.business_id",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.manager_id",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.name",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.office.name",
+        "action": "equal",
+        "value": "Bernie Madoff, CPA - Main Office"
+      }
+    ]
+  },
+  {
+    "_id": "8b055114-2440-4ea9-95eb-cafb169ac885",
+    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
+    "containerId": "",
+    "name": "Business - Create - Missing Field Case (main_office_id) - 1",
+    "url": "localhost:8420/business",
+    "method": "POST",
+    "sortNum": 40000,
+    "created": "2023-03-30T00:02:41.097Z",
+    "modified": "2023-03-30T00:02:41.097Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"ID\":666004,\n  \"owner_id\":666004,\n  \"name\":\"Tampa Fishing Charters\",\n  \"type\":\"Fishing Charter\"\n}",
+      "form": []
+    },
+    "tests": [
         {
             "type": "res-code",
             "custom": "",
@@ -431,33 +631,27 @@
           },
           {
             "type": "json-query",
-            "custom": "json.ID",
+            "custom": "json.business.ID",
             "action": "equal",
-            "value": "666003"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.main_office_id",
-            "action": "equal",
-            "value": "666003"
+            "value": "666004"
           },
           {
             "type": "json-query",
             "custom": "json.business.owner_id",
             "action": "equal",
-            "value": "666003"
+            "value": "666004"
           },
           {
             "type": "json-query",
             "custom": "json.business.name",
             "action": "equal",
-            "value": "Bernie Madoff, CPA"
+            "value": "Tampa Fishing Charters"
           },
           {
             "type": "json-query",
             "custom": "json.business.type",
             "action": "equal",
-            "value": "Accounting"
+            "value": "Fishing Charter"
           },
           {
             "type": "json-query",
@@ -527,19 +721,13 @@
           },
           {
             "type": "json-query",
-            "custom": "json.office.ID",
-            "action": "equal",
-            "value": "666003"
-          },
-          {
-            "type": "json-query",
             "custom": "json.office.CreatedAt",
             "action": "notequal",
             "value": ""
           },
           {
             "type": "json-query",
-            "custom": "json.officeUpdatedAt",
+            "custom": "json.office.UpdatedAt",
             "action": "notequal",
             "value": ""
           },
@@ -553,13 +741,13 @@
             "type": "json-query",
             "custom": "json.office.business_id",
             "action": "equal",
-            "value": "666003"
+            "value": "666004"
           },
           {
             "type": "json-query",
             "custom": "json.office.manager_id",
             "action": "equal",
-            "value": "666003"
+            "value": "666004"
           },
           {
             "type": "json-query",
@@ -595,47 +783,9 @@
             "type": "json-query",
             "custom": "json.office.name",
             "action": "equal",
-            "value": "Bernie Madoff, CPA - Main Office"
+            "value": "Tampa Fishing Charters - Main Office"
           }
     ]
-  },
-  {
-    "_id": "8b055114-2440-4ea9-95eb-cafb169ac885",
-    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
-    "containerId": "",
-    "name": "Business - Create - Missing Field Case (main_office_id) - 1",
-    "url": "localhost:8420/business",
-    "method": "POST",
-    "sortNum": 40000,
-    "created": "2023-03-30T00:02:41.097Z",
-    "modified": "2023-03-30T00:02:41.097Z",
-    "headers": [],
-    "params": [],
-    "body": {
-      "type": "json",
-      "raw": "{\n  \"ID\":666004,\n  \"owner_id\":666004,\n  \"name\":\"Tampa Fishing Charters\",\n  \"type\":\"Fishing Charter\"\n}",
-      "form": []
-    },
-    "tests": []
-  },
-  {
-    "_id": "11da71ea-d141-4650-b792-04fadf54fc59",
-    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
-    "containerId": "",
-    "name": "Business - Create - Standard Case - 3",
-    "url": "localhost:8420/business",
-    "method": "POST",
-    "sortNum": 50000,
-    "created": "2023-03-30T01:44:09.860Z",
-    "modified": "2023-03-30T01:44:09.860Z",
-    "headers": [],
-    "params": [],
-    "body": {
-      "type": "json",
-      "raw": "{\n  \"ID\":666003,\n  \"owner_id\":666003,\n  \"main_office_id\":666003,\n  \"name\":\"Bernie Madoff, CPA\",\n  \"type\":\"Accounting\"\n}",
-      "form": []
-    },
-    "tests": []
   },
   {
     "_id": "256c9aa3-1e2e-40bc-b8ba-a6514c39470b",
