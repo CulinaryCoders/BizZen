@@ -217,7 +217,7 @@ func (app *Application) GetService(writer http.ResponseWriter, request *http.Req
 
 	returnedService, err := service.Get(app.AppDB, serviceID)
 	if err != nil {
-		var errorMessage string = fmt.Sprintf("Service ID (%d) does not exist in the database.\n%s", serviceID, err)
+		var errorMessage string = fmt.Sprintf("Service ID (%d) does not exist in the database.  [%s]", serviceID, err)
 
 		utils.RespondWithError(
 			writer,
@@ -727,7 +727,7 @@ func (app *Application) GetServiceOffering(writer http.ResponseWriter, request *
 
 	returnedServiceOffering, err := serviceOffering.Get(app.AppDB, serviceOfferingID)
 	if err != nil {
-		var errorMessage string = fmt.Sprintf("ServiceOffering ID (%d) does not exist in the database.\n%s", serviceOfferingID, err)
+		var errorMessage string = fmt.Sprintf("ServiceOffering ID (%d) does not exist in the database.  [%s]", serviceOfferingID, err)
 
 		utils.RespondWithError(
 			writer,

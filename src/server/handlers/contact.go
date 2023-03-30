@@ -230,7 +230,7 @@ func (app *Application) GetAddress(writer http.ResponseWriter, request *http.Req
 	returnRecords, err := address.Get(app.AppDB, addressID)
 	returnedAddress := returnRecords["address"]
 	if err != nil {
-		var errorMessage string = fmt.Sprintf("Address ID (%d) does not exist in the database.\n%s", addressID, err)
+		var errorMessage string = fmt.Sprintf("Address ID (%d) does not exist in the database.  [%s]", addressID, err)
 
 		utils.RespondWithError(
 			writer,

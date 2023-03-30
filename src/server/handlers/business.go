@@ -230,7 +230,7 @@ func (app *Application) GetBusiness(writer http.ResponseWriter, request *http.Re
 	returnRecords, err := business.Get(app.AppDB, businessID)
 	returnedBusiness := returnRecords["business"]
 	if err != nil {
-		var errorMessage string = fmt.Sprintf("Business ID (%d) does not exist in the database.\n%s", businessID, err)
+		var errorMessage string = fmt.Sprintf("Business ID (%d) does not exist in the database.  [%s]", businessID, err)
 
 		utils.RespondWithError(
 			writer,
@@ -707,7 +707,7 @@ func (app *Application) GetOffice(writer http.ResponseWriter, request *http.Requ
 	returnRecords, err := office.Get(app.AppDB, officeID)
 	returnedOffice := returnRecords["office"]
 	if err != nil {
-		var errorMessage string = fmt.Sprintf("Office ID (%d) does not exist in the database.\n%s", officeID, err)
+		var errorMessage string = fmt.Sprintf("Office ID (%d) does not exist in the database.  [%s]", officeID, err)
 
 		utils.RespondWithError(
 			writer,

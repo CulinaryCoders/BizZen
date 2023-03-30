@@ -280,7 +280,7 @@ func (app *Application) GetUser(writer http.ResponseWriter, request *http.Reques
 	returnRecords, err := user.Get(app.AppDB, userID)
 	returnedUser := returnRecords["user"]
 	if err != nil {
-		var errorMessage string = fmt.Sprintf("User ID (%d) does not exist in the database.\n%s", userID, err)
+		var errorMessage string = fmt.Sprintf("User ID (%d) does not exist in the database.  [%s]", userID, err)
 
 		utils.RespondWithError(
 			writer,
