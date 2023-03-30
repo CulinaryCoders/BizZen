@@ -16,7 +16,74 @@
       "raw": "{\n  \"ID\":666001,\n  \"owner_id\":666001,\n  \"main_office_id\":666001,\n  \"name\":\"Spongebob's Salon\",\n  \"type\":\"Health & Wellness\"\n}",
       "form": []
     },
-    "tests": []
+    "tests": [
+        {
+            "type": "res-body",
+            "custom": "",
+            "action": "isjson",
+            "value": "true"
+          },
+          {
+            "type": "res-code",
+            "custom": "",
+            "action": "equal",
+            "value": "201"
+          },
+          {
+            "type": "json-query",
+            "custom": "json.business.CreatedAt",
+            "action": "notequal",
+            "value": ""
+          },
+          {
+            "type": "json-query",
+            "custom": "json.business.UpdatedAt",
+            "action": "notequal",
+            "value": ""
+          },
+          {
+            "type": "json-query",
+            "custom": "json.business.DeletedAt",
+            "action": "equal",
+            "value": "null"
+          },
+          {
+            "type": "json-query",
+            "custom": "json.business.ID",
+            "action": "istype",
+            "value": "number"
+          },
+          {
+            "type": "json-query",
+            "custom": "json.business.ID",
+            "action": "notequal",
+            "value": "null"
+          },
+          {
+            "type": "json-query",
+            "custom": "json.business.name",
+            "action": "istype",
+            "value": "string"
+          },
+          {
+            "type": "json-query",
+            "custom": "json.business.type",
+            "action": "istype",
+            "value": "string"
+          },
+          {
+            "type": "json-query",
+            "custom": "json.business.main_office_id",
+            "action": "istype",
+            "value": "number"
+          },
+          {
+            "type": "json-query",
+            "custom": "json.business.main_office_id",
+            "action": "notequal",
+            "value": ""
+          }
+    ]
   },
   {
     "_id": "9c9c7615-46bd-4d1b-a2a9-aea5e514506f",
