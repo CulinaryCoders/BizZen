@@ -10,6 +10,9 @@ import (
 // Read in environmental variables used throughout application
 var AppConfig *Configuration = InitializeConfig()
 
+// Set global debug flag
+var Debug bool = AppConfig.DEBUG_MODE
+
 // struct to map env values
 type Configuration struct {
 	JWT_SIGNING_KEY   []byte `mapstructure:"JWT_SIGNING_KEY"`

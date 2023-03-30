@@ -14,8 +14,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var debug bool = config.AppConfig.DEBUG_MODE
-
 /*
 SampleData type is used to store a list of object instances for each DB object type in the database.
 
@@ -100,7 +98,7 @@ func createSampleRecords[model models.Model](db *gorm.DB, records []model, prima
 	var recordCount int = len(records)
 	var secondaryKeyCount int = len(secondaryReturnObjectKeys)
 
-	if debug {
+	if config.Debug {
 		log.Printf("Number of '%s' records in JSON file:  %d", primaryObjectKey, len(records))
 	}
 
@@ -115,7 +113,7 @@ func createSampleRecords[model models.Model](db *gorm.DB, records []model, prima
 			return errors.New(errorMessage)
 		}
 
-		if debug {
+		if config.Debug {
 			log.Printf("Primary object created ('%s'):\n\n%+v\n\n", primaryObjectKey, primaryRecord)
 		}
 
@@ -129,7 +127,7 @@ func createSampleRecords[model models.Model](db *gorm.DB, records []model, prima
 					return errors.New(errorMessage)
 				}
 
-				if debug {
+				if config.Debug {
 					log.Printf("Secondary object created ('%s' from '%s' object creation):\n\n%+v\n\n", secondaryReturnObjectKey, primaryObjectKey, secondaryRecord)
 				}
 

@@ -52,8 +52,7 @@ Initializes the various components of the Application instance (router, database
 func (app *Application) Initialize(appDBName string) {
 	// Initialize main app database
 	var dbConnectionString string = config.AppConfig.GetPostgresDBConnectionString(appDBName)
-	var debug bool = config.AppConfig.DEBUG_MODE
-	App.AppDB = database.InitializePostgresDB(dbConnectionString, debug)
+	App.AppDB = database.InitializePostgresDB(dbConnectionString, config.Debug)
 
 	// Initialize cache db
 	var cacheDSN string = config.AppConfig.GetRedisDBNetworkAddress()
