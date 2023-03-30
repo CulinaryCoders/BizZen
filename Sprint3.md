@@ -4,10 +4,10 @@
 </br>
 
 Frontend:
-    * Alaine  --  https://www.youtube.com/watch?v=EU7hBra51zk
-	* Lucinda --  https://youtu.be/EAqMi8WJ01s
+* Alaine  --  https://www.youtube.com/watch?v=EU7hBra51zk
+* Lucinda --  https://youtu.be/EAqMi8WJ01s
 
-Backend: 
+Backend: https://youtu.be/1x1grRPc5sM
 
 </br>
 
