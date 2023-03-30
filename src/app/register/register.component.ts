@@ -12,12 +12,13 @@ import {UserService} from '../user.service';
 export class RegisterComponent {
   constructor(private router: Router, private activatedRoute:ActivatedRoute, private userService:UserService) {}
 
-  userModel = new User("12345","", "", "business");
+  userModel = new User("","", "", "user", []);
   isBusiness = false;
   confPass = "";
   errorMsg = "";
 
   registerForm = new FormGroup({
+    userId: new FormControl('123'),
     username: new FormControl(''),
     email: new FormControl(''),
     password: new FormGroup({
@@ -63,7 +64,6 @@ export class RegisterComponent {
     console.log("===confpass: ", this.confPass)
 
     this.errorMsg = "";
-    // console.log(this.registerForm.value);
     console.log(this.userModel);
     let user;
 
@@ -72,7 +72,7 @@ export class RegisterComponent {
         this.errorMsg = "ERROR Passwords must match"
       } else {
         // Note: since first & last name required, might need to test with dummy data
-        user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user");
+        user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user", []);
 
         if (this.isBusiness)
           user.accountType = "business";
@@ -82,9 +82,15 @@ export class RegisterComponent {
         // Update userModel to be sent
         this.userModel.username = this.registerForm.value.username || "test";
 
+        this.userModel.userId = "123"
+
         // Send to db!
         this.addUser();
-        this.router.navigate(["/onboarding"])
+        if (this.isBusiness) {
+          this.router.navigate(["/business-onboarding"])
+        } else {
+          this.router.navigate(["/onboarding"])
+        }
       }
     }
   }
