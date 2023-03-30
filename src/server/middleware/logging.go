@@ -23,7 +23,7 @@ func RequestLoggingMiddleware(next http.Handler) http.Handler {
 					http.StatusInternalServerError,
 					err.Error())
 
-				log.Panicf("ERROR:  %s", err.Error())
+				log.Printf("ERROR:  %s", err.Error())
 			}
 
 			log.Printf("REQUEST BODY:\n\n%s\n\n", string(requestBodyBytes))

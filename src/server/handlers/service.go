@@ -224,7 +224,7 @@ func (app *Application) GetService(writer http.ResponseWriter, request *http.Req
 			http.StatusNotFound,
 			errorMessage)
 
-		log.Panicf(errorMessage)
+		log.Printf("ERROR:  %s", errorMessage)
 
 		return
 	}
@@ -734,7 +734,7 @@ func (app *Application) GetServiceOffering(writer http.ResponseWriter, request *
 			http.StatusNotFound,
 			errorMessage)
 
-		log.Panicf(errorMessage)
+		log.Printf("ERROR:  %s", errorMessage)
 
 		return
 	}

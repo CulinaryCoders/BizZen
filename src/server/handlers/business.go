@@ -237,7 +237,7 @@ func (app *Application) GetBusiness(writer http.ResponseWriter, request *http.Re
 			http.StatusNotFound,
 			errorMessage)
 
-		log.Panicf(errorMessage)
+		log.Printf("ERROR:  %s", errorMessage)
 
 		return
 	}
@@ -714,7 +714,7 @@ func (app *Application) GetOffice(writer http.ResponseWriter, request *http.Requ
 			http.StatusNotFound,
 			errorMessage)
 
-		log.Panicf(errorMessage)
+		log.Printf("ERROR:  %s", errorMessage)
 
 		return
 	}

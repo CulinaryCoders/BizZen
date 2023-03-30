@@ -237,7 +237,7 @@ func (app *Application) GetAddress(writer http.ResponseWriter, request *http.Req
 			http.StatusNotFound,
 			errorMessage)
 
-		log.Panicf(errorMessage)
+		log.Printf("ERROR:  %s", errorMessage)
 
 		return
 	}

@@ -287,7 +287,7 @@ func (app *Application) GetUser(writer http.ResponseWriter, request *http.Reques
 			http.StatusNotFound,
 			errorMessage)
 
-		log.Panicf(errorMessage)
+		log.Printf("ERROR:  %s", errorMessage)
 
 		return
 	}
