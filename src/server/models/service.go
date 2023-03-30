@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+	"server/config"
 	"time"
 
 	"gorm.io/gorm"
@@ -217,8 +219,12 @@ func (service *Service) Delete(db *gorm.DB, serviceID uint) (map[string]Model, e
 		return returnRecords, err
 	}
 
+	if config.Debug {
+		log.Printf("\n\nService object targeted for deletion:\n\n%+v\n\n", deleteService)
+	}
+
 	// TODO:  Extend delete operations to all of the other object types associated with the Service record as is appropriate (ServiceOfferings, etc.)
-	err = db.Delete(&deleteService).Error
+	err = db.Delete(deleteService).Error
 	returnRecords = map[string]Model{"service": deleteService}
 
 	return returnRecords, err
@@ -405,7 +411,11 @@ func (serviceOffering *ServiceOffering) Delete(db *gorm.DB, serviceOfferingID ui
 		return returnRecords, err
 	}
 
-	err = db.Delete(&serviceOffering).Error
+	if config.Debug {
+		log.Printf("\n\nServiceOffering object targeted for deletion:\n\n%+v\n\n", deleteServiceOffering)
+	}
+
+	err = db.Delete(deleteServiceOffering).Error
 	returnRecords = map[string]Model{"service_offering": deleteServiceOffering}
 
 	return returnRecords, err

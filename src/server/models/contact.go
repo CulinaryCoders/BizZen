@@ -1,6 +1,9 @@
 package models
 
 import (
+	"log"
+	"server/config"
+
 	"gorm.io/gorm"
 )
 
@@ -290,7 +293,11 @@ func (address *Address) Delete(db *gorm.DB, addressID uint) (map[string]Model, e
 		return returnRecords, err
 	}
 
-	err = db.Delete(&address).Error
+	if config.Debug {
+		log.Printf("\n\nAddress object targeted for deletion:\n\n%+v\n\n", deleteAddress)
+	}
+
+	err = db.Delete(deleteAddress).Error
 	returnRecords = map[string]Model{"address": deleteAddress}
 
 	return returnRecords, err

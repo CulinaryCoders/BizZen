@@ -1,6 +1,9 @@
 package models
 
 import (
+	"log"
+	"server/config"
+
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -423,7 +426,11 @@ func (user *User) Delete(db *gorm.DB, userID uint) (map[string]Model, error) {
 		return returnRecords, err
 	}
 
-	err = db.Delete(&user).Error
+	if config.Debug {
+		log.Printf("\n\nUser object targeted for deletion:\n\n%+v\n\n", deleteUser)
+	}
+
+	err = db.Delete(deleteUser).Error
 	returnRecords = map[string]Model{"user": deleteUser}
 
 	return returnRecords, err

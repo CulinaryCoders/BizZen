@@ -5,6 +5,8 @@ import (
 	"log"
 	"time"
 
+	"server/config"
+
 	"gorm.io/gorm"
 )
 
@@ -367,8 +369,12 @@ func (business *Business) Delete(db *gorm.DB, businessID uint) (map[string]Model
 		return returnRecords, err
 	}
 
+	if config.Debug {
+		log.Printf("\n\nBusiness object targeted for deletion:\n\n%+v\n\n", deleteBusiness)
+	}
+
 	// TODO:  Extend delete operations to all of the other object types associated with the Business record as is appropriate (Offices, Services, etc.)
-	err = db.Delete(&deleteBusiness).Error
+	err = db.Delete(deleteBusiness).Error
 	returnRecords = map[string]Model{"business": deleteBusiness}
 
 	return returnRecords, err
@@ -555,7 +561,11 @@ func (office *Office) Delete(db *gorm.DB, officeID uint) (map[string]Model, erro
 		return returnRecords, err
 	}
 
-	err = db.Delete(&office).Error
+	if config.Debug {
+		log.Printf("\n\nOffice object targeted for deletion:\n\n%+v\n\n", deleteOffice)
+	}
+
+	err = db.Delete(deleteOffice).Error
 	returnRecords = map[string]Model{"office": deleteOffice}
 
 	return returnRecords, err
