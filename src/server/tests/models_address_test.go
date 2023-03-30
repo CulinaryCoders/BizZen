@@ -4,42 +4,55 @@ import (
 	"encoding/json"
 	"server/database"
 	"server/models"
+	"server/sample_data"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 )
 
-var standardAddresses = []struct {
-	Address models.Address
-}{
-	{Address: models.Address{
+var standardAddresses = []*models.Address{
+	{
+		Model:    gorm.Model{ID: 888001},
 		Address1: "1234 Gator Way",
 		Address2: "",
 		City:     "Gainesville",
 		State:    "FL",
 		ZipCode:  "12345",
-	}},
-	{Address: models.Address{
+	},
+	{
+		Model:    gorm.Model{ID: 888002},
 		Address1: "145 Homer Simpson Ln",
 		Address2: "Apt #5",
 		City:     "Springfield",
 		State:    "IN",
 		ZipCode:  "09090",
-	}},
-	{Address: models.Address{
+	},
+	{
+		Model:    gorm.Model{ID: 888003},
 		Address1: "888 Cueball Street",
 		Address2: "P.O. Box 97",
 		City:     "Boston",
 		State:    "MA",
 		ZipCode:  "33445",
-	}},
+	},
 }
-var missingRequiredFieldsAddresses []models.Address
-var invalidFieldValuesAddresses []models.Address
+
+//var missingRequiredFieldsAddresses []models.Address
+//var invalidFieldValuesAddresses []models.Address
 
 // TODO:  Add documentation (func createTestAddressRecords)
-func createTestAddressRecords([]models.Address) error {
-	return nil
+func createTestAddressRecords(db *gorm.DB, records []*models.Address) error {
+	var addressJSONKey string = "address"
+
+	addressLoadMapping := sample_data.DataLoadMapping[*models.Address]{
+		Records:                   records,
+		PrimaryReturnObjectKey:    addressJSONKey,
+		SecondaryReturnObjectKeys: []string{},
+	}
+
+	err := addressLoadMapping.CreateSampleRecords(db)
+	return err
 }
 
 // TODO:  Add documentation (func TestCreateAddress)
@@ -80,6 +93,11 @@ func TestGetAddress(t *testing.T) {
 	// Refresh database to control testing environment
 	database.FormatAllTables(testAppDB)
 
+	createErr := createTestAddressRecords(testAppDB, standardAddresses)
+	if createErr != nil {
+		t.Logf("ERROR:  %s", createErr)
+	}
+
 	// Defined test cases
 	// testCreateAddress1 := models.Address{
 	// 	Address1: "1234 Gator Way",
@@ -107,7 +125,7 @@ func TestGetAddress(t *testing.T) {
 
 	// Create list of test cases with expected outputs and/or errors
 	type AddressTest struct {
-		input         models.Address
+		input         *models.Address
 		scenario      string
 		expectedError error
 	}
@@ -115,7 +133,7 @@ func TestGetAddress(t *testing.T) {
 	var addressTests []AddressTest
 	for _, standardCase := range standardAddresses {
 		testDef := AddressTest{
-			input:         standardCase.Address,
+			input:         standardCase,
 			scenario:      "Standard address (basic case)",
 			expectedError: nil,
 		}
@@ -127,13 +145,9 @@ func TestGetAddress(t *testing.T) {
 	for _, testCase := range addressTests {
 		address := models.Address{}
 
-		returnRecords, err := testCase.input.Create(testAppDB)
-		createdAddress := returnRecords["address"]
-		if err != nil {
-			t.Errorf("ERROR:  Could not create test address. %s", err)
-		}
+		createdAddress := testCase.input
 
-		returnRecords, err = address.Get(testAppDB, createdAddress.GetID())
+		returnRecords, err := address.Get(testAppDB, createdAddress.GetID())
 		returnedAddress := returnRecords["address"]
 		if err != nil {
 			t.Errorf("ERROR:  func GetAddress failed to return test address. %s", err)

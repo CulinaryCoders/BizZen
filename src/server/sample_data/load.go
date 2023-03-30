@@ -39,9 +39,9 @@ type DataLoadMapping[Model models.Model] struct {
 /*
 *Description*
 
-func (dataLoadMapping DataLoadMapping[Model]) createSampleRecords
+func (dataLoadMapping DataLoadMapping[Model]) CreateSampleRecords
 
-A generic wrapper function for the DataLoadMapping interface to be able to call the 'createSampleRecords' function for any
+A generic wrapper function for the DataLoadMapping interface to be able to call the 'CreateSampleRecords' function for any
 GORM DB object type that implements the 'Model' interface.
 
 *Parameters*
@@ -56,15 +56,15 @@ GORM DB object type that implements the 'Model' interface.
 
 		Encountered error (nil if no errors are encountered).
 */
-func (dataLoadMapping DataLoadMapping[Model]) createSampleRecords(db *gorm.DB) error {
-	err := createSampleRecords(db, dataLoadMapping.Records, dataLoadMapping.PrimaryReturnObjectKey, dataLoadMapping.SecondaryReturnObjectKeys...)
+func (dataLoadMapping DataLoadMapping[Model]) CreateSampleRecords(db *gorm.DB) error {
+	err := CreateSampleRecords(db, dataLoadMapping.Records, dataLoadMapping.PrimaryReturnObjectKey, dataLoadMapping.SecondaryReturnObjectKeys...)
 	return err
 }
 
 /*
 *Description*
 
-func createSampleRecords
+func CreateSampleRecords
 
 Creates the list of records that are passed in the specified database instance and logs all of the objects that are created
 and/or errors that are encountered while records are being created in the database.
@@ -93,7 +93,7 @@ and/or errors that are encountered while records are being created in the databa
 
 		Encountered error (nil if no errors are encountered).
 */
-func createSampleRecords[model models.Model](db *gorm.DB, records []model, primaryObjectKey string, secondaryReturnObjectKeys ...string) error {
+func CreateSampleRecords[model models.Model](db *gorm.DB, records []model, primaryObjectKey string, secondaryReturnObjectKeys ...string) error {
 
 	var recordCount int = len(records)
 	var secondaryKeyCount int = len(secondaryReturnObjectKeys)
@@ -207,7 +207,7 @@ func LoadJSONSampleData(db *gorm.DB) error {
 		SecondaryReturnObjectKeys: []string{},
 	}
 
-	err = userLoadMapping.createSampleRecords(db)
+	err = userLoadMapping.CreateSampleRecords(db)
 	if err != nil {
 		return err
 	}
@@ -222,7 +222,7 @@ func LoadJSONSampleData(db *gorm.DB) error {
 		SecondaryReturnObjectKeys: []string{officeJSONKey},
 	}
 
-	err = businessLoadMapping.createSampleRecords(db)
+	err = businessLoadMapping.CreateSampleRecords(db)
 	if err != nil {
 		return err
 	}
@@ -236,7 +236,7 @@ func LoadJSONSampleData(db *gorm.DB) error {
 		SecondaryReturnObjectKeys: []string{},
 	}
 
-	err = addressLoadMapping.createSampleRecords(db)
+	err = addressLoadMapping.CreateSampleRecords(db)
 	if err != nil {
 		return err
 	}
@@ -250,7 +250,7 @@ func LoadJSONSampleData(db *gorm.DB) error {
 		SecondaryReturnObjectKeys: []string{},
 	}
 
-	err = serviceLoadMapping.createSampleRecords(db)
+	err = serviceLoadMapping.CreateSampleRecords(db)
 	if err != nil {
 		return err
 	}
@@ -264,7 +264,7 @@ func LoadJSONSampleData(db *gorm.DB) error {
 		SecondaryReturnObjectKeys: []string{},
 	}
 
-	err = serviceOfferingLoadMapping.createSampleRecords(db)
+	err = serviceOfferingLoadMapping.CreateSampleRecords(db)
 	if err != nil {
 		return err
 	}
