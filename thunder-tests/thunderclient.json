@@ -1,0 +1,277 @@
+[
+  {
+    "_id": "e78eb9d4-b366-4e16-84ed-76c8e4fdcb0e",
+    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
+    "containerId": "",
+    "name": "Business - Create - Standard Case - 1",
+    "url": "localhost:8420/business",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2023-03-29T23:08:02.458Z",
+    "modified": "2023-03-30T00:08:01.823Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"ID\":666001,\n  \"owner_id\":666001,\n  \"main_office_id\":666001,\n  \"name\":\"Spongebob's Salon\",\n  \"type\":\"Health & Wellness\"\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "isjson",
+        "value": "true"
+      },
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "201"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.CreatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.UpdatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.DeletedAt",
+        "action": "equal",
+        "value": "null"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.ID",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.ID",
+        "action": "notequal",
+        "value": "null"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.name",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.type",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.main_office_id",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.main_office_id",
+        "action": "notequal",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "_id": "f7f5c528-04e8-4fc3-9684-e3f6e65603d4",
+    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
+    "containerId": "",
+    "name": "Business - Create - Standard Case - 2",
+    "url": "localhost:8420/business",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2023-03-30T00:02:14.164Z",
+    "modified": "2023-03-30T00:02:14.164Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"ID\":666002,\n  \"owner_id\":666002,\n  \"name\":\"Spongebob's Salon\",\n  \"type\":\"Health & Wellness\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "3a1cade5-7537-417c-a736-aae254a111e2",
+    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
+    "containerId": "",
+    "name": "Business - Create - Standard Case - 3",
+    "url": "localhost:8420/business",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2023-03-30T00:02:30.903Z",
+    "modified": "2023-03-30T00:02:30.903Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"ID\":666003,\n  \"owner_id\":666003,\n  \"main_office_id\":666003,\n  \"name\":\"Bernie Madoff, CPA\",\n  \"type\":\"Accounting\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "8b055114-2440-4ea9-95eb-cafb169ac885",
+    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
+    "containerId": "",
+    "name": "Business - Create - Missing Field Case (main_office_id) - 1",
+    "url": "localhost:8420/business",
+    "method": "POST",
+    "sortNum": 40000,
+    "created": "2023-03-30T00:02:41.097Z",
+    "modified": "2023-03-30T00:02:41.097Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"ID\":666004,\n  \"owner_id\":666004,\n  \"name\":\"Tampa Fishing Charters\",\n  \"type\":\"Fishing Charter\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "11da71ea-d141-4650-b792-04fadf54fc59",
+    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
+    "containerId": "",
+    "name": "Business - Create - Standard Case - 3",
+    "url": "localhost:8420/business",
+    "method": "POST",
+    "sortNum": 50000,
+    "created": "2023-03-30T01:44:09.860Z",
+    "modified": "2023-03-30T01:44:09.860Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"ID\":666003,\n  \"owner_id\":666003,\n  \"main_office_id\":666003,\n  \"name\":\"Bernie Madoff, CPA\",\n  \"type\":\"Accounting\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "256c9aa3-1e2e-40bc-b8ba-a6514c39470b",
+    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
+    "containerId": "",
+    "name": "Business - Get - Standard Case - 1",
+    "url": "localhost:8420/business/666001",
+    "method": "GET",
+    "sortNum": 60000,
+    "created": "2023-03-30T01:44:16.550Z",
+    "modified": "2023-03-30T01:44:16.550Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "isjson",
+        "value": "true"
+      },
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "d32ee679-5c0f-437f-88b8-0c2457c56312",
+    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
+    "containerId": "",
+    "name": "Business - Get - Invalid Case (ID doesn't exist) - 1",
+    "url": "localhost:8420/business/9999999",
+    "method": "GET",
+    "sortNum": 70000,
+    "created": "2023-03-30T01:44:20.324Z",
+    "modified": "2023-03-30T01:44:20.324Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "isjson",
+        "value": "true"
+      },
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "404"
+      }
+    ]
+  },
+  {
+    "_id": "1e2b03b1-9f27-4492-86aa-60470b184c24",
+    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
+    "containerId": "",
+    "name": "Business - Delete - Standard Case - 1",
+    "url": "localhost:8420/business/666001",
+    "method": "DELETE",
+    "sortNum": 80000,
+    "created": "2023-03-30T01:44:24.044Z",
+    "modified": "2023-03-30T01:44:24.044Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "01536aac-76a0-443b-9cf8-2f96db27a72f",
+    "colId": "950f8b67-ce5a-45ce-a6c7-fbfbbb3ce187",
+    "containerId": "",
+    "name": "Business - Delete - Invalid Case (ID doesn't exist) - 1",
+    "url": "localhost:8420/business/9999999",
+    "method": "DELETE",
+    "sortNum": 90000,
+    "created": "2023-03-30T01:44:27.257Z",
+    "modified": "2023-03-30T01:44:27.257Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "500"
+      },
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "isjson",
+        "value": "true"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.error",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.error",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.error",
+        "action": "contains",
+        "value": "record not found"
+      }
+    ]
+  }
+]

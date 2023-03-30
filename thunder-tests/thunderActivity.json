@@ -1,0 +1,191 @@
+[
+  {
+    "_id": "82c706c6-0ed6-4809-9779-8bf9138be9fb",
+    "colId": "history",
+    "containerId": "",
+    "name": "Business - Create - Standard Case - 1",
+    "url": "localhost:8420/business",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-03-29T23:06:25.218Z",
+    "modified": "2023-03-29T23:06:25.218Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"ID\":666001,\n  \"owner_id\":666001,\n  \"main_office_id\":666001,\n  \"name\":\"Spongebob's Salon\",\n  \"type\":\"Health & Wellness\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "9c9c7615-46bd-4d1b-a2a9-aea5e514506f",
+    "colId": "history",
+    "containerId": "",
+    "name": "Business - Create - Standard Case - 2",
+    "url": "localhost:8420/business",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-03-29T23:06:25.218Z",
+    "modified": "2023-03-29T23:56:08.147Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"ID\":666002,\n  \"owner_id\":666002,\n  \"name\":\"Spongebob's Salon\",\n  \"type\":\"Health & Wellness\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "3a822b99-05ad-4d05-b986-270cdba2caf3",
+    "colId": "history",
+    "containerId": "",
+    "name": "Business - Create - Standard Case - 3",
+    "url": "localhost:8420/business",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-03-29T23:06:25.218Z",
+    "modified": "2023-03-30T00:02:18.957Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"ID\":666003,\n  \"owner_id\":666003,\n  \"main_office_id\":666003,\n  \"name\":\"Bernie Madoff, CPA\",\n  \"type\":\"Accounting\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "0a03a02f-9f46-4ba9-962e-9b2cbf031a8c",
+    "colId": "history",
+    "containerId": "",
+    "name": "Business - Create - Missing Field Case (main_office_id) - 1",
+    "url": "localhost:8420/business",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2023-03-29T23:06:25.218Z",
+    "modified": "2023-03-29T23:59:21.817Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"ID\":666004,\n  \"owner_id\":666004,\n  \"name\":\"Tampa Fishing Charters\",\n  \"type\":\"Fishing Charter\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "fdb0324b-7e47-41cf-b551-25ee4a6fa098",
+    "colId": "history",
+    "containerId": "",
+    "name": "Business - Get - Standard Case - 1",
+    "url": "localhost:8420/business/666001",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-03-29T23:06:25.218Z",
+    "modified": "2023-03-30T00:16:37.039Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "isjson",
+        "value": "true"
+      },
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "c496fc7e-ef43-4482-91b5-40571a22833d",
+    "colId": "history",
+    "containerId": "",
+    "name": "Business - Delete - Standard Case - 1",
+    "url": "localhost:8420/business/666001",
+    "method": "DELETE",
+    "sortNum": 0,
+    "created": "2023-03-29T23:06:25.218Z",
+    "modified": "2023-03-30T00:15:47.161Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "e91fa59c-7a0d-48f3-b6a8-6ae18bda7e35",
+    "colId": "history",
+    "containerId": "",
+    "name": "Business - Get - Invalid Case (ID doesn't exist) - 1",
+    "url": "localhost:8420/business/9999999",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-03-29T23:06:25.218Z",
+    "modified": "2023-03-30T01:35:09.114Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "isjson",
+        "value": "true"
+      },
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "404"
+      }
+    ]
+  },
+  {
+    "_id": "c38ff8e5-3ee9-44e7-9bd0-51375f996a8d",
+    "colId": "history",
+    "containerId": "",
+    "name": "Business - Delete - Invalid Case (ID doesn't exist) - 1",
+    "url": "localhost:8420/business/9999999",
+    "method": "DELETE",
+    "sortNum": 0,
+    "created": "2023-03-29T23:06:25.218Z",
+    "modified": "2023-03-30T01:43:49.399Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "500"
+      },
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "isjson",
+        "value": "true"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.error",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.error",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.error",
+        "action": "contains",
+        "value": "record not found"
+      }
+    ]
+  }
+]
