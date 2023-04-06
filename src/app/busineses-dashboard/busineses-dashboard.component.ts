@@ -10,8 +10,9 @@ import {formatDate} from "@angular/common";
 
 export class BusinesesDashboardComponent {
   constructor(private router: Router) {};
+  // TODO: read from db
+  businessOwnerView = true;
   view = "list";
-
   // TODO: read from db
   business = {
     id: 1,
@@ -28,6 +29,10 @@ export class BusinesesDashboardComponent {
 
   formatTime(time: Date) {
     return formatDate(time, "HH:mm", 'en')
+  }
+
+  openAddService() {
+    this.router.navigate(["/create-service"])
   }
 
   toggleView(type: string) {
