@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component,} from '@angular/core';
 import {CalendarEvent, CalendarView} from 'angular-calendar';
 import {startOfDay} from 'date-fns';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-service-calendar-component',
@@ -21,6 +22,7 @@ import {startOfDay} from 'date-fns';
   ],
 })
 export class ServiceCalendarComponent {
+  constructor(private router: Router) {};
 
   viewDate: Date = new Date();
   view: CalendarView = CalendarView.Month;
@@ -45,9 +47,10 @@ export class ServiceCalendarComponent {
     console.log(date);
     this.viewDate = date;
     this.view = CalendarView.Day;
-    //let x=this.adminService.dateFormat(date)
-    //this.openAppointmentList(x)
   }
 
-
+  eventClicked({ event }: { event: CalendarEvent }): void {
+    alert("Navigating to " + event.title + " page");
+    this.router.navigate(['/service/'+event.meta.id]);
+  }
 }

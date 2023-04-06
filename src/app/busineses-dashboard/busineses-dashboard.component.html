@@ -60,8 +60,8 @@
               ${{service.price}}
             </div>
             <div style="text-align: right">
-              <button class="btn btn-secondary" style="margin-right: 5px">Learn More</button>
-              <button class="btn btn-primary">Sign up</button>
+              <button (click)="goToServicePage(service.id)" class="btn btn-secondary" style="margin-right: 5px">Learn More</button>
+              <button *ngIf="!businessOwnerView" class="btn btn-primary">Sign up</button>
             </div>
           </div>
         </li>

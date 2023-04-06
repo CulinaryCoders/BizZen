@@ -53,12 +53,18 @@ export class BusinesesDashboardComponent {
     }
   }
 
+  goToServicePage(serviceId: number) {
+    alert("going to service number " + serviceId + "'s page")
+    this.router.navigate(['/service/'+serviceId])
+  }
+
   routeToHome() {
     this.router.navigate(['/home']);
   }
 
   services = [
     {
+      id: 1,
       name: "Yoga",
       description: "Easy yoga class",
       start_date_time: new Date("5/7/2023 11:00:00"),
@@ -67,6 +73,7 @@ export class BusinesesDashboardComponent {
       price: 15
     },
     {
+      id: 2,
       name: "Painting",
       description: "Intro to painting class",
       start_date_time: new Date("5/6/2023 11:00:00"),
