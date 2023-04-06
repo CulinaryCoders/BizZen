@@ -2,23 +2,10 @@ import {
   Component,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { EventColor } from 'calendar-utils';
-import { CalendarView } from 'angular-calendar';
+import { CalendarView, CalendarEvent } from 'angular-calendar';
+import { startOfDay } from 'date-fns';
+import {Service} from "../service";
 
-const colors: Record<string, EventColor> = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
-};
 @Component({
   selector: 'app-service-calendar-component',
   templateUrl: './service-calendar.component.html',
@@ -38,12 +25,31 @@ const colors: Record<string, EventColor> = {
   ],
 })
 export class ServiceCalendarComponent {
+
   viewDate: Date = new Date();
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
 
-
   setView(view: CalendarView) {
     this.view = view;
   }
+
+  events: CalendarEvent[] = [
+    {
+      start: startOfDay(new Date()),
+      title: 'Yoga Class',
+    },
+    {
+      start: startOfDay(new Date()),
+      title: 'Painting Class',
+    }
+  ];
+
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    console.log(date);
+    //let x=this.adminService.dateFormat(date)
+    //this.openAppointmentList(x)
+  }
+
+
 }

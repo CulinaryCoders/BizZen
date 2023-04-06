@@ -56,7 +56,9 @@
       </div>
     </ng-template>
     <ng-template [ngIf]="this.view === 'calendar'">
-      <app-service-calendar-component></app-service-calendar-component>
+      <div class="calendar-container">
+        <app-service-calendar-component></app-service-calendar-component>
+      </div>
     </ng-template>
   </div>
 </div>
