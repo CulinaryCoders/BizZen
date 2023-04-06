@@ -13,7 +13,7 @@ import {BusinesesDashboardComponent} from "./busineses-dashboard/busineses-dashb
 
 export const routes: Routes = [
   //more specific routes should be above less specific routes
-  // { path: '', component: LandingComponent },
+  { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'register', component: RegisterComponent },
@@ -22,7 +22,7 @@ export const routes: Routes = [
   { path: 'create-service', component: CreateServiceComponent },
   { path: 'find-classes', component: FindClassesComponent},
   { path: 'class-summary', component: ServicePageComponent},
-  { path: '', component: BusinesesDashboardComponent},
+  { path: 'home', component: BusinesesDashboardComponent},
   { path: '',   redirectTo: '/home', pathMatch: 'full' }, // redirect to `first-component`
 ];
 

@@ -12,6 +12,16 @@ export class BusinesesDashboardComponent {
   constructor(private router: Router) {};
   view = "list";
 
+  // TODO: read from db
+  business = {
+    id: 1,
+    name: "CEN Recreational Center",
+    bio: "Welcome to our community! Browse our classes for a variety of enriching opportunities.",
+    created_at: new Date(),
+    opening_time: "11:00",
+    closing_time: "19:00"
+  }
+
   formatDate(day: Date) {
     return formatDate(day, "MMM dd, yyyy", 'en')
   }

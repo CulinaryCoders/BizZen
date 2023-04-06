@@ -1,10 +1,6 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import { CalendarView, CalendarEvent } from 'angular-calendar';
-import { startOfDay } from 'date-fns';
-import {Service} from "../service";
+import {ChangeDetectionStrategy, Component,} from '@angular/core';
+import {CalendarEvent, CalendarView} from 'angular-calendar';
+import {startOfDay} from 'date-fns';
 
 @Component({
   selector: 'app-service-calendar-component',
@@ -47,6 +43,8 @@ export class ServiceCalendarComponent {
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     console.log(date);
+    this.viewDate = date;
+    this.view = CalendarView.Day;
     //let x=this.adminService.dateFormat(date)
     //this.openAppointmentList(x)
   }
