@@ -56,20 +56,7 @@
       </div>
     </ng-template>
     <ng-template [ngIf]="this.view === 'calendar'">
-      <p>CALENDAR</p>
+      <app-service-calendar-component></app-service-calendar-component>
     </ng-template>
   </div>
 </div>
-
-<script>
-  var firstTabEl = document.querySelector('#service-list li:last-child a')
-  var firstTab = new bootstrap.Tab(firstTabEl)
-
-  firstTab.show()
-
-  var triggerEl = document.querySelector('#list-btn a[href="#list"]')
-  bootstrap.Tab.getInstance(triggerEl).show() // Select tab by name
-
-  var triggerFirstTabEl = document.querySelector('#service-list li:first-child a')
-  bootstrap.Tab.getInstance(triggerFirstTabEl).show() // Select first tab
-</script>

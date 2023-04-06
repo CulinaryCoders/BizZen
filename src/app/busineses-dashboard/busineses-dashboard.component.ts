@@ -7,6 +7,7 @@ import {formatDate} from "@angular/common";
   templateUrl: './busineses-dashboard.component.html',
   styleUrls: ['./busineses-dashboard.component.scss']
 })
+
 export class BusinesesDashboardComponent {
   constructor(private router: Router) {};
   view = "list";

@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +19,7 @@ import { FindClassesComponent } from './find-classes/find-classes.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ServicePageComponent } from './service-page/service-page.component';
 import { BusinesesDashboardComponent } from './busineses-dashboard/busineses-dashboard.component';
+import { ServiceCalendarComponent } from './service-calendar/service-calendar.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,8 @@ import { BusinesesDashboardComponent } from './busineses-dashboard/busineses-das
     CreateServiceComponent,
     FindClassesComponent,
     ServicePageComponent,
-    BusinesesDashboardComponent
+    BusinesesDashboardComponent,
+    ServiceCalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +43,11 @@ import { BusinesesDashboardComponent } from './busineses-dashboard/busineses-das
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ScrollingModule
+    ScrollingModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

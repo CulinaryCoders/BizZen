@@ -19,6 +19,11 @@
     "@angular/platform-browser": "^15.1.0",
     "@angular/platform-browser-dynamic": "^15.1.0",
     "@angular/router": "^15.1.0",
+    "@date-io/date-fns": "^1.3.13",
+    "@ng-bootstrap/ng-bootstrap": "^14.1.0",
+    "angular-calendar": "^0.31.0",
+    "date-fns": "^2.29.3",
+    "ng-bootstrap": "^1.6.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
