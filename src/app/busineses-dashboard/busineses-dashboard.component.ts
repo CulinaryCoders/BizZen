@@ -19,7 +19,7 @@ export class BusinesesDashboardComponent {
         id: 1,
         name: "Yoga",
         description: "Easy yoga class",
-        start_date_time: new Date("5/7/2023 11:00:00"),
+        start_date_time: new Date("4/6/2023 11:00:00"),
         length: 120,
         capacity: 10,
         price: 15
@@ -28,7 +28,25 @@ export class BusinesesDashboardComponent {
         id: 2,
         name: "Painting",
         description: "Intro to painting class",
-        start_date_time: new Date("5/6/2023 11:00:00"),
+        start_date_time: new Date("4/6/2023 10:00:00"),
+        length: 120,
+        capacity: 10,
+        price: 15
+      },
+      {
+        id: 3,
+        name: "Weightlifting",
+        description: "Do you even lift",
+        start_date_time: new Date("4/11/2023 15:00:00"),
+        length: 120,
+        capacity: 10,
+        price: 15
+      },
+      {
+        id: 4,
+        name: "Computers",
+        description: "Learn how to use computer applications like Excel",
+        start_date_time: new Date("4/22/2023 13:00:00"),
         length: 120,
         capacity: 10,
         price: 15
