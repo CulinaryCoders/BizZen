@@ -9,6 +9,7 @@ import {BusinessOnboardingComponent} from "./business-onboarding/business-onboar
 import {CreateServiceComponent} from "./create-service/create-service.component";
 import { FindClassesComponent } from './find-classes/find-classes.component';
 import { ServicePageComponent } from './service-page/service-page.component';
+import {BusinesesDashboardComponent} from "./busineses-dashboard/busineses-dashboard.component";
 
 export const routes: Routes = [
   //more specific routes should be above less specific routes
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'create-service', component: CreateServiceComponent },
   { path: 'find-classes', component: FindClassesComponent},
   { path: 'class-summary', component: ServicePageComponent},
+  { path: 'home', component: BusinesesDashboardComponent},
   { path: '',   redirectTo: '/home', pathMatch: 'full' }, // redirect to `first-component`
 ];
 
