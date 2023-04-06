@@ -7,14 +7,42 @@ import (
 	"net/url"
 )
 
-// TODO: Add comment documentation (type AngularHandler)
+/*
+*Description*
+
+type AngularHandler
+
+The AngularHandler type is used to store/access various attributes of the frontend Angular application
+*/
 type AngularHandler struct {
-	Host         string
-	HTTPAddress  string
-	ReverseProxy *httputil.ReverseProxy
+	Host         string                 // The host address for the frontend Angular application
+	HTTPAddress  string                 // The host address for the frontend Angular application in http format
+	ReverseProxy *httputil.ReverseProxy // The reverse proxy used to allow the frontend to connect to the backend server
 }
 
-// TODO: Add comment documentation (func NewAngularHandler)
+/*
+*Description*
+
+func NewAngularHandler
+
+Creates a new AngularHandler instance.
+
+*Parameters*
+
+	host  <string>
+
+	   The host address of the Angular application (only the host portion of the address, no port number).
+
+	httpAddress  <string>
+
+		The http address of the Angular application in 'http://host:port' format.
+
+*Returns*
+
+	_  <AngularHandler>
+
+		A pointer to the new AngularHandler instance that was created.
+*/
 func NewAngularHandler(host string, httpAddress string) *AngularHandler {
 	origin, err := url.Parse(host)
 	if err != nil {
