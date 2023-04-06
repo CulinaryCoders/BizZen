@@ -9,12 +9,32 @@ import {formatDate} from "@angular/common";
 })
 export class BusinesesDashboardComponent {
   constructor(private router: Router) {};
+  view = "list";
+
   formatDate(day: Date) {
     return formatDate(day, "MMM dd, yyyy", 'en')
   }
 
   formatTime(time: Date) {
     return formatDate(time, "HH:mm", 'en')
+  }
+
+  toggleView(type: string) {
+    let listBtn = document.getElementById("list-view") || document.createElement("<p>");
+    let calendarBtn = document.getElementById("calendar-view") || document.createElement("<p>");
+    if (type === "calendar" && this.view === "list") {
+      this.view = "calendar";
+      listBtn.classList.remove("btn-primary");
+      listBtn.classList.add("btn-secondary");
+      calendarBtn.classList.add("btn-primary");
+      calendarBtn.classList.remove("btn-secondary");
+    } else if (type === "list" && this.view === "calendar") {
+      this.view = "list";
+      listBtn.classList.add("btn-primary");
+      listBtn.classList.remove("btn-secondary");
+      calendarBtn.classList.remove("btn-primary");
+      calendarBtn.classList.add("btn-secondary");
+    }
   }
 
   routeToHome() {
