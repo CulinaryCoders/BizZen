@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from "@angular/router";
 import {formatDate} from "@angular/common";
+import {Service} from "../service";
 
 @Component({
   selector: 'app-busineses-dashboard',
@@ -9,6 +10,32 @@ import {formatDate} from "@angular/common";
 })
 
 export class BusinesesDashboardComponent {
+  // @ts-ignore
+  services: any[];
+
+  ngOnInit() {
+    this.services = [
+      {
+        id: 1,
+        name: "Yoga",
+        description: "Easy yoga class",
+        start_date_time: new Date("5/7/2023 11:00:00"),
+        length: 120,
+        capacity: 10,
+        price: 15
+      },
+      {
+        id: 2,
+        name: "Painting",
+        description: "Intro to painting class",
+        start_date_time: new Date("5/6/2023 11:00:00"),
+        length: 120,
+        capacity: 10,
+        price: 15
+      },
+    ];
+  }
+
   constructor(private router: Router) {};
   // TODO: read from db
   businessOwnerView = true;
@@ -22,6 +49,28 @@ export class BusinesesDashboardComponent {
     opening_time: "11:00",
     closing_time: "19:00"
   }
+
+
+  services1 = [
+    {
+      id: 1,
+      name: "Yoga",
+      description: "Easy yoga class",
+      start_date_time: new Date("5/7/2023 11:00:00"),
+      length: 120,
+      capacity: 10,
+      price: 15
+    },
+    {
+      id: 2,
+      name: "Painting",
+      description: "Intro to painting class",
+      start_date_time: new Date("5/6/2023 11:00:00"),
+      length: 120,
+      capacity: 10,
+      price: 15
+    },
+  ]
 
   formatDate(day: Date) {
     return formatDate(day, "MMM dd, yyyy", 'en')
@@ -61,25 +110,4 @@ export class BusinesesDashboardComponent {
   routeToHome() {
     this.router.navigate(['/home']);
   }
-
-  services = [
-    {
-      id: 1,
-      name: "Yoga",
-      description: "Easy yoga class",
-      start_date_time: new Date("5/7/2023 11:00:00"),
-      length: 120,
-      capacity: 10,
-      price: 15
-    },
-    {
-      id: 2,
-      name: "Painting",
-      description: "Intro to painting class",
-      start_date_time: new Date("5/6/2023 11:00:00"),
-      length: 120,
-      capacity: 10,
-      price: 15
-    },
-  ]
 }

@@ -60,7 +60,7 @@
               ${{service.price}}
             </div>
             <div style="text-align: right">
-              <button (click)="goToServicePage(service.id)" class="btn btn-secondary" style="margin-right: 5px">Learn More</button>
+              <button (click)="goToServicePage(service.id)" class="btn btn-secondary" style="margin-right: 5px">More Info</button>
               <button *ngIf="!businessOwnerView" class="btn btn-primary">Sign up</button>
             </div>
           </div>
@@ -69,7 +69,7 @@
     </div>
     <div style="width: 70%; padding: 10px">
       <div class="calendar-container">
-        <app-service-calendar-component></app-service-calendar-component>
+        <app-service-calendar-component [services]="services"></app-service-calendar-component>
       </div>
     </div>
 <!--    <div style="width: 100%; padding: 10px">-->

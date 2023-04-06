@@ -1,7 +1,8 @@
-import {ChangeDetectionStrategy, Component,} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {CalendarEvent, CalendarView} from 'angular-calendar';
 import {startOfDay} from 'date-fns';
 import {Router} from "@angular/router";
+import {Service} from "../service";
 
 @Component({
   selector: 'app-service-calendar-component',
@@ -21,27 +22,31 @@ import {Router} from "@angular/router";
     `,
   ],
 })
-export class ServiceCalendarComponent {
+export class ServiceCalendarComponent implements OnInit{
   constructor(private router: Router) {};
+  // @ts-ignore
+  @Input() services: any[];
 
   viewDate: Date = new Date();
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
+  // @ts-ignore
+  events: CalendarEvent[] = [];
+
+  ngOnInit(): void {
+    console.log("services: ", this.services)
+
+    this.services.forEach((service) => {
+      this.events.push({
+        start: service.start_date_time,
+        title: service.name
+      })
+    })
+  }
 
   setView(view: CalendarView) {
     this.view = view;
   }
-
-  events: CalendarEvent[] = [
-    {
-      start: startOfDay(new Date()),
-      title: 'Yoga Class',
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'Painting Class',
-    }
-  ];
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     console.log(date);
