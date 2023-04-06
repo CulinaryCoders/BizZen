@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormControl, FormGroup} from "@angular/forms";
 import {User} from "../user";
+import {UserService} from '../user.service';
 
 @Component({
   selector: 'app-onboarding',
@@ -9,9 +10,10 @@ import {User} from "../user";
   styleUrls: ['./onboarding.component.scss'],
 })
 export class OnboardingComponent {
-  constructor(private router: Router) {};
+  constructor(private router: Router, private userService:UserService) {};
 
   errorMsg = "";
+  userModel = history.state.user;
 
   onboardingForm = new FormGroup({
     firstName: new FormControl(''),
@@ -28,6 +30,21 @@ export class OnboardingComponent {
     } else {
       this.selectedInterests.push(interest)
     }
+  }
+
+  async addUser(){
+    console.log("user model: ", this.userModel)
+    // Promise interface
+    // this.userService.addUser(this.userModel.userId, this.userModel.username, this.userModel.password, this.userModel.accountType).then(
+    //   user => {
+    //     console.log("ADDING USER")
+    //     this.userModel = user;
+    //     console.log("success");
+    //   }, err => {
+    //     console.log("ERROR");
+    //     console.log(err);
+    //   }
+    // );
   }
 
   onSubmit() {
@@ -48,9 +65,15 @@ export class OnboardingComponent {
       this.onboardingForm.value.interests = this.selectedInterests;
 
       // CONNECT BACKEND this.newApptForm.value has all the info needed to add to DB User object
-      console.log(this.onboardingForm.value);
-      let user = new User("12345", fname || "Gatey", "pass", "user", [])
-      this.router.navigateByUrl('/profile', {state: {user: user}});
+      // Send to db!
+      this.addUser().then(() => {
+        console.log(this.onboardingForm.value);
+        // let user = new User("12345", fname || "Gatey", "pass", "user", [])
+        // this.router.navigateByUrl('/profile', {state: {user: user}});
+        // this.router.navigateByUrl('/profile', {state: {user: this.userModel}});
+      }).catch((err) => {
+        console.log("error: ", err)
+      });
     }
   }
 

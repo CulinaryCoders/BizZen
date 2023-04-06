@@ -10,15 +10,13 @@ import {UserService} from '../user.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  constructor(private router: Router, private activatedRoute:ActivatedRoute, private userService:UserService) {}
-
+  constructor(private router: Router, private activatedRoute:ActivatedRoute) {}
   userModel = new User("","", "", "user", []);
   isBusiness = false;
   confPass = "";
   errorMsg = "";
 
   registerForm = new FormGroup({
-    userId: new FormControl('123'),
     username: new FormControl(''),
     email: new FormControl(''),
     password: new FormGroup({
@@ -30,7 +28,6 @@ export class RegisterComponent {
   )
 
   passwordsMatch() {
-    console.log("confpass: ", this.confPass)
     return this.userModel.password === this.confPass;
   }
 
@@ -45,51 +42,38 @@ export class RegisterComponent {
       // && this.userModel.password?.confPass && this.userModel.password.confPass !== ""
   }
 
-  async addUser(){
-    // Promise interface
-
-    this.userService.addUser(this.userModel.userId, this.userModel.username, this.userModel.password, this.userModel.accountType).then(
-      user => {
-        console.log("ADDING USER")
-        this.userModel = user;
-        console.log("success");
-      }, err => {
-        console.log("ERROR");
-        console.log(err);
-      }
-    );
-  }
-
   onSubmit() {
-    console.log("===confpass: ", this.confPass)
-
     this.errorMsg = "";
     console.log(this.userModel);
     let user;
 
-    if (this.allFieldsFilled() && this.registerForm.value.password?.pass === this.registerForm.value.password?.confPass) {
+    if (this.allFieldsFilled()) {
       if (!this.passwordsMatch()) {
         this.errorMsg = "ERROR Passwords must match"
       } else {
         // Note: since first & last name required, might need to test with dummy data
-        user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user", []);
+        // user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user", []);
 
-        if (this.isBusiness)
-          user.accountType = "business";
-        else
-          user.accountType = "user";
+        if (this.isBusiness) {
+          // user.accountType = "business";
+          this.userModel.accountType = "business"
+        } else {
+          // user.accountType = "user";
+          this.userModel.accountType = "user"
+        }
 
-        // Update userModel to be sent
-        this.userModel.username = this.registerForm.value.username || "test";
+        // // Update userModel to be sent
+        // this.userModel.username = this.registerForm.value.username || "test";
+        //
+        // this.userModel.userId = "123"
 
-        this.userModel.userId = "123"
 
-        // Send to db!
-        this.addUser();
         if (this.isBusiness) {
           this.router.navigate(["/business-onboarding"])
         } else {
-          this.router.navigate(["/onboarding"])
+          this.router.navigateByUrl('/onboarding', {state: {user: this.userModel}});
+
+          // this.router.navigate(["/onboarding"])
         }
       }
     }
