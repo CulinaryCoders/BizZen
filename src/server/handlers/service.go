@@ -42,9 +42,9 @@ Creates a new service record in the database.
 
 		Required fields:
 
-			office_id  <uint>
+			business_id  <uint>
 
-				ID of Office record Service is associated with
+				ID of Business record Service is associated with
 
 			name  <string>
 
@@ -54,17 +54,39 @@ Creates a new service record in the database.
 
 				Description of the service
 
+			start_date_time  <time.Time>
+
+				Date/time that service is scheduled to start
+
+			length <uint>
+
+				Length of time in minutes that the service will take
+
+			capacity <uint>
+
+				Number of users that can sign up for the service
+
+			price <uint>
+
+				Price (in cents) for the service being offered
+
 		Optional fields:
 
-			N/A (None)
+			cancel_fee <uint>
+
+				Fee (in cents) for cancelling appointment after minimum notice cutoff
 
 *Example request(s)*
 
 	POST /service
 	{
-		"office_id":123
+		"business_id":123
 		"name":"Yoga class",
-		"desc":"30 minute beginner yoga class"
+		"desc":"30 minute beginner yoga class",
+		"start_date_time":"2023-05-31T14:30:00.0000000-05:00",
+		"length":30,
+		"capacity":20,
+		"price":2000
 	}
 
 *Response format*
@@ -79,9 +101,14 @@ Creates a new service record in the database.
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"DeletedAt": null,
-			"office_id":123
+			"business_id":123
 			"name":"Yoga class",
-			"desc":"30 minute beginner yoga class"
+			"desc":"30 minute beginner yoga class",
+			"start_date_time":"2023-05-31T14:30:00.0000000-05:00",
+			"length":30,
+			"capacity":20,
+			"price":2000,
+			"cancel_fee":0
 		}
 
 	Failure:
@@ -181,9 +208,14 @@ Get service record from the database by ID.
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"DeletedAt": null,
-			"office_id":123,
+			"business_id":123
 			"name":"Yoga class",
-			"desc":"30 minute beginner yoga class"
+			"desc":"30 minute beginner yoga class",
+			"start_date_time":"2023-05-31T14:30:00.0000000-05:00",
+			"length":30,
+			"capacity":20,
+			"price":2000,
+			"cancel_fee":0
 		}
 
 	Failure:
@@ -275,9 +307,9 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 		Optional fields:
 
-			office_id  <uint>
+			business_id  <uint>
 
-				ID of Office record Service is associated with
+				ID of Business record Service is associated with
 
 			name  <string>
 
@@ -287,13 +319,32 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 				Description of the service
 
+			start_date_time  <time.Time>
+
+				Date/time that service is scheduled to start
+
+			length <uint>
+
+				Length of time in minutes that the service will take
+
+			capacity <uint>
+
+				Number of users that can sign up for the service
+
+			price <uint>
+
+				Price (in cents) for the service being offered
+
+			cancel_fee <uint>
+
+				Fee (in cents) for cancelling appointment after minimum notice cutoff
+
 *Example request(s)*
 
 	PUT /service/123456
 	{
-		"office_id":456,
-		"name":"Personal training session",
-		"desc":"1 hour personal training session with qualified trainer"
+		"price":2500,
+		"cancel_fee":1000,
 	}
 
 *Response format*
@@ -306,11 +357,16 @@ If a specified field's value should be deleted from the record, the appropriate 
 		{
 			"ID": 123456,
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
-			"UpdatedAt": "2022-07-11T01:23:45.6789012-14:25",
+			"UpdatedAt": "2020-02-13T04:20:12.6789012-05:00",
 			"DeletedAt": null,
-			"office_id":456,
-			"name":"Personal training session",
-			"desc":"1 hour personal training session with qualified trainer"
+			"business_id":123
+			"name":"Yoga class",
+			"desc":"30 minute beginner yoga class",
+			"start_date_time":"2023-05-31T14:30:00.0000000-05:00",
+			"length":30,
+			"capacity":20,
+			"price":2500,
+			"cancel_fee":1000
 		}
 
 	Failure:
@@ -423,9 +479,14 @@ Deleted service record is returned in the response body if the operation is suce
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"DeletedAt": "2022-07-11T01:23:45.6789012-14:25",
-			"office_id":123,
+			"business_id":123
 			"name":"Yoga class",
-			"desc":"30 minute beginner yoga class"
+			"desc":"30 minute beginner yoga class",
+			"start_date_time":"2023-05-31T14:30:00.0000000-05:00",
+			"length":30,
+			"capacity":20,
+			"price":2000,
+			"cancel_fee":0
 		}
 
 	Failure:

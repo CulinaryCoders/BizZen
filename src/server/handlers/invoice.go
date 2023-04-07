@@ -58,7 +58,12 @@ Creates a new invoice record in the database.
 
 			status  <string>
 
-				Status of the invoice (Unpaid, Paid, Overpaid)
+				Status of the invoice.
+
+				Permitted values (automatically set based on remaining balance value):
+					Unpaid
+					Paid
+					Overpaid
 
 *Example request(s)*
 

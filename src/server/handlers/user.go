@@ -72,25 +72,9 @@ Creates a new user account record in the database.
 
 		Optional fields:
 
-			contact_info_id  <uint>
-
-				The ID of the ContactInfo record associated with the new user account
-
 			business_id  <uint>
 
 				The ID of the Business record associated with the new user account (only applicable for 'Business' account types)
-
-			permissions_id  <uint>
-
-				The ID of the UserPermissions record associated with the new user account
-
-			user_pref_id  <uint>
-
-				The ID of the UserPrefences record associated with the new user account
-
-			profile_pic_id  <uint>
-
-				The ID of the ProfilePic record associated with the new user account
 
 *Example request(s)*
 
@@ -122,11 +106,7 @@ Creates a new user account record in the database.
 		"account_type": "Individual",
 		"first_name": "John",
 		"last_name": "Doe",
-		"contact_info_id": 45,
-		"business_id": null,
-		"permissions_id": 123,
-		"user_pref_id": 88,
-		"profile_pic_id": 79
+		"business_id": null
 		}
 
 	Failure:
@@ -240,11 +220,7 @@ Retrieves a user account record from the database by user ID if the ID exists in
 		"account_type": "Individual",
 		"first_name": "John",
 		"last_name": "Doe",
-		"contact_info_id": 45,
-		"business_id": null,
-		"permissions_id": 123,
-		"user_pref_id": 88,
-		"profile_pic_id": 79
+		"business_id": null
 		}
 
 	Failure:
@@ -367,25 +343,9 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 				The user's last name
 
-			contact_info_id  <uint>
-
-				The ID of the ContactInfo record associated with the new user account
-
 			business_id  <uint>
 
 				The ID of the Business record associated with the new user account (only applicable for 'Business' account types)
-
-			permissions_id  <uint>
-
-				The ID of the UserPermissions record associated with the new user account
-
-			user_pref_id  <uint>
-
-				The ID of the UserPrefences record associated with the new user account
-
-			profile_pic_id  <uint>
-
-				The ID of the ProfilePic record associated with the new user account
 
 *Example request(s)*
 
@@ -413,11 +373,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 		"account_type": "Individual",
 		"first_name": "Luke",
 		"last_name": "Skywalker",
-		"contact_info_id": 45,
-		"business_id": null,
-		"permissions_id": 123,
-		"user_pref_id": 88,
-		"profile_pic_id": 79
+		"business_id": null
 		}
 
 	Failure:
@@ -537,11 +493,7 @@ Deleted user record is returned in the response body if the operation is sucessf
 		"account_type": "Individual",
 		"first_name": "John",
 		"last_name": "Doe",
-		"contact_info_id": 45,
-		"business_id": null,
-		"permissions_id": 123,
-		"user_pref_id": 88,
-		"profile_pic_id": 79
+		"business_id": null
 		}
 
 	Failure:

@@ -12,14 +12,14 @@ import (
 // GORM model for all Service records in the database
 type Service struct {
 	gorm.Model
-	BusinessID      uint      `gorm:"column:business_id" json:"business_id"`           // ID of Business that Service is associated with
-	Name            string    `gorm:"column:name" json:"name"`                         // Service name
-	Description     string    `gorm:"column:desc" json:"desc"`                         // Service description
-	StartDateTime   time.Time `gorm:"column:start_date_time" json:"start_date_time"`   // Date/time that the service starts
-	Length          uint      `gorm:"column:length" json:"length"`                     // Length of time in minutes that the service will take
-	Capacity        uint      `gorm:"column:capacity" json:"capacity"`                 // Number of users that can sign up for the service
-	CancellationFee uint      `gorm:"column:cancellation_fee" json:"cancellation_fee"` // Fee (in cents) for cancelling appointment after minimum notice cutoff
-	Price           uint      `gorm:"column:price" json:"price"`                       // Price (in cents) for the service being offered
+	BusinessID    uint      `gorm:"column:business_id" json:"business_id"`         // ID of Business that Service is associated with
+	Name          string    `gorm:"column:name" json:"name"`                       // Service name
+	Description   string    `gorm:"column:desc" json:"desc"`                       // Service description
+	StartDateTime time.Time `gorm:"column:start_date_time" json:"start_date_time"` // Date/time that the service starts
+	Length        uint      `gorm:"column:length" json:"length"`                   // Length of time in minutes that the service will take
+	Capacity      uint      `gorm:"column:capacity" json:"capacity"`               // Number of users that can sign up for the service
+	CancelFee     uint      `gorm:"column:cancel_fee" json:"cancel_fee"`           // Fee (in cents) for cancelling appointment after minimum notice cutoff
+	Price         uint      `gorm:"column:price" json:"price"`                     // Price (in cents) for the service being offered
 }
 
 /*
