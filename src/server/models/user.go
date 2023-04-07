@@ -13,139 +13,14 @@ import (
 // GORM model for all User records in the database
 type User struct {
 	gorm.Model
-	Email             string `gorm:"not null;unique;column:email" json:"email"`                             // User's email address
-	Username          string `gorm:"not null;unique;column:username" json:"username"`                       // Username
-	Password          string `gorm:"not null;column:password" json:"password"`                              // User's hashed password
-	AccountType       string `gorm:"not null;column:account_type" json:"account_type"`                      // Account type of the User record (Individual, Business, System)
-	FirstName         string `gorm:"not null;column:first_name" json:"first_name"`                          // User's first name
-	LastName          string `gorm:"not null;column:last_name" json:"last_name"`                            // User's last name
-	ContactInfoID     *uint  `gorm:"column:contact_info_id" json:"contact_info_id" sql:"DEFAULT:NULL"`      // ID of ContactInfo record associated with the User record
-	BusinessID        *uint  `gorm:"column:business_id;default:null" json:"business_id" sql:"DEFAULT:NULL"` // ID of the Business record associated with the User record
-	UserPermissionsID *uint  `gorm:"column:permissions_id" json:"permissions_id" sql:"DEFAULT:NULL"`        // ID of the UserPermissions record associated with the User
-	UserPreferencesID *uint  `gorm:"column:user_pref_id" json:"user_pref_id" sql:"DEFAULT:NULL"`            // ID of the UserPreferences record associated with the User record
-	ProfilePicID      *uint  `gorm:"column:profile_pic_id" json:"profile_pic_id" sql:"DEFAULT:NULL"`        // ID of the ProfilePic record associated with the User record
+	Email       string `gorm:"not null;unique;column:email" json:"email"`                             // User's email address
+	Username    string `gorm:"not null;unique;column:username" json:"username"`                       // Username
+	Password    string `gorm:"not null;column:password" json:"password"`                              // User's hashed password
+	AccountType string `gorm:"not null;column:account_type" json:"account_type"`                      // Account type of the User record (Individual, Business, System)
+	FirstName   string `gorm:"not null;column:first_name" json:"first_name"`                          // User's first name
+	LastName    string `gorm:"not null;column:last_name" json:"last_name"`                            // User's last name
+	BusinessID  *uint  `gorm:"column:business_id;default:null" json:"business_id" sql:"DEFAULT:NULL"` // ID of the Business record associated with the User record
 }
-
-// GORM model for all UserPermissions records in the database
-type UserPermissions struct {
-	gorm.Model
-	Label       string `gorm:"not null;column:label" json:"label"` // Label / shortname for the permissions set
-	Description string `gorm:"not null;column:desc" json:"desc"`   // Description of permissions
-}
-
-/*
-*Description*
-
-func Equal
-
-Determines if two different User objects are equal to each other (i.e. all fields match).
-
-The primary purpose of this function is to test the functionality of database and handler calls to ensure that
-the correct objects are being returned and/or updated in the database.
-
-*Parameters*
-
-	compareUser  <*User>
-
-		The User object that the calling User object is being compared to
-
-*Returns*
-
-	unequalFields  <[]string>
-
-		The list of fields that did not match between the two User objects being compared
-
-	equal  <bool>
-
-		If all the fields between the two objects are the same, true is returned. Otherwise, false is returned.
-*/
-// func (user *User) Equal(compareUser *User) (unequalFields []string, equal bool) {
-// 	equal = true
-
-// 	if user.ID != compareUser.ID {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "ID")
-// 	}
-
-// 	if user.Email != compareUser.Email {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "Email")
-// 	}
-
-// 	if user.Username != compareUser.Username {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "Username")
-// 	}
-
-// 	if user.Password != compareUser.Password {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "Password")
-// 	}
-
-// 	if user.AccountType != compareUser.AccountType {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "AccountType")
-// 	}
-
-// 	if user.FirstName != compareUser.FirstName {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "FirstName")
-// 	}
-
-// 	if user.LastName != compareUser.LastName {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "LastName")
-// 	}
-
-// 	if user.ContactInfoID != compareUser.ContactInfoID {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "ContactInfoID")
-// 	}
-
-// 	if user.BusinessID != compareUser.BusinessID {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "BusinessID")
-// 	}
-
-// 	if user.UserPermissionsID != compareUser.UserPermissionsID {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "UserPermissionsID")
-// 	}
-
-// 	if user.BusinessID != compareUser.UserPreferencesID {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "BusinessID")
-// 	}
-
-// 	if user.UserPermissionsID != compareUser.ProfilePicID {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "UserPermissionsID")
-// 	}
-
-// 	if user.CreatedAt.Equal(compareUser.CreatedAt) {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "CreatedAt")
-// 	}
-
-// 	if user.UpdatedAt.Equal(compareUser.UpdatedAt) {
-// 		equal = false
-// 		unequalFields = append(unequalFields, "UpdatedAt")
-// 	}
-
-// 	if !user.DeletedAt.Time.Equal(compareUser.DeletedAt.Time) {
-// 		equal = false
-// 		log.Printf("DeletedAt.Time (User):  %s\nDeletedAt.Time (compareUser):  %s", user.DeletedAt.Time, compareUser.DeletedAt.Time)
-// 		unequalFields = append(unequalFields, "DeletedAt.Time")
-// 	}
-
-// 	if user.DeletedAt.Valid != compareUser.DeletedAt.Valid {
-// 		equal = false
-// 		log.Printf("DeletedAt.Valid (User):  %t\nDeletedAt.Valid (compareUser):  %t", user.DeletedAt.Valid, compareUser.DeletedAt.Valid)
-// 		unequalFields = append(unequalFields, "DeletedAt.Valid")
-// 	}
-
-// 	return unequalFields, equal
-// }
 
 /*
 *Description*

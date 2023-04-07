@@ -133,12 +133,12 @@ Executes gorm AutoMigrate function for all DB models.
 */
 func setupTables(db *gorm.DB) {
 	db.AutoMigrate(&models.User{},
-		&models.Address{},
-		&models.ContactInfo{},
+		// &models.Address{},
+		// &models.ContactInfo{},
 		&models.Business{},
-		&models.Office{},
+		// &models.Office{},
 		&models.Service{},
-		&models.ServiceOffering{},
+		// &models.ServiceOffering{},
 		&models.Appointment{})
 }
 
