@@ -110,12 +110,6 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/business/{id}", app.UpdateBusiness).Methods("PUT")
 	app.Router.HandleFunc("/business/{id}", app.DeleteBusiness).Methods("DELETE")
 
-	// Office routes
-	// app.Router.HandleFunc("/office", app.CreateOffice).Methods("POST")
-	// app.Router.HandleFunc("/office/{id}", app.GetOffice).Methods("GET")
-	// app.Router.HandleFunc("/office/{id}", app.UpdateOffice).Methods("PUT")
-	// app.Router.HandleFunc("/office/{id}", app.DeleteOffice).Methods("DELETE")
-
 	// Address routes
 	// app.Router.HandleFunc("/address", app.CreateAddress).Methods("POST")
 	// app.Router.HandleFunc("/address/{id}", app.GetAddress).Methods("GET")
@@ -128,11 +122,11 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/service/{id}", app.UpdateService).Methods("PUT")
 	app.Router.HandleFunc("/service/{id}", app.DeleteService).Methods("DELETE")
 
-	// ServiceOffering routes
-	// app.Router.HandleFunc("/service-offering", app.CreateServiceOffering).Methods("POST")
-	// app.Router.HandleFunc("/service-offering/{id}", app.GetServiceOffering).Methods("GET")
-	// app.Router.HandleFunc("/service-offering/{id}", app.UpdateServiceOffering).Methods("PUT")
-	// app.Router.HandleFunc("/service-offering/{id}", app.DeleteServiceOffering).Methods("DELETE")
+	// Appointment routes
+	app.Router.HandleFunc("/appointment", app.CreateAppointment).Methods("POST")
+	app.Router.HandleFunc("/appointment/{id}", app.GetAppointment).Methods("GET")
+	app.Router.HandleFunc("/appointment/{id}", app.UpdateAppointment).Methods("PUT")
+	app.Router.HandleFunc("/appointment/{id}", app.DeleteAppointment).Methods("DELETE")
 
 	// Path prefix for API to work with Angular frontend
 	// WARNING: This MUST be the last route defined by the router.

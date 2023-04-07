@@ -1,0 +1,42 @@
+{
+  "id": 514466,
+  "num_rows": 500,
+  "file_format": "json",
+  "name": "bizzen-appointment",
+  "array": false,
+  "columns": [
+    {
+      "name": "ID",
+      "null_percentage": 0,
+      "type": "Row Number",
+      "formula": "this + 999000"
+    },
+    {
+      "name": "service_id",
+      "null_percentage": 0,
+      "type": "Row Number",
+      "formula": "this + 999000"
+    },
+    {
+      "name": "user_id",
+      "null_percentage": 0,
+      "type": "Row Number",
+      "formula": "this + 999000"
+    },
+    {
+      "name": "cancel_date_time",
+      "null_percentage": 90,
+      "type": "Datetime",
+      "min": "01/01/2023",
+      "max": "09/30/2023",
+      "format": "%Y-%m-%dT%H:%M:%SZ",
+      "formula": ""
+    },
+    {
+      "name": "active",
+      "null_percentage": 0,
+      "type": "Boolean",
+      "formula": "if not cancel_date_time then true\nelse false end"
+    }
+  ]
+}
