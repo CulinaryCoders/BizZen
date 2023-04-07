@@ -1,0 +1,52 @@
+{
+  "id": 514498,
+  "num_rows": 500,
+  "file_format": "json",
+  "name": "bizzen-invoice",
+  "array": false,
+  "columns": [
+    {
+      "name": "ID",
+      "null_percentage": 0,
+      "type": "Row Number",
+      "formula": "this + 999000"
+    },
+    {
+      "name": "appointment_id",
+      "null_percentage": 0,
+      "type": "Row Number",
+      "formula": "this + 999000"
+    },
+    {
+      "name": "original_balance",
+      "null_percentage": 0,
+      "type": "Number",
+      "min": 0,
+      "max": 100000,
+      "decimals": 0,
+      "formula": ""
+    },
+    {
+      "name": "remaining_balance",
+      "null_percentage": 0,
+      "type": "Number",
+      "min": 0,
+      "max": 100000,
+      "decimals": 0,
+      "formula": "if appointment_id > 999300 then (original_balance - random(0, original_balance))\nelse 0 end"
+    },
+    {
+      "name": "status",
+      "null_percentage": 0,
+      "type": "Custom List",
+      "values": [
+        "Unpaid",
+        "Paid",
+        "Overpaid"
+      ],
+      "selectionStyle": "random",
+      "distribution": null,
+      "formula": "if remaining_balance === 0 then 'Paid'\nelsif remaining_balance < 0 then 'Overpaid'\nelse 'Unpaid' end"
+    }
+  ]
+}

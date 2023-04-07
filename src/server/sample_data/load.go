@@ -20,13 +20,13 @@ SampleData type is used to store a list of object instances for each DB object t
 Records for each object type can be created from a JSON file and then loaded into the appropriate DB instance.
 */
 type SampleData struct {
-	Users      []*models.User     `json:"users"`      // List of User records
-	Businesses []*models.Business `json:"businesses"` // List of Business records
-	// Offices          []*models.Office          `json:"offices"`           // List of Office records
+	Users        []*models.User        `json:"users"`        // List of User records
+	Businesses   []*models.Business    `json:"businesses"`   // List of Business records
+	Services     []*models.Service     `json:"services"`     // List of Service records
+	Appointments []*models.Appointment `json:"appointments"` // List of Appointment records
+	Invoices     []*models.Invoice     `json:"invoices"`     // List of Invoice records
 	// Addresses        []*models.Address         `json:"addresses"`         // List of Address records
 	// Contacts         []*models.ContactInfo     `json:"contacts"`          // List of Contact records
-	Services []*models.Service `json:"services"` // List of Service records
-	// ServiceOfferings []*models.ServiceOffering `json:"service_offerings"` // List of ServiceOffering records
 }
 
 // DataLoadMapping type is a generic wrapper struct designed to simplify the creation of records for all GORM DB object types that implement the 'Model' interface.
@@ -212,7 +212,7 @@ func LoadJSONSampleData(db *gorm.DB) error {
 		return err
 	}
 
-	//  Businesses / Main Offices
+	//  Businesses
 	var businessJSONKey string = "business"
 
 	businessLoadMapping := DataLoadMapping[*models.Business]{
@@ -254,19 +254,33 @@ func LoadJSONSampleData(db *gorm.DB) error {
 		return err
 	}
 
-	//  ServiceOfferings
-	// var serviceOfferingJSONKey string = "service_offering"
+	//  Appointments
+	var apptJSONKey string = "appointment"
 
-	// serviceOfferingLoadMapping := DataLoadMapping[*models.ServiceOffering]{
-	// 	Records:                   sampleData.ServiceOfferings,
-	// 	PrimaryReturnObjectKey:    serviceOfferingJSONKey,
-	// 	SecondaryReturnObjectKeys: []string{},
-	// }
+	apptLoadMapping := DataLoadMapping[*models.Appointment]{
+		Records:                   sampleData.Appointments,
+		PrimaryReturnObjectKey:    apptJSONKey,
+		SecondaryReturnObjectKeys: []string{},
+	}
 
-	// err = serviceOfferingLoadMapping.CreateSampleRecords(db)
-	// if err != nil {
-	// 	return err
-	// }
+	err = apptLoadMapping.CreateSampleRecords(db)
+	if err != nil {
+		return err
+	}
+
+	//  Invoices
+	var invoiceJSONKey string = "invoice"
+
+	invoiceLoadMapping := DataLoadMapping[*models.Invoice]{
+		Records:                   sampleData.Invoices,
+		PrimaryReturnObjectKey:    invoiceJSONKey,
+		SecondaryReturnObjectKeys: []string{},
+	}
+
+	err = invoiceLoadMapping.CreateSampleRecords(db)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

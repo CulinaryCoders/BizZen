@@ -13,9 +13,9 @@ import (
 /*
 *Description*
 
-func CreateAppointment
+func CreateInvoice
 
-Creates a new appointment record in the database.
+Creates a new invoice record in the database.
 
 *Parameters*
 
@@ -35,37 +35,37 @@ Creates a new appointment record in the database.
 
 	Type:  POST
 
-	Route:	/appointment
+	Route:	/invoice
 
 	Body:
 		Format: JSON
 
 		Required fields:
 
-			service_id  <uint>
+			appointment_id  <uint>
 
-				ID of Service record Appointment is associated with
+				ID of Appointment record Invoice is associated with
 
-			user_id  <uint>
+			original_balance  <int>
 
-				ID of User that booked the appointment
+				Total original balance of the invoice (in cents)
 
 		Optional fields:
 
-			cancel_date_time  <time.Time>
+			remaining_balance  <int>
 
-				Date/time when appointment was cancelled (if cancelled, else null)
+				Remaining balance of the invoice (in cents)
 
-			active  <bool>
+			status  <string>
 
-				Status flag (true for Active, false for Cancelled)
+				Status of the invoice (Unpaid, Paid, Overpaid)
 
 *Example request(s)*
 
-	POST /appointment
+	POST /invoice
 	{
-		"service_id":123
-		"user_id":123
+		"appointment_id":123,
+		"original_balance":5000
 	}
 
 *Response format*
@@ -80,10 +80,10 @@ Creates a new appointment record in the database.
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"DeletedAt": null,
-			"service_id":123,
-			"user_id":123,
-			"cancel_date_time":null,
-			"active":true
+			"appointment_id":123,
+			"original_balance":5000,
+			"remaining_balance":5000,
+			"status":"Unpaid"
 		}
 
 	Failure:
@@ -104,11 +104,11 @@ Creates a new appointment record in the database.
 		"error":"ERROR MESSAGE TEXT HERE"
 		}
 */
-func (app *Application) CreateAppointment(writer http.ResponseWriter, request *http.Request) {
-	appt := models.Appointment{}
+func (app *Application) CreateInvoice(writer http.ResponseWriter, request *http.Request) {
+	invoice := models.Invoice{}
 
 	decoder := json.NewDecoder(request.Body)
-	if err := decoder.Decode(&appt); err != nil {
+	if err := decoder.Decode(&invoice); err != nil {
 		utils.RespondWithError(
 			writer,
 			http.StatusBadRequest,
@@ -119,8 +119,8 @@ func (app *Application) CreateAppointment(writer http.ResponseWriter, request *h
 
 	defer request.Body.Close()
 
-	returnedRecords, err := appt.Create(app.AppDB)
-	createdAppointment := returnedRecords["appointment"]
+	returnedRecords, err := invoice.Create(app.AppDB)
+	createdInvoice := returnedRecords["invoice"]
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -133,15 +133,15 @@ func (app *Application) CreateAppointment(writer http.ResponseWriter, request *h
 	utils.RespondWithJSON(
 		writer,
 		http.StatusCreated,
-		createdAppointment)
+		createdInvoice)
 }
 
 /*
 *Description*
 
-func GetAppointment
+func GetInvoice
 
-Get appointment record from the database by ID.
+Get invoice record from the database by ID.
 
 *Parameters*
 
@@ -161,7 +161,7 @@ Get appointment record from the database by ID.
 
 	Type:	GET
 
-	Route:	/appointment/{id}
+	Route:	/invoice/{id}
 
 	Body:
 
@@ -169,7 +169,7 @@ Get appointment record from the database by ID.
 
 *Example request(s)*
 
-	GET /appointment/123456
+	GET /invoice/123456
 
 *Response format*
 
@@ -183,10 +183,10 @@ Get appointment record from the database by ID.
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"DeletedAt": null,
-			"service_id":123,
-			"user_id":123,
-			"cancel_date_time":null,
-			"active":true
+			"appointment_id":123,
+			"original_balance":5000,
+			"remaining_balance":5000,
+			"status":"Unpaid"
 		}
 
 	Failure:
@@ -205,9 +205,9 @@ Get appointment record from the database by ID.
 			"error":"ERROR MESSAGE TEXT HERE"
 		}
 */
-func (app *Application) GetAppointment(writer http.ResponseWriter, request *http.Request) {
-	appt := models.Appointment{}
-	apptID, err := utils.ParseRequestID(request)
+func (app *Application) GetInvoice(writer http.ResponseWriter, request *http.Request) {
+	invoice := models.Invoice{}
+	invoiceID, err := utils.ParseRequestID(request)
 
 	if err != nil {
 		utils.RespondWithError(
@@ -218,9 +218,9 @@ func (app *Application) GetAppointment(writer http.ResponseWriter, request *http
 		return
 	}
 
-	returnedAppointment, err := appt.Get(app.AppDB, apptID)
+	returnedInvoice, err := invoice.Get(app.AppDB, invoiceID)
 	if err != nil {
-		var errorMessage string = fmt.Sprintf("Appointment ID (%d) does not exist in the database.  [%s]", apptID, err)
+		var errorMessage string = fmt.Sprintf("Invoice ID (%d) does not exist in the database.  [%s]", invoiceID, err)
 
 		utils.RespondWithError(
 			writer,
@@ -235,15 +235,15 @@ func (app *Application) GetAppointment(writer http.ResponseWriter, request *http
 	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
-		returnedAppointment)
+		returnedInvoice)
 }
 
 /*
 *Description*
 
-func UpdateAppointment
+func UpdateInvoice
 
-Updates the appointment record associated with the specified appointment ID in the database.
+Updates the invoice record associated with the specified invoice ID in the database.
 
 This function behaves like a PATCH method, rather than a true PUT. Any fields that aren't specified in the request body for the PUT request will not be altered for the specified record.
 
@@ -267,7 +267,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 	Type:   PUT
 
-	Route:  /appointment/{id}
+	Route:  /invoice/{id}
 
 	Body:
 		Format: JSON
@@ -278,27 +278,27 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 		Optional fields:
 
-			service_id  <uint>
+			appointment_id  <uint>
 
-				ID of Service record Appointment is associated with
+				ID of Appointment record Invoice is associated with
 
-			user_id  <uint>
+			original_balance  <int>
 
-				ID of User that booked the appointment
+				Total original balance of the invoice (in cents)
 
-			cancel_date_time  <time.Time>
+			remaining_balance  <int>
 
-				Date/time when appointment was cancelled (if cancelled, else null)
+				Remaining balance of the invoice (in cents)
 
-			active  <bool>
+			status  <string>
 
-				Status flag (true for Active, false for Cancelled)
+				Status of the invoice (Unpaid, Paid, Overpaid)
 
 *Example request(s)*
 
-	PUT /appointment/123456
+	PUT /invoice/123456
 	{
-		"active":false
+		"remaining_balance":0
 	}
 
 *Response format*
@@ -313,10 +313,10 @@ If a specified field's value should be deleted from the record, the appropriate 
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 			"UpdatedAt": "2020-02-13T04:20:12.6789012-05:00",
 			"DeletedAt": null,
-			"service_id":123,
-			"user_id":123,
-			"cancel_date_time":"2020-01-31T04:20:12.6789012-05:00",
-			"active":false
+			"appointment_id":123,
+			"original_balance":5000,
+			"remaining_balance":0,
+			"status":"Paid"
 		}
 
 	Failure:
@@ -336,9 +336,9 @@ If a specified field's value should be deleted from the record, the appropriate 
 		"error":"ERROR MESSAGE TEXT HERE"
 		}
 */
-func (app *Application) UpdateAppointment(writer http.ResponseWriter, request *http.Request) {
-	appt := models.Appointment{}
-	apptID, err := utils.ParseRequestID(request)
+func (app *Application) UpdateInvoice(writer http.ResponseWriter, request *http.Request) {
+	invoice := models.Invoice{}
+	invoiceID, err := utils.ParseRequestID(request)
 
 	if err != nil {
 		utils.RespondWithError(
@@ -363,8 +363,8 @@ func (app *Application) UpdateAppointment(writer http.ResponseWriter, request *h
 
 	defer request.Body.Close()
 
-	returnedRecords, err := appt.Update(app.AppDB, apptID, updates)
-	updatedAppointment := returnedRecords["appointment"]
+	returnedRecords, err := invoice.Update(app.AppDB, invoiceID, updates)
+	updatedInvoice := returnedRecords["invoice"]
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -377,17 +377,17 @@ func (app *Application) UpdateAppointment(writer http.ResponseWriter, request *h
 	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
-		updatedAppointment)
+		updatedInvoice)
 }
 
 /*
 *Description*
 
-func DeleteAppointment
+func DeleteInvoice
 
-Delete an appointment record from the database by appointment ID if the ID exists in the database.
+Delete an invoice record from the database by invoice ID if the ID exists in the database.
 
-Deleted appointment record is returned in the response body if the operation is sucessful.
+Deleted invoice record is returned in the response body if the operation is sucessful.
 
 *Parameters*
 
@@ -407,7 +407,7 @@ Deleted appointment record is returned in the response body if the operation is 
 
 	Type:  	DELETE
 
-	Route:	/appointment/{id}
+	Route:	/invoice/{id}
 
 	Body:
 
@@ -415,7 +415,7 @@ Deleted appointment record is returned in the response body if the operation is 
 
 *Example request(s)*
 
-	DELETE /appointment/123456
+	DELETE /invoice/123456
 
 *Response format*
 
@@ -427,12 +427,12 @@ Deleted appointment record is returned in the response body if the operation is 
 		{
 			"ID": 123456,
 			"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
-			"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
-			"DeletedAt": "2022-06-31T04:20:12.6789012-05:00",
-			"service_id":123,
-			"user_id":123,
-			"cancel_date_time":null,
-			"active":true
+			"UpdatedAt": "2020-02-13T04:20:12.6789012-05:00",
+			"DeletedAt": "2022-06-31T04:20:12.6789012-05:00",,
+			"appointment_id":123,
+			"original_balance":5000,
+			"remaining_balance":0,
+			"status":"Paid"
 		}
 
 	Failure:
@@ -452,9 +452,9 @@ Deleted appointment record is returned in the response body if the operation is 
 		"error":"ERROR MESSAGE TEXT HERE"
 		}
 */
-func (app *Application) DeleteAppointment(writer http.ResponseWriter, request *http.Request) {
-	appt := models.Appointment{}
-	apptID, err := utils.ParseRequestID(request)
+func (app *Application) DeleteInvoice(writer http.ResponseWriter, request *http.Request) {
+	invoice := models.Invoice{}
+	invoiceID, err := utils.ParseRequestID(request)
 
 	if err != nil {
 		utils.RespondWithError(
@@ -465,8 +465,8 @@ func (app *Application) DeleteAppointment(writer http.ResponseWriter, request *h
 		return
 	}
 
-	returnedRecords, err := appt.Delete(app.AppDB, apptID)
-	deletedAppointment := returnedRecords["appointment"]
+	returnedRecords, err := invoice.Delete(app.AppDB, invoiceID)
+	deletedInvoice := returnedRecords["invoice"]
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -479,6 +479,6 @@ func (app *Application) DeleteAppointment(writer http.ResponseWriter, request *h
 	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,
-		deletedAppointment)
+		deletedInvoice)
 
 }

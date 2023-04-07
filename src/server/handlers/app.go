@@ -128,6 +128,12 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/appointment/{id}", app.UpdateAppointment).Methods("PUT")
 	app.Router.HandleFunc("/appointment/{id}", app.DeleteAppointment).Methods("DELETE")
 
+	// Invoice routes
+	app.Router.HandleFunc("/invoice", app.CreateInvoice).Methods("POST")
+	app.Router.HandleFunc("/invoice/{id}", app.GetInvoice).Methods("GET")
+	app.Router.HandleFunc("/invoice/{id}", app.UpdateInvoice).Methods("PUT")
+	app.Router.HandleFunc("/invoice/{id}", app.DeleteInvoice).Methods("DELETE")
+
 	// Path prefix for API to work with Angular frontend
 	// WARNING: This MUST be the last route defined by the router.
 	app.Router.PathPrefix("/").Handler(app.NGHandler.ReverseProxy).Methods("GET")
