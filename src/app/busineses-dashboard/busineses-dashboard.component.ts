@@ -57,7 +57,7 @@ export class BusinesesDashboardComponent {
 
   constructor(private router: Router) {};
   // TODO: read from db
-  businessOwnerView = false; // user.account_type
+  businessOwnerView = true; // user.account_type
   view = "list";
   // TODO: read from db
   business = {

@@ -16,67 +16,44 @@ export class CreateServiceComponent {
   newService = new FormGroup({
     name: new FormControl(''),
     description: new FormControl(''),
-    type: new FormControl(),
-    startTime: new FormControl(''),
-    endTime: new FormControl(''),
-    numParticipants: new FormControl(0),
-    pricePerUnit: new FormControl(0),
+    startDateTime: new FormControl(),
+    length: new FormControl(),
+    capacity: new FormControl(),
+    pricePerUnit: new FormControl(),
+    cancellationFee: new FormControl(),
   })
-
-  serviceTypes = ["Class", "Lecture", "Tutoring", "Demonstration", "Other"]
-  selectedServiceType: string = "";
-
-  selectType(type: string) {
-    this.selectedServiceType = type;
-  }
 
   verifyFields() {
     let errorMsg = "";
     let name = this.newService.value.name
     let description = this.newService.value.description
-    let startTime = this.newService.value.startTime
-    let endTime = this.newService.value.endTime
-    let numParticipants = this.newService.value.numParticipants
+    let startDateTime = this.newService.value.startDateTime
+    let length = this.newService.value.length
+    let capacity = this.newService.value.capacity
     let pricePerUnit = this.newService.value.pricePerUnit
+    let cancellationFee = this.newService.value.cancellationFee
     if (!name || name === "") {
       errorMsg += "ERROR Business Name Required -- "
     }
     if (!description || description === "") {
       errorMsg += "ERROR Business Description Required -- "
     }
-    if (!startTime || startTime === "") {
-      errorMsg += "ERROR Opening Time Required -- "
+    if (!startDateTime) {
+      errorMsg += "ERROR Start Date & Time Required -- "
     }
-    if (!endTime || endTime === "") {
-      errorMsg += "ERROR Closing Time Required -- "
+    if (!length || length === 0) {
+      errorMsg += "ERROR Length of Service Required -- "
     }
-    if (!this.validStartEndTime()) {
-      errorMsg += "ERROR End must be after start --"
-    }
-    if (numParticipants === 0) {
+    if (!capacity || capacity === 0) {
       errorMsg += "ERROR Please specify how many participants -- "
     }
     if (!pricePerUnit) {
       errorMsg += "ERROR Please specify a price per unit -- "
     }
-    return errorMsg;
-  }
-
-  validStartEndTime() {
-    let start = this.newService.value.startTime;
-    let end = this.newService.value.endTime;
-    if (start && end) {
-      let startJSDate = new Date();
-      startJSDate.setHours(Number(start[0]+start[1]));
-      startJSDate.setMinutes(Number(start[3]+start[4]));
-
-      let endJSDate = new Date();
-      endJSDate.setHours(Number(end[0]+end[1]));
-      endJSDate.setMinutes(Number(end[3]+end[4]));
-
-      return startJSDate < endJSDate;
+    if (!cancellationFee) {
+      errorMsg += "ERROR Please specify a cancellation fee -- "
     }
-    return false;
+    return errorMsg;
   }
 
   onSubmit() {
@@ -89,7 +66,7 @@ export class CreateServiceComponent {
 
       console.log(this.newService.value);
 
-      this.router.navigate(['/profile']);
+      this.router.navigate(['/home']);
     }
   }
 
