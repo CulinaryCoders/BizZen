@@ -57,7 +57,7 @@ export class ServiceCalendarComponent implements OnInit{
   }
 
   // TODO: feed in current user
-  user = new User("","","","",[]);
+  user = new User("","","","", "", []);
   eventClicked({ event }: { event: CalendarEvent }): void {
     this.router.navigateByUrl('/class-summary', {state: {user:this.user, service: event.meta.serviceObj}});
   }

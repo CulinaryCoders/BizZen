@@ -6,7 +6,7 @@
       <div class="form-group">
           <label for="username">Username</label>
           <input type="text" class="form-control" id="username" required
-              [(ngModel)]="model.username" name="username"
+              [(ngModel)]="model.email" name="username"
               #username ="ngModel">
           <div [hidden]="username.valid || username.pristine"
               class="alert alert-danger">

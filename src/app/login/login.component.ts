@@ -15,7 +15,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 export class LoginComponent {
 
 
-  model = new User("12345","", "", "business", []);
+  model = new User("","", "", "", "", []);
 
   checkbox : boolean = false;
 
@@ -36,7 +36,7 @@ export class LoginComponent {
     {
       this.model.accountType = "user";
     }
-    
+
     this.router.navigateByUrl('/profile', {state: {user: this.model }});
 
   }

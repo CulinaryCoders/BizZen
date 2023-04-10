@@ -62,7 +62,7 @@ export class CreateServiceComponent {
       // this.newService.value.tags = this.selectedTags;
 
       // CONNECT BACKEND this.newService.value has all the info needed to add to DB User object
-      let user = new User("","","","",[]);
+      let user = new User("","","","","", []);
 
       console.log(this.newService.value);
 

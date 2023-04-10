@@ -122,7 +122,7 @@ export class BusinesesDashboardComponent {
   }
 
   // TODO: feed in current user
-  user = new User("","","","",[]);
+  user = new User("","","","","", []);
   goToServicePage(serviceToPass: any) {
     this.router.navigateByUrl('/class-summary', {state: {user:this.user, service:serviceToPass}});
   }

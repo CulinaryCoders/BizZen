@@ -11,13 +11,14 @@ import {UserService} from '../user.service';
 })
 export class RegisterComponent {
   constructor(private router: Router, private activatedRoute:ActivatedRoute) {}
-  userModel = new User("","", "", "user", []);
+  userModel = new User("","", "", "", "", []);
   isBusiness = false;
   confPass = "";
   errorMsg = "";
 
   registerForm = new FormGroup({
-    username: new FormControl(''),
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
     email: new FormControl(''),
     password: new FormGroup({
       pass: new FormControl(''),
@@ -32,14 +33,10 @@ export class RegisterComponent {
   }
 
   allFieldsFilled() {
-    // return this.registerForm.value.username && this.registerForm.value.username !== ""
-    //   && this.registerForm.value.email && this.registerForm.value.email !== ""
-    //   && this.registerForm.value.password?.pass && this.registerForm.value.password.pass !== ""
-    //   && this.registerForm.value.password?.confPass && this.registerForm.value.password.confPass !== ""
-    return this.userModel.username && this.userModel.username !== ""
-      && this.userModel.userId && this.userModel.userId !== ""
+    return this.userModel.firstName && this.userModel.firstName !== ""
+      && this.userModel.lastName && this.userModel.lastName !== ""
+      && this.userModel.email && this.userModel.email !== ""
       && this.userModel.password && this.userModel.password !== "" || false
-      // && this.userModel.password?.confPass && this.userModel.password.confPass !== ""
   }
 
   onSubmit() {
@@ -71,7 +68,9 @@ export class RegisterComponent {
         if (this.isBusiness) {
           this.router.navigate(["/business-onboarding"])
         } else {
-          this.router.navigateByUrl('/onboarding', {state: {user: this.userModel}});
+          this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
+
+          // this.router.navigateByUrl('/onboarding', {state: {user: this.userModel}});
 
           // this.router.navigate(["/onboarding"])
         }
