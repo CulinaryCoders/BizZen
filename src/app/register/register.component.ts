@@ -48,31 +48,21 @@ export class RegisterComponent {
       if (!this.passwordsMatch()) {
         this.errorMsg = "ERROR Passwords must match"
       } else {
-        // Note: since first & last name required, might need to test with dummy data
-        // user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user", []);
-
         if (this.isBusiness) {
-          // user.accountType = "business";
           this.userModel.accountType = "business"
         } else {
-          // user.accountType = "user";
           this.userModel.accountType = "user"
         }
 
-        // // Update userModel to be sent
-        // this.userModel.username = this.registerForm.value.username || "test";
-        //
-        // this.userModel.userId = "123"
-
+        // TODO: add user to db
 
         if (this.isBusiness) {
-          this.router.navigate(["/business-onboarding"])
-        } else {
+          // this.router.navigate(["/business-onboarding"]);
           this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
 
-          // this.router.navigateByUrl('/onboarding', {state: {user: this.userModel}});
-
-          // this.router.navigate(["/onboarding"])
+        } else {
+          // this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
+          this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
         }
       }
     }
