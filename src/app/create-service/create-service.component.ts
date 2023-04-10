@@ -21,6 +21,7 @@ export class CreateServiceComponent {
     capacity: new FormControl(),
     pricePerUnit: new FormControl(),
     cancellationFee: new FormControl(),
+    // businessId: history.state.user.email // TODO: email or id
   })
 
   verifyFields() {
@@ -59,14 +60,10 @@ export class CreateServiceComponent {
   onSubmit() {
     this.errorMsg = this.verifyFields();
     if (this.errorMsg === "") {
-      // this.newService.value.tags = this.selectedTags;
-
       // CONNECT BACKEND this.newService.value has all the info needed to add to DB User object
-      let user = new User("","","","","", []);
-
       console.log(this.newService.value);
 
-      this.router.navigate(['/home']);
+      this.router.navigateByUrl('/home', {state: {user: history.state.user}});
     }
   }
 
