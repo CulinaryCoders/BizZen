@@ -41,25 +41,16 @@ export class RegisterComponent {
 
   onSubmit() {
     this.errorMsg = "";
-    console.log(this.userModel);
-    let user;
-
     if (this.allFieldsFilled()) {
       if (!this.passwordsMatch()) {
         this.errorMsg = "ERROR Passwords must match"
       } else {
         if (this.isBusiness) {
-          console.log("is business")
-
           this.userModel.accountType = "business"
           this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
-
         } else {
-          console.log("is NOTbusiness")
-
           this.userModel.accountType = "user"
           this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
-
         }
         // TODO: add user to db
 

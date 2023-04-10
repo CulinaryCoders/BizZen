@@ -20,6 +20,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ServicePageComponent } from './service-page/service-page.component';
 import { BusinesesDashboardComponent } from './busineses-dashboard/busineses-dashboard.component';
 import { ServiceCalendarComponent } from './service-calendar/service-calendar.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ServiceCalendarComponent } from './service-calendar/service-calendar.co
     FindClassesComponent,
     ServicePageComponent,
     BusinesesDashboardComponent,
-    ServiceCalendarComponent
+    ServiceCalendarComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
