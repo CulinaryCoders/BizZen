@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Router} from "@angular/router";
 import {formatDate} from "@angular/common";
 import {Service} from "../service";
+import {User} from "../user";
 
 @Component({
   selector: 'app-busineses-dashboard',
@@ -56,7 +57,7 @@ export class BusinesesDashboardComponent {
 
   constructor(private router: Router) {};
   // TODO: read from db
-  businessOwnerView = true;
+  businessOwnerView = false; // user.account_type
   view = "list";
   // TODO: read from db
   business = {
@@ -119,10 +120,12 @@ export class BusinesesDashboardComponent {
       calendarBtn.classList.add("btn-secondary");
     }
   }
+user = new User("","","","",[]);
+  goToServicePage(serviceToPass: any) {
+    // alert("going to service number " + serviceId + "'s page")
+    // this.router.navigate(['/service/'+serviceId])
+    this.router.navigateByUrl('/class-summary', {state: {user:this.user, service:serviceToPass}});
 
-  goToServicePage(serviceId: number) {
-    alert("going to service number " + serviceId + "'s page")
-    this.router.navigate(['/service/'+serviceId])
   }
 
   routeToHome() {
