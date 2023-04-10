@@ -27,6 +27,8 @@ export class ServiceCalendarComponent implements OnInit{
   constructor(private router: Router) {};
   // @ts-ignore
   @Input() services: any[];
+  // @ts-ignore
+  @Input() user: User;
 
   viewDate: Date = new Date();
   view: CalendarView = CalendarView.Month;
@@ -35,8 +37,6 @@ export class ServiceCalendarComponent implements OnInit{
   events: CalendarEvent[] = [];
 
   ngOnInit(): void {
-    console.log("services: ", this.services)
-
     this.services.forEach((service) => {
       this.events.push({
         start: service.start_date_time,
@@ -56,9 +56,7 @@ export class ServiceCalendarComponent implements OnInit{
     this.view = CalendarView.Day;
   }
 
-  // TODO: feed in current user
-  user = new User("","","","", "", []);
   eventClicked({ event }: { event: CalendarEvent }): void {
-    this.router.navigateByUrl('/class-summary', {state: {user:this.user, service: event.meta.serviceObj}});
+    this.router.navigateByUrl('/class-summary', {state: {user: this.user, service: event.meta.serviceObj}});
   }
 }

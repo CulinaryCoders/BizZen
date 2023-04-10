@@ -13,8 +13,11 @@ import {User} from "../user";
 export class BusinesesDashboardComponent {
   // @ts-ignore
   services: any[];
+  // @ts-ignore
+  user: User;
 
   ngOnInit() {
+    this.user = history.state.user;
     this.services = [
       {
         id: 1,
