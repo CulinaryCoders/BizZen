@@ -120,12 +120,11 @@ export class BusinesesDashboardComponent {
       calendarBtn.classList.add("btn-secondary");
     }
   }
-user = new User("","","","",[]);
-  goToServicePage(serviceToPass: any) {
-    // alert("going to service number " + serviceId + "'s page")
-    // this.router.navigate(['/service/'+serviceId])
-    this.router.navigateByUrl('/class-summary', {state: {user:this.user, service:serviceToPass}});
 
+  // TODO: feed in current user
+  user = new User("","","","",[]);
+  goToServicePage(serviceToPass: any) {
+    this.router.navigateByUrl('/class-summary', {state: {user:this.user, service:serviceToPass}});
   }
 
   routeToHome() {

@@ -3,6 +3,7 @@ import {CalendarEvent, CalendarView} from 'angular-calendar';
 import {startOfDay} from 'date-fns';
 import {Router} from "@angular/router";
 import {Service} from "../service";
+import {User} from "../user";
 
 @Component({
   selector: 'app-service-calendar-component',
@@ -39,7 +40,8 @@ export class ServiceCalendarComponent implements OnInit{
     this.services.forEach((service) => {
       this.events.push({
         start: service.start_date_time,
-        title: service.name
+        title: service.name,
+        meta: {serviceObj: service},
       })
     })
   }
@@ -54,8 +56,9 @@ export class ServiceCalendarComponent implements OnInit{
     this.view = CalendarView.Day;
   }
 
+  // TODO: feed in current user
+  user = new User("","","","",[]);
   eventClicked({ event }: { event: CalendarEvent }): void {
-    alert("Navigating to " + event.title + " page");
-    this.router.navigate(['/service/'+event.meta.id]);
+    this.router.navigateByUrl('/class-summary', {state: {user:this.user, service: event.meta.serviceObj}});
   }
 }
