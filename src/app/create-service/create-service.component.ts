@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormControl, FormGroup} from "@angular/forms";
+import {User} from "../user";
 
 @Component({
   selector: 'app-create-service',
@@ -84,6 +85,8 @@ export class CreateServiceComponent {
       // this.newService.value.tags = this.selectedTags;
 
       // CONNECT BACKEND this.newService.value has all the info needed to add to DB User object
+      let user = new User("","","","",[]);
+
       console.log(this.newService.value);
 
       this.router.navigate(['/profile']);
