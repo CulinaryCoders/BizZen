@@ -70,4 +70,8 @@ export class CreateServiceComponent {
   routeToHome() {
     this.router.navigate(['/']);
   }
+
+  routeToDash() {
+    this.router.navigateByUrl('/home', {state: {user: history.state.user}});
+  }
 }
