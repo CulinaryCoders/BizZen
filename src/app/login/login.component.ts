@@ -19,14 +19,12 @@ export class LoginComponent {
 
   checkbox : boolean = false;
 
-
   constructor(private router:Router, private activatedRoute:ActivatedRoute, private userService:UserService){}
 
   submitted = false;
 
   onSubmit() {
     this.submitted = true;
-
 
     if(this.checkbox)
     {
@@ -36,6 +34,8 @@ export class LoginComponent {
     {
       this.model.accountType = "user";
     }
+
+    //console.log(this.userService.getUser("12345", "test"));
 
     this.router.navigateByUrl('/profile', {state: {user: this.model }});
 

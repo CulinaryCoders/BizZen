@@ -1,10 +1,16 @@
+<app-navbar></app-navbar>
 <div class="container">
-
+    <button (click)="debug()" class="btn btn-primary">debug</button>
+    <button (click)="editService()"  [hidden]="!isBusiness || isEditing" class="btn btn-primary">Edit</button>
+    <button (click)="saveEdit()" [hidden]="!isEditing" class="btn btn-primary">Save Edit</button>
+    <button (click)="cancelEdit()" [hidden]="!isEditing" class="btn btn-primary">Cancel Edit</button>
+    isBusiness is {{this.isBusiness}}
+    <br>
     <br>
     <div class="card">
         <div class="card-header">
             <h2 class="display-2">{{service.name}}</h2>
-
+            
         </div>
 
         <div class = "card-body">
@@ -13,7 +19,14 @@
                     <h4>About</h4>
                 </div>
                 <div class="card-body">
-                    <p class="card-text">{{service.description}}</p>
+                    <!--editing-->
+                    <div class="form-group" [hidden] = "!isEditing">
+                        <input type="text" class="form-control" id="serviceDescription"
+                            [(ngModel)]="service.description" name="description"
+                            #serviceDescription ="ngModel">
+                    </div>
+                    <!--normal view-->
+                    <p [hidden] = "isEditing" class="card-text">{{service.description}}</p>
                 </div>
             </div>
 
@@ -23,10 +36,24 @@
 
                 <div class="card-header">
                     <h4>Dates</h4>
+                    
                 </div>
                 <div class="card-body">
-                    <p class="card-text"><b>Begins: </b>{{service.offering.startDate}}</p>
-                    <p class="card-text"><b>Ends: </b>{{service.offering.endDate}}</p>
+                     <!--editing-->
+                     <div class="form-group" [hidden] = "!isEditing">
+                        <input type="text" class="form-control" id="serviceDate"
+                            [(ngModel)]="service.start_date_time" name="date"
+                            #serviceDate ="ngModel">
+                        <br>
+                        <input type="text" class="form-control" id="serviceLength"
+                            [(ngModel)]="service.length" name="length"
+                            #serviceLength ="ngModel"> 
+                    </div>
+                    <!--normal view-->
+                    <div [hidden] = "isEditing">
+                        <p class="card-text"><b>Begins: </b>{{this.formatDate(service.start_date_time)}}</p>
+                        <p class="card-text"><b>Length: </b>{{service.length}} minutes</p>
+                    </div>
                 </div>
 
             </div>
@@ -36,19 +63,47 @@
             <div class="card">
 
                 <div class="card-header">
-                    <h4>Cost</h4>
+                    <h4>Capacity</h4>
                 </div>
+
                 <div class="card-body">
-                    <p class="card-text"><b>Classes start at: </b>${{service.offering.price}}</p>
+                    <!--editing-->
+                    <div class="form-group" [hidden] = "!isEditing">
+                        <input type="text" class="form-control" id="serviceCapacity"
+                            [(ngModel)]="service.capacity" name="capacity"
+                            #serviceCapacity ="ngModel">
+                    </div>
+                    <!--normal view-->
+                    <p class="card-text" [hidden] = "isEditing">{{service.capacity}} people</p>
                 </div>
                 
             </div>
         
             <br>
 
-            <button (click)="joinClass()" [disabled]="userJoined" class="btn btn-primary">Join</button>
+            <div class="card">
+
+                <div class="card-header">
+                    <h4>Cost</h4>
+                </div>
+                <div class="card-body">
+                    <!--editing-->
+                    <div class="form-group" [hidden] = "!isEditing">
+                        <input type="text" class="form-control" id="servicePrice"
+                            [(ngModel)]="service.price" name="price"
+                            #servicePrice ="ngModel">
+                    </div>
+                    <!--normal view-->
+                    <p class="card-text" [hidden] = "isEditing"><b>Classes start at: </b>${{service.price}}</p>
+                </div>
+                
+            </div>
+        
+            <br>
+
+            <button (click)="joinClass()" [hidden]="isBusiness" [disabled]="userJoined" class="btn btn-primary">Join</button>
               
-            <button (click) ="leaveClass()" [disabled]="!userJoined" style="margin-left:2em" class="btn btn-primary">Leave</button>
+            <button (click) ="leaveClass()" [hidden]="isBusiness" [disabled]="!userJoined" style="margin-left:2em" class="btn btn-primary">Leave</button>
 
             <div [hidden]="!userJoined"><br></div>
         

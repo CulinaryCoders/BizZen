@@ -1,5 +1,6 @@
-import {formatDate} from "@angular/common";
+
 export class Service {
+
     constructor(
         public serviceId : string,
         public name : string,
@@ -10,4 +11,5 @@ export class Service {
         public price: number
 
     ) {}
+
 }
