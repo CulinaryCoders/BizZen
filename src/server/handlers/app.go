@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 	"server/config"
-	"server/database"
 	"server/middleware"
+	"server/models"
 
 	"github.com/go-redis/redis/v7"
 	"github.com/gorilla/mux"
@@ -52,11 +52,11 @@ Initializes the various components of the Application instance (router, database
 func (app *Application) Initialize(appDBName string) {
 	// Initialize main app database
 	var dbConnectionString string = config.AppConfig.GetPostgresDBConnectionString(appDBName)
-	App.AppDB = database.InitializePostgresDB(dbConnectionString, config.Debug)
+	App.AppDB = models.InitializePostgresDB(dbConnectionString, config.Debug)
 
 	// Initialize cache db
 	var cacheDSN string = config.AppConfig.GetRedisDBNetworkAddress()
-	App.CacheDB = database.InitializeRedisDB(cacheDSN)
+	App.CacheDB = models.InitializeRedisDB(cacheDSN)
 
 	// Initialize cookie store
 	App.CookieStore = sessions.NewCookieStore([]byte("super-secret"))
@@ -103,6 +103,7 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/user/{id}", app.GetUser).Methods("GET")
 	app.Router.HandleFunc("/user/{id}", app.UpdateUser).Methods("PUT")
 	app.Router.HandleFunc("/user/{id}", app.DeleteUser).Methods("DELETE")
+	app.Router.HandleFunc("/user/{id}/service-appointments", app.GetUserServiceAppointments).Methods("GET")
 
 	// Business routes
 	app.Router.HandleFunc("/business", app.CreateBusiness).Methods("POST")
@@ -121,6 +122,9 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/service/{id}", app.GetService).Methods("GET")
 	app.Router.HandleFunc("/service/{id}", app.UpdateService).Methods("PUT")
 	app.Router.HandleFunc("/service/{id}", app.DeleteService).Methods("DELETE")
+	app.Router.HandleFunc("/service/{service-id}/user/{user-id}", app.GetUserEnrolledStatus).Methods("GET")
+	app.Router.HandleFunc("/service/{id}/users", app.GetListOfEnrolledUsers).Methods("GET")
+	app.Router.HandleFunc("/service/{id}/user-count", app.GetEnrolledUsersCount).Methods("GET")
 
 	// Appointment routes
 	app.Router.HandleFunc("/appointment", app.CreateAppointment).Methods("POST")

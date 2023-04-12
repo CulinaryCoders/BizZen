@@ -1,10 +1,9 @@
-package database
+package models
 
 import (
 	"errors"
 	"fmt"
 	"log"
-	"server/models"
 
 	"github.com/go-redis/redis/v7"
 	"gorm.io/driver/postgres"
@@ -132,13 +131,14 @@ Executes gorm AutoMigrate function for all DB models.
 	N/A (None)
 */
 func setupTables(db *gorm.DB) {
-	db.AutoMigrate(&models.User{},
-		&models.Business{},
-		&models.Service{},
-		&models.Appointment{},
-		&models.Invoice{},
-		// &models.Address{},
-		// &models.ContactInfo{},
+	db.AutoMigrate(
+		&User{},
+		&Business{},
+		&Service{},
+		&Appointment{},
+		&Invoice{},
+		// &Address{},
+		// &ContactInfo{},
 	)
 }
 

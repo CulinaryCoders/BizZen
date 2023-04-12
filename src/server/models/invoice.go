@@ -11,7 +11,7 @@ import (
 // TODO: Update time columns type / formatting to ensure behavior/values are expected
 type Invoice struct {
 	gorm.Model
-	AppointmentID    uint   `gorm:"column:user_id" json:"user_id"`                     // ID of appointment that invoice is associated with
+	AppointmentID    uint   `gorm:"column:user_id" json:"user_id"`                     // ID of invoice that invoice is associated with
 	OriginalBalance  int    `gorm:"column:original_balance" json:"original_balance"`   // Total original balance of the invoice (in cents)
 	RemainingBalance int    `gorm:"column:remaining_balance" json:"remaining_balance"` // Remaining balance of the invoice (in cents)
 	Status           string `gorm:"column:status" json:"status"`                       // Enforced list of statuses based on remaining balance (Unpaid, Paid, Overpaid)
@@ -32,7 +32,7 @@ func GetID
 
 	_  <uint>
 
-		The ID of the appointment object
+		The ID of the invoice object
 */
 func (invoice *Invoice) GetID() uint {
 	return invoice.ID
@@ -64,7 +64,7 @@ Creates a new Invoice record in the database and returns the created record alon
 func (invoice *Invoice) Create(db *gorm.DB) (map[string]Model, error) {
 	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
 	err := db.Create(&invoice).Error
-	returnRecords := map[string]Model{"appointment": invoice}
+	returnRecords := map[string]Model{"invoice": invoice}
 	return returnRecords, err
 }
 
@@ -83,7 +83,7 @@ Retrieves a Invoice record in the database by ID if it exists and returns that r
 
 	invoiceID  <uint>
 
-		The ID of the appointment record being requested.
+		The ID of the invoice record being requested.
 
 *Returns*
 
@@ -97,7 +97,7 @@ Retrieves a Invoice record in the database by ID if it exists and returns that r
 */
 func (invoice *Invoice) Get(db *gorm.DB, invoiceID uint) (map[string]Model, error) {
 	err := db.First(&invoice, invoiceID).Error
-	returnRecords := map[string]Model{"appointment": invoice}
+	returnRecords := map[string]Model{"invoice": invoice}
 	return returnRecords, err
 }
 
@@ -122,7 +122,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 	invoiceID  <uint>
 
-		The ID of the appointment record being updated.
+		The ID of the invoice record being updated.
 
 	updates  <map[string]interface{}>
 
@@ -147,7 +147,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 func (invoice *Invoice) Update(db *gorm.DB, invoiceID uint, updates map[string]interface{}) (map[string]Model, error) {
 	// Confirm invoiceID exists in the database and get current object
 	returnRecords, err := invoice.Get(db, invoiceID)
-	updateInvoice := returnRecords["appointment"]
+	updateInvoice := returnRecords["invoice"]
 
 	if err != nil {
 		return returnRecords, err
@@ -156,12 +156,12 @@ func (invoice *Invoice) Update(db *gorm.DB, invoiceID uint, updates map[string]i
 	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 
 	err = db.Model(&updateInvoice).Where("id = ?", invoiceID).Updates(updates).Error
-	returnRecords = map[string]Model{"appointment": updateInvoice}
+	returnRecords = map[string]Model{"invoice": updateInvoice}
 
 	return returnRecords, err
 }
 
-// TODO: Cascade delete all records associated with appointment (InvoiceOfferings, etc.)
+// TODO: Cascade delete all records associated with invoice (InvoiceOfferings, etc.)
 /*
 *Description*
 
@@ -179,7 +179,7 @@ Deleted record is returned along with any errors that are thrown.
 
 	invoiceID  <uint>
 
-		The ID of the appointment record being deleted.
+		The ID of the invoice record being deleted.
 
 *Returns*
 
@@ -195,7 +195,7 @@ Deleted record is returned along with any errors that are thrown.
 func (invoice *Invoice) Delete(db *gorm.DB, invoiceID uint) (map[string]Model, error) {
 	// Confirm invoiceID exists in the database and get current object
 	returnRecords, err := invoice.Get(db, invoiceID)
-	deleteInvoice := returnRecords["appointment"]
+	deleteInvoice := returnRecords["invoice"]
 
 	if err != nil {
 		return returnRecords, err
@@ -207,7 +207,7 @@ func (invoice *Invoice) Delete(db *gorm.DB, invoiceID uint) (map[string]Model, e
 
 	// TODO:  Extend delete operations to all of the other object types associated with the Invoice record as is appropriate (InvoiceOfferings, etc.)
 	err = db.Delete(deleteInvoice).Error
-	returnRecords = map[string]Model{"appointment": deleteInvoice}
+	returnRecords = map[string]Model{"invoice": deleteInvoice}
 
 	return returnRecords, err
 }
