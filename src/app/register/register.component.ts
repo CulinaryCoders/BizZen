@@ -11,13 +11,14 @@ import {UserService} from '../user.service';
 })
 export class RegisterComponent {
   constructor(private router: Router, private activatedRoute:ActivatedRoute) {}
-  userModel = new User("","", "", "user", []);
+  userModel = new User("","", "", "", "", []);
   isBusiness = false;
   confPass = "";
   errorMsg = "";
 
   registerForm = new FormGroup({
-    username: new FormControl(''),
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
     email: new FormControl(''),
     password: new FormGroup({
       pass: new FormControl(''),
@@ -32,48 +33,34 @@ export class RegisterComponent {
   }
 
   allFieldsFilled() {
-    // return this.registerForm.value.username && this.registerForm.value.username !== ""
-    //   && this.registerForm.value.email && this.registerForm.value.email !== ""
-    //   && this.registerForm.value.password?.pass && this.registerForm.value.password.pass !== ""
-    //   && this.registerForm.value.password?.confPass && this.registerForm.value.password.confPass !== ""
-    return this.userModel.username && this.userModel.username !== ""
-      && this.userModel.userId && this.userModel.userId !== ""
+    return this.userModel.firstName && this.userModel.firstName !== ""
+      && this.userModel.lastName && this.userModel.lastName !== ""
+      && this.userModel.email && this.userModel.email !== ""
       && this.userModel.password && this.userModel.password !== "" || false
-      // && this.userModel.password?.confPass && this.userModel.password.confPass !== ""
   }
 
   onSubmit() {
     this.errorMsg = "";
-    console.log(this.userModel);
-    let user;
-
     if (this.allFieldsFilled()) {
       if (!this.passwordsMatch()) {
         this.errorMsg = "ERROR Passwords must match"
       } else {
-        // Note: since first & last name required, might need to test with dummy data
-        // user = new User(this.registerForm.value.email || "test", this.registerForm.value.username || "test", this.registerForm.value.password?.pass || "pass", "user", []);
-
         if (this.isBusiness) {
-          // user.accountType = "business";
           this.userModel.accountType = "business"
+          this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
         } else {
-          // user.accountType = "user";
           this.userModel.accountType = "user"
+          this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
         }
-
-        // // Update userModel to be sent
-        // this.userModel.username = this.registerForm.value.username || "test";
-        //
-        // this.userModel.userId = "123"
-
+        // TODO: add user to db
 
         if (this.isBusiness) {
-          this.router.navigate(["/business-onboarding"])
-        } else {
-          this.router.navigateByUrl('/onboarding', {state: {user: this.userModel}});
+          // this.router.navigate(["/business-onboarding"]);
+          this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
 
-          // this.router.navigate(["/onboarding"])
+        } else {
+          // this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
+          this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
         }
       }
     }

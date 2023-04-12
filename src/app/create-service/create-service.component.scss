@@ -1,0 +1,21 @@
+.form-background-panel {
+  border-radius: 10px;
+  padding: 20px;
+  margin: 5px;
+  background-color: lighten(rgb(random(255), random(255), random(255)), 19);
+}
+
+.flex-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.field-group {
+  display: block;
+}
+
+.input-field {
+  font-size: 20px;
+  width: 500px;
+}

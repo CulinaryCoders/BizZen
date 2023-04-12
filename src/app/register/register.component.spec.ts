@@ -62,8 +62,8 @@ describe('RegisterComponent', () => {
   });
 
   it('should check that all fields are filled in', () => {
-    component.userModel.username = "test"
-    component.userModel.userId = "test@example.com"
+    component.userModel.firstName = "test"
+    component.userModel.email = "test@example.com"
     component.userModel.password = "pass123"
 
     const allFilled = component.allFieldsFilled();
@@ -71,8 +71,8 @@ describe('RegisterComponent', () => {
   });
 
   it('should catch when not all fields filled in', () => {
-    component.userModel.username = ""
-    component.userModel.userId = ""
+    component.userModel.firstName = ""
+    component.userModel.email = ""
     component.userModel.password = ""
 
     const allFilled = component.allFieldsFilled();
@@ -80,8 +80,8 @@ describe('RegisterComponent', () => {
   });
 
   it('check for matching passwords', () => {
-    component.userModel.username = "test"
-    component.userModel.userId = "test@example.com"
+    component.userModel.firstName = "test"
+    component.userModel.email = "test@example.com"
     component.userModel.password = "pass123"
     component.confPass = "pass123"
 
@@ -90,8 +90,8 @@ describe('RegisterComponent', () => {
   });
 
   it('check for MISmatching passwords', () => {
-    component.userModel.username = "test"
-    component.userModel.userId = "test@example.com"
+    component.userModel.firstName = "test"
+    component.userModel.email = "test@example.com"
     component.userModel.password = "pass123"
     component.confPass = "pass1234"
 

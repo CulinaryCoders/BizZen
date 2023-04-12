@@ -41,8 +41,8 @@ describe('ServicePageComponent', () => {
   
   it('should join class', () => {
 
-    component.currentUser = new User("123", "username", "pass", "User", 
-      [new Service("001", "test", "test", new ServiceOffering("", "", 1))]);
+    component.currentUser = new User("firstname", "lastname", "email", "pass", "User", 
+      [new Service("123", "Test Service", "Test Service description", new Date("4/11/2023 11:00:00"), 120, 10, 15)]);
 
     component.joinClass();
     expect(component.userJoined).toBeTruthy();
@@ -54,8 +54,9 @@ describe('ServicePageComponent', () => {
 
   it('should leave class after joining', () => {
 
-    component.currentUser = new User("123", "username", "pass", "User", 
-      [new Service("001", "test", "test", new ServiceOffering("", "", 1))]);
+    component.currentUser = new User("firstname", "lastname", "email", "pass", "User", 
+      [new Service("123", "Test Service", "Test Service description", new Date("4/11/2023 11:00:00"), 120, 10, 15)]);
+
 
     component.joinClass();
     component.leaveClass();

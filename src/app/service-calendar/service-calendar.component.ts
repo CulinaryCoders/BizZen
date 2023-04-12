@@ -3,6 +3,7 @@ import {CalendarEvent, CalendarView} from 'angular-calendar';
 import {startOfDay} from 'date-fns';
 import {Router} from "@angular/router";
 import {Service} from "../service";
+import {User} from "../user";
 
 @Component({
   selector: 'app-service-calendar-component',
@@ -26,6 +27,8 @@ export class ServiceCalendarComponent implements OnInit{
   constructor(private router: Router) {};
   // @ts-ignore
   @Input() services: any[];
+  // @ts-ignore
+  @Input() user: User;
 
   viewDate: Date = new Date();
   view: CalendarView = CalendarView.Month;
@@ -34,12 +37,11 @@ export class ServiceCalendarComponent implements OnInit{
   events: CalendarEvent[] = [];
 
   ngOnInit(): void {
-    console.log("services: ", this.services)
-
     this.services.forEach((service) => {
       this.events.push({
         start: service.start_date_time,
-        title: service.name
+        title: service.name,
+        meta: {serviceObj: service},
       })
     })
   }
@@ -55,7 +57,6 @@ export class ServiceCalendarComponent implements OnInit{
   }
 
   eventClicked({ event }: { event: CalendarEvent }): void {
-    alert("Navigating to " + event.title + " page");
-    this.router.navigate(['/service/'+event.meta.id]);
+    this.router.navigateByUrl('/class-summary', {state: {user: this.user, service: event.meta.serviceObj}});
   }
 }

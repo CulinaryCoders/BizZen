@@ -1,12 +1,9 @@
 <script>
   var formatDate = require("@angular/common").formatDate;
 </script>
+<app-navbar></app-navbar>
 <div class="page-container">
-  <div style="display: flex; flex-direction: row; align-items: center; justify-content: center">
-    <h1 (click)="routeToHome()" style="background-color: antiquewhite; border-radius: 5px; display: inline-block; padding: 15px; margin-top:15px; cursor: pointer">[bizZen]</h1>
-    <h1 style="padding-left: 10px"> &nbsp; {{business.name}}</h1>
-  </div>
-  <p style="text-align: center">Offering classes since <b>{{formatDate(business.created_at)}}</b></p>
+  <h1 style="width: 100%; text-align: center">{{business.name}}</h1>
   <hr/>
   <div style="display: flex; flex-direction: row">
     <div style="width: 30%; padding: 10px">
@@ -17,6 +14,8 @@
           </svg>
           &nbsp;Service
         </button>
+        <br/>
+        <p style="text-align: center">Offering classes since <b>{{formatDate(business.created_at)}}</b></p>
       </div>
       <div *ngIf="!businessOwnerView">
         <h3>Come visit us!</h3>
@@ -58,8 +57,7 @@
               ${{service.price}}
             </div>
             <div style="text-align: right">
-              <button (click)="goToServicePage(service.id)" class="btn btn-secondary" style="margin-right: 5px">More Info</button>
-              <button *ngIf="!businessOwnerView" class="btn btn-primary">Sign up</button>
+              <button (click)="goToServicePage(service)" class="btn btn-secondary" style="margin-right: 5px">More Info</button>
             </div>
           </div>
         </li>
