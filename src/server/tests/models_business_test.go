@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"server/database"
 	"server/models"
 	"testing"
 
@@ -11,14 +10,12 @@ import (
 // TODO:  Add documentation (func TestCreateBusiness)
 func TestCreateBusiness(t *testing.T) {
 	// Refresh database to control testing environment
-	database.FormatAllTables(testAppDB)
+	models.FormatAllTables(testAppDB)
 
 	// Create business record
 	testCreateBusiness := models.Business{
-		OwnerID:      1,
-		MainOfficeID: 1,
-		Name:         "Gator Aider LLC",
-		Type:         "Tutoring",
+		OwnerID: 1,
+		Name:    "Gator Aider LLC",
 	}
 
 	returnRecords, err := testCreateBusiness.Create(testAppDB)

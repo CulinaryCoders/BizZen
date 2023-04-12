@@ -1,0 +1,93 @@
+{
+  "id": 506589,
+  "num_rows": 500,
+  "file_format": "json",
+  "name": "bizzen-service",
+  "array": false,
+  "columns": [
+    {
+      "name": "ID",
+      "null_percentage": 0,
+      "type": "Row Number",
+      "formula": "this + 999000"
+    },
+    {
+      "name": "business_id",
+      "null_percentage": 0,
+      "type": "Row Number",
+      "formula": "this + 999000"
+    },
+    {
+      "name": "name",
+      "null_percentage": 0,
+      "type": "Custom List",
+      "values": [
+        "Yoga ",
+        "Spin",
+        "Zumba",
+        "Jazzercise",
+        "Tai Chi",
+        "Pilates",
+        "Beginner Stretching",
+        "Meditation",
+        "Crossfit"
+      ],
+      "selectionStyle": "random",
+      "distribution": null,
+      "formula": null
+    },
+    {
+      "name": "description",
+      "null_percentage": 15,
+      "type": "Paragraphs",
+      "min": 1,
+      "max": 2,
+      "formula": null
+    },
+    {
+      "name": "start_date_time",
+      "null_percentage": 0,
+      "type": "Datetime",
+      "min": "01/01/2023",
+      "max": "09/30/2023",
+      "format": "%Y-%m-%dT%H:%M:%SZ",
+      "formula": null
+    },
+    {
+      "name": "length",
+      "null_percentage": 0,
+      "type": "Number",
+      "min": 15,
+      "max": 150,
+      "decimals": 0,
+      "formula": null
+    },
+    {
+      "name": "capacity",
+      "null_percentage": 0,
+      "type": "Number",
+      "min": 1,
+      "max": 50,
+      "decimals": 0,
+      "formula": null
+    },
+    {
+      "name": "cancellation_fee",
+      "null_percentage": 0,
+      "type": "Number",
+      "min": 0,
+      "max": 0,
+      "decimals": 0,
+      "formula": null
+    },
+    {
+      "name": "price",
+      "null_percentage": 0,
+      "type": "Number",
+      "min": 0,
+      "max": 100000,
+      "decimals": 0,
+      "formula": null
+    }
+  ]
+}

@@ -17,72 +17,72 @@
       "form": []
     },
     "tests": [
-        {
-            "type": "res-body",
-            "custom": "",
-            "action": "isjson",
-            "value": "true"
-          },
-          {
-            "type": "res-code",
-            "custom": "",
-            "action": "equal",
-            "value": "201"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.CreatedAt",
-            "action": "notequal",
-            "value": ""
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.UpdatedAt",
-            "action": "notequal",
-            "value": ""
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.DeletedAt",
-            "action": "equal",
-            "value": "null"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.ID",
-            "action": "istype",
-            "value": "number"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.ID",
-            "action": "notequal",
-            "value": "null"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.name",
-            "action": "istype",
-            "value": "string"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.type",
-            "action": "istype",
-            "value": "string"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.main_office_id",
-            "action": "istype",
-            "value": "number"
-          },
-          {
-            "type": "json-query",
-            "custom": "json.business.main_office_id",
-            "action": "notequal",
-            "value": ""
-          }
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "isjson",
+        "value": "true"
+      },
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "201"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.CreatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.UpdatedAt",
+        "action": "notequal",
+        "value": ""
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.DeletedAt",
+        "action": "equal",
+        "value": "null"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.ID",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.ID",
+        "action": "notequal",
+        "value": "null"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.name",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.type",
+        "action": "istype",
+        "value": "string"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.main_office_id",
+        "action": "istype",
+        "value": "number"
+      },
+      {
+        "type": "json-query",
+        "custom": "json.business.main_office_id",
+        "action": "notequal",
+        "value": ""
+      }
     ]
   },
   {
@@ -254,5 +254,33 @@
         "value": "record not found"
       }
     ]
+  },
+  {
+    "_id": "2e924732-1dda-43ba-ae40-3df885cc0ef5",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:8420/service/999001",
+    "url": "http://localhost:8420/service/999002/user/999002",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-04-07T19:31:17.566Z",
+    "modified": "2023-04-12T18:33:41.111Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "7eeb15ac-3bc3-404f-9d51-d0ba4cb89a78",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:8420/service/999001",
+    "url": "localhost:8420/service/999001/users",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-04-07T19:31:23.680Z",
+    "modified": "2023-04-07T19:34:28.048Z",
+    "headers": [],
+    "params": [],
+    "tests": []
   }
 ]

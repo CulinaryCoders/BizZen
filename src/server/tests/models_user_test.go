@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"server/database"
 	"server/models"
 	"testing"
 
@@ -16,7 +15,7 @@ func TestAuthenticate(t *testing.T) {
 // TODO:  Add documentation (func TestCreateUser)
 func TestCreateUser(t *testing.T) {
 	// Refresh database to control testing environment
-	database.FormatAllTables(testAppDB)
+	models.FormatAllTables(testAppDB)
 
 	// Create user record
 	testCreateUser := models.User{

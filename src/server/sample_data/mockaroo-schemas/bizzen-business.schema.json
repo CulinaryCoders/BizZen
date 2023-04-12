@@ -1,0 +1,27 @@
+{
+  "id": 504773,
+  "num_rows": 500,
+  "file_format": "json",
+  "name": "bizzen-business",
+  "array": false,
+  "columns": [
+    {
+      "name": "ID",
+      "null_percentage": 0,
+      "type": "Row Number",
+      "formula": "this + 999000"
+    },
+    {
+      "name": "owner_id",
+      "null_percentage": 0,
+      "type": "Row Number",
+      "formula": "this + 999000"
+    },
+    {
+      "name": "name",
+      "null_percentage": 0,
+      "type": "Fake Company Name",
+      "formula": null
+    }
+  ]
+}

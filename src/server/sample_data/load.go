@@ -20,13 +20,13 @@ SampleData type is used to store a list of object instances for each DB object t
 Records for each object type can be created from a JSON file and then loaded into the appropriate DB instance.
 */
 type SampleData struct {
-	Users            []*models.User            `json:"users"`             // List of User records
-	Businesses       []*models.Business        `json:"businesses"`        // List of Business records
-	Offices          []*models.Office          `json:"offices"`           // List of Office records
-	Addresses        []*models.Address         `json:"addresses"`         // List of Address records
-	Contacts         []*models.ContactInfo     `json:"contacts"`          // List of Contact records
-	Services         []*models.Service         `json:"services"`          // List of Service records
-	ServiceOfferings []*models.ServiceOffering `json:"service_offerings"` // List of ServiceOffering records
+	Users        []*models.User        `json:"users"`        // List of User records
+	Businesses   []*models.Business    `json:"businesses"`   // List of Business records
+	Services     []*models.Service     `json:"services"`     // List of Service records
+	Appointments []*models.Appointment `json:"appointments"` // List of Appointment records
+	Invoices     []*models.Invoice     `json:"invoices"`     // List of Invoice records
+	// Addresses        []*models.Address         `json:"addresses"`         // List of Address records
+	// Contacts         []*models.ContactInfo     `json:"contacts"`          // List of Contact records
 }
 
 // DataLoadMapping type is a generic wrapper struct designed to simplify the creation of records for all GORM DB object types that implement the 'Model' interface.
@@ -212,14 +212,13 @@ func LoadJSONSampleData(db *gorm.DB) error {
 		return err
 	}
 
-	//  Businesses / Main Offices
+	//  Businesses
 	var businessJSONKey string = "business"
-	var officeJSONKey string = "office"
 
 	businessLoadMapping := DataLoadMapping[*models.Business]{
 		Records:                   sampleData.Businesses,
 		PrimaryReturnObjectKey:    businessJSONKey,
-		SecondaryReturnObjectKeys: []string{officeJSONKey},
+		SecondaryReturnObjectKeys: []string{},
 	}
 
 	err = businessLoadMapping.CreateSampleRecords(db)
@@ -228,18 +227,18 @@ func LoadJSONSampleData(db *gorm.DB) error {
 	}
 
 	//  Addresses
-	var addressJSONKey string = "address"
+	// var addressJSONKey string = "address"
 
-	addressLoadMapping := DataLoadMapping[*models.Address]{
-		Records:                   sampleData.Addresses,
-		PrimaryReturnObjectKey:    addressJSONKey,
-		SecondaryReturnObjectKeys: []string{},
-	}
+	// addressLoadMapping := DataLoadMapping[*models.Address]{
+	// 	Records:                   sampleData.Addresses,
+	// 	PrimaryReturnObjectKey:    addressJSONKey,
+	// 	SecondaryReturnObjectKeys: []string{},
+	// }
 
-	err = addressLoadMapping.CreateSampleRecords(db)
-	if err != nil {
-		return err
-	}
+	// err = addressLoadMapping.CreateSampleRecords(db)
+	// if err != nil {
+	// 	return err
+	// }
 
 	//  Services
 	var serviceJSONKey string = "service"
@@ -255,16 +254,30 @@ func LoadJSONSampleData(db *gorm.DB) error {
 		return err
 	}
 
-	//  ServiceOfferings
-	var serviceOfferingJSONKey string = "service_offering"
+	//  Appointments
+	var apptJSONKey string = "appointment"
 
-	serviceOfferingLoadMapping := DataLoadMapping[*models.ServiceOffering]{
-		Records:                   sampleData.ServiceOfferings,
-		PrimaryReturnObjectKey:    serviceOfferingJSONKey,
+	apptLoadMapping := DataLoadMapping[*models.Appointment]{
+		Records:                   sampleData.Appointments,
+		PrimaryReturnObjectKey:    apptJSONKey,
 		SecondaryReturnObjectKeys: []string{},
 	}
 
-	err = serviceOfferingLoadMapping.CreateSampleRecords(db)
+	err = apptLoadMapping.CreateSampleRecords(db)
+	if err != nil {
+		return err
+	}
+
+	//  Invoices
+	var invoiceJSONKey string = "invoice"
+
+	invoiceLoadMapping := DataLoadMapping[*models.Invoice]{
+		Records:                   sampleData.Invoices,
+		PrimaryReturnObjectKey:    invoiceJSONKey,
+		SecondaryReturnObjectKeys: []string{},
+	}
+
+	err = invoiceLoadMapping.CreateSampleRecords(db)
 	if err != nil {
 		return err
 	}

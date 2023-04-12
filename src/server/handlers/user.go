@@ -72,25 +72,9 @@ Creates a new user account record in the database.
 
 		Optional fields:
 
-			contact_info_id  <uint>
-
-				The ID of the ContactInfo record associated with the new user account
-
 			business_id  <uint>
 
 				The ID of the Business record associated with the new user account (only applicable for 'Business' account types)
-
-			permissions_id  <uint>
-
-				The ID of the UserPermissions record associated with the new user account
-
-			user_pref_id  <uint>
-
-				The ID of the UserPrefences record associated with the new user account
-
-			profile_pic_id  <uint>
-
-				The ID of the ProfilePic record associated with the new user account
 
 *Example request(s)*
 
@@ -122,11 +106,7 @@ Creates a new user account record in the database.
 		"account_type": "Individual",
 		"first_name": "John",
 		"last_name": "Doe",
-		"contact_info_id": 45,
-		"business_id": null,
-		"permissions_id": 123,
-		"user_pref_id": 88,
-		"profile_pic_id": 79
+		"business_id": null
 		}
 
 	Failure:
@@ -240,11 +220,7 @@ Retrieves a user account record from the database by user ID if the ID exists in
 		"account_type": "Individual",
 		"first_name": "John",
 		"last_name": "Doe",
-		"contact_info_id": 45,
-		"business_id": null,
-		"permissions_id": 123,
-		"user_pref_id": 88,
-		"profile_pic_id": 79
+		"business_id": null
 		}
 
 	Failure:
@@ -367,25 +343,9 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 				The user's last name
 
-			contact_info_id  <uint>
-
-				The ID of the ContactInfo record associated with the new user account
-
 			business_id  <uint>
 
 				The ID of the Business record associated with the new user account (only applicable for 'Business' account types)
-
-			permissions_id  <uint>
-
-				The ID of the UserPermissions record associated with the new user account
-
-			user_pref_id  <uint>
-
-				The ID of the UserPrefences record associated with the new user account
-
-			profile_pic_id  <uint>
-
-				The ID of the ProfilePic record associated with the new user account
 
 *Example request(s)*
 
@@ -413,11 +373,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 		"account_type": "Individual",
 		"first_name": "Luke",
 		"last_name": "Skywalker",
-		"contact_info_id": 45,
-		"business_id": null,
-		"permissions_id": 123,
-		"user_pref_id": 88,
-		"profile_pic_id": 79
+		"business_id": null
 		}
 
 	Failure:
@@ -537,11 +493,7 @@ Deleted user record is returned in the response body if the operation is sucessf
 		"account_type": "Individual",
 		"first_name": "John",
 		"last_name": "Doe",
-		"contact_info_id": 45,
-		"business_id": null,
-		"permissions_id": 123,
-		"user_pref_id": 88,
-		"profile_pic_id": 79
+		"business_id": null
 		}
 
 	Failure:
@@ -589,4 +541,80 @@ func (app *Application) DeleteUser(writer http.ResponseWriter, request *http.Req
 		writer,
 		http.StatusOK,
 		deletedUser)
+}
+
+// TODO:  Add documentation (func GetUserEnrolledStatus)
+func (app *Application) GetUserEnrolledStatus(writer http.ResponseWriter, request *http.Request) {
+	var serviceIDKey string = "service-id"
+	var userIDKey string = "user-id"
+
+	serviceID, serviceIDErr := utils.ParseRequestIDField(request, serviceIDKey)
+	if serviceIDErr != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			serviceIDErr.Error())
+
+		return
+	}
+
+	userID, userIDErr := utils.ParseRequestIDField(request, userIDKey)
+	if userIDErr != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			serviceIDErr.Error())
+
+		return
+	}
+
+	var user *models.User
+	hasServiceAppointment, err := user.HasServiceAppointment(app.AppDB, userID, serviceID)
+	if userIDErr != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		hasServiceAppointment)
+}
+
+// TODO:  Add documentation (func GetUserServiceAppointments)
+func (app *Application) GetUserServiceAppointments(writer http.ResponseWriter, request *http.Request) {
+	// log.Print("Undefined route handler requested  --  GetUserServiceAppointments")
+	user := models.User{}
+	userID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
+
+	var userSvcAppts []map[string]interface{}
+	userSvcAppts, err = user.GetServiceAppointments(app.AppDB, userID)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusNotFound,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		userSvcAppts)
 }

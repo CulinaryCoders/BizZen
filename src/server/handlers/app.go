@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 	"server/config"
-	"server/database"
 	"server/middleware"
+	"server/models"
 
 	"github.com/go-redis/redis/v7"
 	"github.com/gorilla/mux"
@@ -52,11 +52,11 @@ Initializes the various components of the Application instance (router, database
 func (app *Application) Initialize(appDBName string) {
 	// Initialize main app database
 	var dbConnectionString string = config.AppConfig.GetPostgresDBConnectionString(appDBName)
-	App.AppDB = database.InitializePostgresDB(dbConnectionString, config.Debug)
+	App.AppDB = models.InitializePostgresDB(dbConnectionString, config.Debug)
 
 	// Initialize cache db
 	var cacheDSN string = config.AppConfig.GetRedisDBNetworkAddress()
-	App.CacheDB = database.InitializeRedisDB(cacheDSN)
+	App.CacheDB = models.InitializeRedisDB(cacheDSN)
 
 	// Initialize cookie store
 	App.CookieStore = sessions.NewCookieStore([]byte("super-secret"))
@@ -103,6 +103,7 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/user/{id}", app.GetUser).Methods("GET")
 	app.Router.HandleFunc("/user/{id}", app.UpdateUser).Methods("PUT")
 	app.Router.HandleFunc("/user/{id}", app.DeleteUser).Methods("DELETE")
+	app.Router.HandleFunc("/user/{id}/service-appointments", app.GetUserServiceAppointments).Methods("GET")
 
 	// Business routes
 	app.Router.HandleFunc("/business", app.CreateBusiness).Methods("POST")
@@ -110,29 +111,32 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/business/{id}", app.UpdateBusiness).Methods("PUT")
 	app.Router.HandleFunc("/business/{id}", app.DeleteBusiness).Methods("DELETE")
 
-	// Office routes
-	app.Router.HandleFunc("/office", app.CreateOffice).Methods("POST")
-	app.Router.HandleFunc("/office/{id}", app.GetOffice).Methods("GET")
-	app.Router.HandleFunc("/office/{id}", app.UpdateOffice).Methods("PUT")
-	app.Router.HandleFunc("/office/{id}", app.DeleteOffice).Methods("DELETE")
-
 	// Address routes
-	app.Router.HandleFunc("/address", app.CreateAddress).Methods("POST")
-	app.Router.HandleFunc("/address/{id}", app.GetAddress).Methods("GET")
-	app.Router.HandleFunc("/address/{id}", app.UpdateAddress).Methods("PUT")
-	app.Router.HandleFunc("/address/{id}", app.DeleteAddress).Methods("DELETE")
+	// app.Router.HandleFunc("/address", app.CreateAddress).Methods("POST")
+	// app.Router.HandleFunc("/address/{id}", app.GetAddress).Methods("GET")
+	// app.Router.HandleFunc("/address/{id}", app.UpdateAddress).Methods("PUT")
+	// app.Router.HandleFunc("/address/{id}", app.DeleteAddress).Methods("DELETE")
 
 	// Service routes
 	app.Router.HandleFunc("/service", app.CreateService).Methods("POST")
 	app.Router.HandleFunc("/service/{id}", app.GetService).Methods("GET")
 	app.Router.HandleFunc("/service/{id}", app.UpdateService).Methods("PUT")
 	app.Router.HandleFunc("/service/{id}", app.DeleteService).Methods("DELETE")
+	app.Router.HandleFunc("/service/{service-id}/user/{user-id}", app.GetUserEnrolledStatus).Methods("GET")
+	app.Router.HandleFunc("/service/{id}/users", app.GetListOfEnrolledUsers).Methods("GET")
+	app.Router.HandleFunc("/service/{id}/user-count", app.GetEnrolledUsersCount).Methods("GET")
 
-	// ServiceOffering routes
-	app.Router.HandleFunc("/service-offering", app.CreateServiceOffering).Methods("POST")
-	app.Router.HandleFunc("/service-offering/{id}", app.GetServiceOffering).Methods("GET")
-	app.Router.HandleFunc("/service-offering/{id}", app.UpdateServiceOffering).Methods("PUT")
-	app.Router.HandleFunc("/service-offering/{id}", app.DeleteServiceOffering).Methods("DELETE")
+	// Appointment routes
+	app.Router.HandleFunc("/appointment", app.CreateAppointment).Methods("POST")
+	app.Router.HandleFunc("/appointment/{id}", app.GetAppointment).Methods("GET")
+	app.Router.HandleFunc("/appointment/{id}", app.UpdateAppointment).Methods("PUT")
+	app.Router.HandleFunc("/appointment/{id}", app.DeleteAppointment).Methods("DELETE")
+
+	// Invoice routes
+	app.Router.HandleFunc("/invoice", app.CreateInvoice).Methods("POST")
+	app.Router.HandleFunc("/invoice/{id}", app.GetInvoice).Methods("GET")
+	app.Router.HandleFunc("/invoice/{id}", app.UpdateInvoice).Methods("PUT")
+	app.Router.HandleFunc("/invoice/{id}", app.DeleteInvoice).Methods("DELETE")
 
 	// Path prefix for API to work with Angular frontend
 	// WARNING: This MUST be the last route defined by the router.
