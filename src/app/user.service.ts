@@ -20,8 +20,16 @@ export class UserService {
 
   }
 
-  getUser(email: string, password: string) : Promise<User>{
-    return this.http.get<User>(this.getUserURL+email, {
+  //to access user obj in other code (console.log example)
+  // call login.then( (user) => { console.log(user); });
+  login(username: string, password: string) : Promise<void | User> {
+    return this.http.post<User>('http://localhost:8080/login', {
+      username, password
+    }).toPromise().then(); 
+  }
+  
+  getUser(id: string, password: string) : Promise<User>{
+    return this.http.get<User>(this.getUserURL+id, {
 
     }).toPromise().then();
   }

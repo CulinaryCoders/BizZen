@@ -18,6 +18,7 @@ export class LoginComponent {
   model = new User("","", "", "", "", []);
 
   checkbox : boolean = false;
+  userExists : boolean = true;
 
   constructor(private router:Router, private activatedRoute:ActivatedRoute, private userService:UserService){}
 
@@ -35,11 +36,25 @@ export class LoginComponent {
       this.model.accountType = "user";
     }
 
-    //console.log(this.userService.getUser("12345", "test"));
+  
+    this.userService.login(this.model.email, this.model.password)
+      .then((user) => {this.successfulLogin(user)})   //success
+      .catch(()=>this.unsuccessfulLogin());           //failure
+   
+  }
+  successfulLogin(returnedUser : void|User)
+  {
+    this.model = returnedUser as User;
+    this.userExists = true;
 
     this.router.navigateByUrl('/profile', {state: {user: this.model }});
-
   }
+
+  unsuccessfulLogin()
+  {
+    this.userExists = false;
+  }
+
   routeToRegister() {
     this.router.navigate(['/register']);
   }
