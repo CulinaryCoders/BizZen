@@ -68,6 +68,13 @@ func ParseRequestID(request *http.Request) (uint, error) {
 	return uint(convertedToUint64), err
 }
 
+// ParseRequestIDField is a helper function to parse the specified ID variable present in the request and convert to uint64
+func ParseRequestIDField(request *http.Request, idFieldKey string) (uint, error) {
+	id := mux.Vars(request)[idFieldKey]
+	convertedToUint64, err := strconv.ParseUint(id, 10, 64)
+	return uint(convertedToUint64), err
+}
+
 /*
 DecodeJSON is a helper function to unmarshal the request body into the provided gorm Model object
 */
