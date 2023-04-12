@@ -260,11 +260,11 @@
     "colId": "history",
     "containerId": "",
     "name": "http://localhost:8420/service/999001",
-    "url": "http://localhost:8420/service/999002/user/999002",
+    "url": "http://localhost:8080/services",
     "method": "GET",
     "sortNum": 0,
     "created": "2023-04-07T19:31:17.566Z",
-    "modified": "2023-04-12T18:33:41.111Z",
+    "modified": "2023-04-12T20:24:28.244Z",
     "headers": [],
     "params": [],
     "tests": []

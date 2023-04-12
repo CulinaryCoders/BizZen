@@ -20,7 +20,6 @@ func TestCreateUser(t *testing.T) {
 	// Create user record
 	testCreateUser := models.User{
 		Email:       "test@gmail.com",
-		Username:    "user1",
 		Password:    "pw123",
 		AccountType: "Individual",
 		FirstName:   "John",
