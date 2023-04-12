@@ -42,6 +42,48 @@ func (appt *Appointment) GetID() uint {
 /*
 *Description*
 
+func GetUserID
+
+# Returns UserID field from calling Appointment object
+
+*Parameters*
+
+	N/A (None)
+
+*Returns*
+
+	_  <uint>
+
+		The UserID field from the calling appointment object
+*/
+func (appt *Appointment) GetUserID() uint {
+	return appt.UserID
+}
+
+/*
+*Description*
+
+func GetServiceID
+
+# Returns ServiceID field from calling Appointment object
+
+*Parameters*
+
+	N/A (None)
+
+*Returns*
+
+	_  <uint>
+
+		The ServiceID field from the calling appointment object
+*/
+func (appt *Appointment) GetServiceID() uint {
+	return appt.ServiceID
+}
+
+/*
+*Description*
+
 func Create
 
 Creates a new Appointment record in the database and returns the created record along with any errors that are thrown.
@@ -100,6 +142,14 @@ func (appt *Appointment) Get(db *gorm.DB, apptID uint) (map[string]Model, error)
 	err := db.First(&appt, apptID).Error
 	returnRecords := map[string]Model{"appointment": appt}
 	return returnRecords, err
+}
+
+// TODO:  Add documentation (func GetRecordListFromSecondaryID)
+func (appt *Appointment) GetRecordListFromSecondaryID(db *gorm.DB, secondaryIDJsonKey string, secondaryID uint) ([]Appointment, error) {
+	var appts []Appointment
+
+	err := db.Where(map[string]interface{}{secondaryIDJsonKey: secondaryID}).Find(&appts).Error
+	return appts, err
 }
 
 /*

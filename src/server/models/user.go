@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"server/config"
 
@@ -165,6 +167,78 @@ func (user *User) Get(db *gorm.DB, userID uint) (map[string]Model, error) {
 	err := db.First(&user, userID).Error
 	returnRecords := map[string]Model{"user": user}
 	return returnRecords, err
+}
+
+// TODO:  Add documentation (func GetRecordListFromPrimaryIDs)
+func (user *User) GetRecordListFromPrimaryIDs(db *gorm.DB, ids []uint) ([]User, error) {
+	var users []User
+
+	err := db.Where(ids).Find(&users).Error
+	return users, err
+}
+
+// TODO:  Add documentation (func GetAppointments)
+func (user *User) GetAppointments(db *gorm.DB, userID uint) ([]Appointment, error) {
+	var appt Appointment
+	var appts []Appointment
+
+	appts, err := appt.GetRecordListFromSecondaryID(db, "user_id", userID)
+	return appts, err
+}
+
+// TODO:  Add documentation (func GetServiceAppointments)
+func (user *User) GetServiceAppointments(db *gorm.DB, userID uint) ([]map[string]interface{}, error) {
+	var appts []Appointment
+	var apptServiceID uint
+	var apptService Service
+	var serviceAppointments []map[string]interface{}
+
+	// Get list of appointments for specified UserID
+	appts, apptErr := user.GetAppointments(db, userID)
+	if apptErr != nil {
+		var errorMessage string = fmt.Sprintf("User ID (%d) does not have any appointment records in the database.  [%s]", userID, apptErr)
+		return serviceAppointments, errors.New(errorMessage)
+	}
+	//err = db.Model(&Appointment{}).Distinct("services.*").Joins("left join appointments on appointments.service_id = services.id and appointments.user_id = ?", userID).Scan(&services).Error
+
+	// Get list of ServiceIDs from user's appointments
+	for _, appt := range appts {
+		// Get Service associated with each of the user's appointments
+		apptServiceID = appt.GetServiceID()
+		returnedRecords, svcErr := apptService.Get(db, apptServiceID)
+		if svcErr != nil {
+			var errorMessage string = fmt.Sprintf("Service ID (%d) does not exist in the database, but is associated with Appointment ID (%d).  [%s]", userID, appt.GetID(), apptErr)
+			return serviceAppointments, errors.New(errorMessage)
+		}
+
+		// Structure JSON appropriately and append to list of service appointments
+		var svcAppt map[string]interface{} = map[string]interface{}{"appointment": appt, "service": returnedRecords["service"]}
+		serviceAppointments = append(serviceAppointments, svcAppt)
+	}
+
+	return serviceAppointments, nil
+}
+
+func (user *User) HasServiceAppointment(db *gorm.DB, userID uint, serviceID uint) (bool, error) {
+	var appts []Appointment
+	var apptServiceID uint
+
+	// Get list of appointments for specified UserID
+	appts, apptErr := user.GetAppointments(db, userID)
+	if apptErr != nil {
+		var errorMessage string = fmt.Sprintf("User ID (%d) does not have any appointment records in the database.  [%s]", userID, apptErr)
+		return false, errors.New(errorMessage)
+	}
+
+	for _, appt := range appts {
+		// Get Service associated with each of the user's appointments
+		apptServiceID = appt.GetServiceID()
+		if serviceID == apptServiceID {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }
 
 /*

@@ -542,3 +542,79 @@ func (app *Application) DeleteUser(writer http.ResponseWriter, request *http.Req
 		http.StatusOK,
 		deletedUser)
 }
+
+// TODO:  Add documentation (func GetUserEnrolledStatus)
+func (app *Application) GetUserEnrolledStatus(writer http.ResponseWriter, request *http.Request) {
+	var serviceIDKey string = "service-id"
+	var userIDKey string = "user-id"
+
+	serviceID, serviceIDErr := utils.ParseRequestIDField(request, serviceIDKey)
+	if serviceIDErr != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			serviceIDErr.Error())
+
+		return
+	}
+
+	userID, userIDErr := utils.ParseRequestIDField(request, userIDKey)
+	if userIDErr != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			serviceIDErr.Error())
+
+		return
+	}
+
+	var user *models.User
+	hasServiceAppointment, err := user.HasServiceAppointment(app.AppDB, userID, serviceID)
+	if userIDErr != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		hasServiceAppointment)
+}
+
+// TODO:  Add documentation (func GetUserServiceAppointments)
+func (app *Application) GetUserServiceAppointments(writer http.ResponseWriter, request *http.Request) {
+	// log.Print("Undefined route handler requested  --  GetUserServiceAppointments")
+	user := models.User{}
+	userID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
+
+	var userSvcAppts []map[string]interface{}
+	userSvcAppts, err = user.GetServiceAppointments(app.AppDB, userID)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusNotFound,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		userSvcAppts)
+}

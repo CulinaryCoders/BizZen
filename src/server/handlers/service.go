@@ -536,3 +536,71 @@ func (app *Application) DeleteService(writer http.ResponseWriter, request *http.
 		deletedService)
 
 }
+
+// TODO:  Add documentation (func GetListOfEnrolledUsers)
+func (app *Application) GetListOfEnrolledUsers(writer http.ResponseWriter, request *http.Request) {
+	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
+	service := models.Service{}
+	serviceID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
+
+	var users []models.User
+	users, err = service.GetUsers(app.AppDB, serviceID)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusNotFound,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		users)
+}
+
+// TODO:  Add documentation (func GetEnrolledUsersCount)
+func (app *Application) GetEnrolledUsersCount(writer http.ResponseWriter, request *http.Request) {
+	// log.Print("Undefined route handler requested  --  GetEnrolledUsersCount")
+	service := models.Service{}
+	serviceID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
+
+	var users []models.User
+	users, err = service.GetUsers(app.AppDB, serviceID)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusNotFound,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		len(users))
+}

@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"server/config"
 	"time"
@@ -104,6 +106,55 @@ func (service *Service) Get(db *gorm.DB, serviceID uint) (map[string]Model, erro
 	err := db.First(&service, serviceID).Error
 	returnRecords := map[string]Model{"service": service}
 	return returnRecords, err
+}
+
+// TODO:  Add documentation (func GetRecordListFromPrimaryIDs)
+func (service *Service) GetRecordListFromPrimaryIDs(db *gorm.DB, ids []uint) ([]Service, error) {
+	var services []Service
+
+	err := db.Where(ids).Find(&services).Error
+	return services, err
+}
+
+// TODO:  Add documentation (func GetAppointments)
+func (service *Service) GetAppointments(db *gorm.DB, serviceID uint) ([]Appointment, error) {
+	var appt Appointment
+	var appts []Appointment
+
+	// Confirm Service record exists for specified ID
+	_, err := service.Get(db, serviceID)
+	if err != nil {
+		var errorMessage string = fmt.Sprintf("Service ID (%d) does not exist in the database.  [%s]", serviceID, err)
+		return appts, errors.New(errorMessage)
+	}
+
+	// Get list of appointments for specified ServiceID
+	appts, err = appt.GetRecordListFromSecondaryID(db, "service_id", serviceID)
+
+	return appts, err
+}
+
+// TODO:  Add documentation (func GetUsers)
+func (service *Service) GetUsers(db *gorm.DB, serviceID uint) ([]User, error) {
+	var apptsUserIDs []uint
+	var user User
+	var users []User
+
+	// Get list of appointments for specified ServiceID
+	appts, err := service.GetAppointments(db, serviceID)
+	if err != nil {
+		return users, err
+	}
+
+	// Get list of UserIDs from appointments
+	for _, record := range appts {
+		apptsUserIDs = append(apptsUserIDs, record.GetUserID())
+	}
+
+	// Get list of Users from appointment UserIDs
+	users, err = user.GetRecordListFromPrimaryIDs(db, apptsUserIDs)
+
+	return users, err
 }
 
 /*
