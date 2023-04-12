@@ -1,7 +1,7 @@
 package tests
 
 import (
-	_ "server/database"
+	_ "server/models"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

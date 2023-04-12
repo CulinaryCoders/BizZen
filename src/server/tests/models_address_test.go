@@ -2,7 +2,6 @@ package tests
 
 import (
 	"encoding/json"
-	"server/database"
 	"server/models"
 	"server/sample_data"
 	"testing"
@@ -58,7 +57,7 @@ func createTestAddressRecords(db *gorm.DB, records []*models.Address) error {
 // TODO:  Add documentation (func TestCreateAddress)
 func TestCreateAddress(t *testing.T) {
 	// Refresh database to control testing environment
-	database.FormatAllTables(testAppDB)
+	models.FormatAllTables(testAppDB)
 
 	// Create address record
 	testCreateAddress := models.Address{
@@ -91,7 +90,7 @@ func TestCreateAddress(t *testing.T) {
 // TODO:  Add documentation (func TestGetAddress)
 func TestGetAddress(t *testing.T) {
 	// Refresh database to control testing environment
-	database.FormatAllTables(testAppDB)
+	models.FormatAllTables(testAppDB)
 
 	createErr := createTestAddressRecords(testAppDB, standardAddresses)
 	if createErr != nil {

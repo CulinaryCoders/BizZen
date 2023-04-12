@@ -1,7 +1,6 @@
 package tests
 
 import (
-	_ "server/database"
 	_ "server/models"
 	"testing"
 
