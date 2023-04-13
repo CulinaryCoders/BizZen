@@ -110,7 +110,29 @@ func (business *Business) Get(db *gorm.DB, businessID uint) (map[string]Model, e
 	return returnRecords, err
 }
 
-// TODO:  Add documentation (func GetAll)
+/*
+*Description*
+
+func GetAll
+
+Retrieves all Business records from the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+*Returns*
+
+	_  <[]Business>
+
+		The list of Business records that are retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (business *Business) GetAll(db *gorm.DB) ([]Business, error) {
 	var businesses []Business
 	err := db.Find(&businesses).Error

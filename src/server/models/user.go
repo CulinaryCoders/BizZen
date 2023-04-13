@@ -168,7 +168,29 @@ func (user *User) Get(db *gorm.DB, userID uint) (map[string]Model, error) {
 	return returnRecords, err
 }
 
-// TODO:  Add documentation (func GetAll)
+/*
+*Description*
+
+func GetAll
+
+Retrieves all User records from the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+*Returns*
+
+	_  <[]User>
+
+		The list of User records that are retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (user *User) GetAll(db *gorm.DB) ([]User, error) {
 	var users []User
 	err := db.Find(&users).Error

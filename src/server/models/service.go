@@ -108,7 +108,29 @@ func (service *Service) Get(db *gorm.DB, serviceID uint) (map[string]Model, erro
 	return returnRecords, err
 }
 
-// TODO:  Add documentation (func GetAll)
+/*
+*Description*
+
+func GetAll
+
+Retrieves all Service records from the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+*Returns*
+
+	_  <[]Service>
+
+		The list of Service records that are retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (service *Service) GetAll(db *gorm.DB) ([]Service, error) {
 	var services []Service
 	err := db.Find(&services).Error

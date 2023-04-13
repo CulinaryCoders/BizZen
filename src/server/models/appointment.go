@@ -144,7 +144,29 @@ func (appt *Appointment) Get(db *gorm.DB, apptID uint) (map[string]Model, error)
 	return returnRecords, err
 }
 
-// TODO:  Add documentation (func GetAll)
+/*
+*Description*
+
+func GetAll
+
+Retrieves all Appointment records from the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+*Returns*
+
+	_  <[]Appointment>
+
+		The list of Appointment records that are retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (appt *Appointment) GetAll(db *gorm.DB) ([]Appointment, error) {
 	var appts []Appointment
 	err := db.Find(&appts).Error

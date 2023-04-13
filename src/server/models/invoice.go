@@ -101,7 +101,29 @@ func (invoice *Invoice) Get(db *gorm.DB, invoiceID uint) (map[string]Model, erro
 	return returnRecords, err
 }
 
-// TODO:  Add documentation (func GetAll)
+/*
+*Description*
+
+func GetAll
+
+Retrieves all Invoice records from the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+*Returns*
+
+	_  <[]Invoice>
+
+		The list of Invoice records that are retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (invoice *Invoice) GetAll(db *gorm.DB) ([]Invoice, error) {
 	var invoices []Invoice
 	err := db.Find(&invoices).Error
