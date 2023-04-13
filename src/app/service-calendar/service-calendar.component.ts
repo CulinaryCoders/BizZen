@@ -41,7 +41,7 @@ export class ServiceCalendarComponent implements OnInit{
 
   ngOnInit(): void {
     this.services.forEach((service) => {
-      console.log("services received: ", service)
+      // console.log("services received: ", service)
       this.events.push({
         start: new Date(service.start_date_time),
         title: service.name,
