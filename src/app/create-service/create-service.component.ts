@@ -60,12 +60,7 @@ export class CreateServiceComponent {
   onSubmit() {
     this.errorMsg = this.verifyFields();
     if (this.errorMsg === "") {
-      // CONNECT BACKEND this.newService.value has all the info needed to add to DB User object
-      console.log(this.newService.value);
-      // let res = this.serviceService.addService(this.newService.value.name, this.newService.value.description, this.newService.value.startDateTime, this.newService.value.length, this.newService.value.capacity, this.newService.value.price)
-      let res = this.serviceService.addService1(this.newService);
-      console.log("RESSS create service: ", res)
-
+      let res = this.serviceService.addService(this.newService);
       this.router.navigateByUrl('/home', {state: {user: history.state.user}});
     }
   }
