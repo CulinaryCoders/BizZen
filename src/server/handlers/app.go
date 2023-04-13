@@ -103,6 +103,7 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/user/{id}", app.GetUser).Methods("GET")
 	app.Router.HandleFunc("/user/{id}", app.UpdateUser).Methods("PUT")
 	app.Router.HandleFunc("/user/{id}", app.DeleteUser).Methods("DELETE")
+	app.Router.HandleFunc("/users", app.GetUsers).Methods("GET")
 	app.Router.HandleFunc("/user/{id}/service-appointments", app.GetUserServiceAppointments).Methods("GET")
 
 	// Business routes
@@ -110,6 +111,7 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/business/{id}", app.GetBusiness).Methods("GET")
 	app.Router.HandleFunc("/business/{id}", app.UpdateBusiness).Methods("PUT")
 	app.Router.HandleFunc("/business/{id}", app.DeleteBusiness).Methods("DELETE")
+	app.Router.HandleFunc("/businesses", app.GetBusinesses).Methods("GET")
 
 	// Address routes
 	// app.Router.HandleFunc("/address", app.CreateAddress).Methods("POST")
@@ -132,12 +134,14 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/appointment/{id}", app.GetAppointment).Methods("GET")
 	app.Router.HandleFunc("/appointment/{id}", app.UpdateAppointment).Methods("PUT")
 	app.Router.HandleFunc("/appointment/{id}", app.DeleteAppointment).Methods("DELETE")
+	app.Router.HandleFunc("/appointments", app.GetAppointments).Methods("GET")
 
 	// Invoice routes
 	app.Router.HandleFunc("/invoice", app.CreateInvoice).Methods("POST")
 	app.Router.HandleFunc("/invoice/{id}", app.GetInvoice).Methods("GET")
 	app.Router.HandleFunc("/invoice/{id}", app.UpdateInvoice).Methods("PUT")
 	app.Router.HandleFunc("/invoice/{id}", app.DeleteInvoice).Methods("DELETE")
+	app.Router.HandleFunc("/invoices", app.GetInvoices).Methods("GET")
 
 	// Path prefix for API to work with Angular frontend
 	// WARNING: This MUST be the last route defined by the router.

@@ -144,6 +144,14 @@ func (appt *Appointment) Get(db *gorm.DB, apptID uint) (map[string]Model, error)
 	return returnRecords, err
 }
 
+// TODO:  Add documentation (func GetAll)
+func (appt *Appointment) GetAll(db *gorm.DB) ([]Appointment, error) {
+	var appts []Appointment
+	err := db.Find(&appts).Error
+
+	return appts, err
+}
+
 // TODO:  Add documentation (func GetRecordListFromSecondaryID)
 func (appt *Appointment) GetRecordListFromSecondaryID(db *gorm.DB, secondaryIDJsonKey string, secondaryID uint) ([]Appointment, error) {
 	var appts []Appointment

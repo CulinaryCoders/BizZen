@@ -168,6 +168,14 @@ func (user *User) Get(db *gorm.DB, userID uint) (map[string]Model, error) {
 	return returnRecords, err
 }
 
+// TODO:  Add documentation (func GetAll)
+func (user *User) GetAll(db *gorm.DB) ([]User, error) {
+	var users []User
+	err := db.Find(&users).Error
+
+	return users, err
+}
+
 // TODO:  Add documentation (func GetRecordListFromPrimaryIDs)
 func (user *User) GetRecordListFromPrimaryIDs(db *gorm.DB, ids []uint) ([]User, error) {
 	var users []User

@@ -110,6 +110,14 @@ func (business *Business) Get(db *gorm.DB, businessID uint) (map[string]Model, e
 	return returnRecords, err
 }
 
+// TODO:  Add documentation (func GetAll)
+func (business *Business) GetAll(db *gorm.DB) ([]Business, error) {
+	var businesses []Business
+	err := db.Find(&businesses).Error
+
+	return businesses, err
+}
+
 /*
 *Description*
 
