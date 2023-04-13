@@ -25,9 +25,9 @@ export class UserService {
   login(username: string, password: string) : Promise<void | User> {
     return this.http.post<User>('http://localhost:8080/login', {
       username, password
-    }).toPromise().then(); 
+    }).toPromise().then();
   }
-  
+
   getUser(id: string, password: string) : Promise<User>{
     return this.http.get<User>(this.getUserURL+id, {
 

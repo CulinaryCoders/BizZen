@@ -2,15 +2,14 @@ import { Component } from '@angular/core';
 import {FormGroup, FormControl, Validator, AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../user";
-import {UserService} from '../user.service';
-
+import {UserService} from "../user.service"
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  constructor(private router: Router, private activatedRoute:ActivatedRoute) {}
+  constructor(private router: Router, private activatedRoute:ActivatedRoute, private userService:UserService) {}
   userModel = new User("","", "", "", "", []);
   isBusiness = false;
   confPass = "";
@@ -52,16 +51,13 @@ export class RegisterComponent {
           this.userModel.accountType = "user"
           this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
         }
-        // TODO: add user to db
 
-        if (this.isBusiness) {
-          // this.router.navigate(["/business-onboarding"]);
-          this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
+        // Creates user in DB
+        let user1 = this.userService.addUser(this.userModel.firstName, this.userModel.lastName, this.userModel.email, this.userModel.password, this.userModel.accountType);
+        console.log("user response: ", user1);
 
-        } else {
-          // this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
-          this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
-        }
+        // Routes to profile
+        this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
       }
     }
   }
