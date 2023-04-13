@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { User } from '../user';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -14,9 +15,10 @@ export class ProfileComponent {
 
     ngOnInit()
     {
-        //this.route.params.subscribe((params:Params) => this.userIdParameter = params['idToPass'])
-        if(history.state != null)
-          this.userIdParameter = history.state.user.firstName;
+      console.log(history.state.user);
+      //this.route.params.subscribe((params:Params) => this.userIdParameter = params['idToPass'])
+        if(history.state.user != null)
+          this.userIdParameter = history.state.user.first_name;
         else
           this.userIdParameter = "ERROR: userIdParameter is null; no user was passed!";
     }
