@@ -18,12 +18,6 @@
       "formula": null
     },
     {
-      "name": "username",
-      "null_percentage": 0,
-      "type": "Username",
-      "formula": null
-    },
-    {
       "name": "password",
       "null_percentage": 0,
       "type": "Password",
