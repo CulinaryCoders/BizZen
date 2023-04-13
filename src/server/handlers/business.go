@@ -456,3 +456,27 @@ func (app *Application) DeleteBusiness(writer http.ResponseWriter, request *http
 		http.StatusOK,
 		deletedBusiness)
 }
+
+// TODO:  Add documentation (func GetInvoices)
+func (app *Application) GetBusinesses(writer http.ResponseWriter, request *http.Request) {
+	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
+	business := models.Business{}
+	var businesses []models.Business
+
+	businesses, err := business.GetAll(app.AppDB)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		businesses)
+}

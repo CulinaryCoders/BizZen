@@ -101,6 +101,14 @@ func (invoice *Invoice) Get(db *gorm.DB, invoiceID uint) (map[string]Model, erro
 	return returnRecords, err
 }
 
+// TODO:  Add documentation (func GetAll)
+func (invoice *Invoice) GetAll(db *gorm.DB) ([]Invoice, error) {
+	var invoices []Invoice
+	err := db.Find(&invoices).Error
+
+	return invoices, err
+}
+
 /*
 *Description*
 

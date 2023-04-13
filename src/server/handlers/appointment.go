@@ -482,3 +482,27 @@ func (app *Application) DeleteAppointment(writer http.ResponseWriter, request *h
 		deletedAppointment)
 
 }
+
+// TODO:  Add documentation (func GetAppointments)
+func (app *Application) GetAppointments(writer http.ResponseWriter, request *http.Request) {
+	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
+	appt := models.Appointment{}
+	var appts []models.Appointment
+
+	appts, err := appt.GetAll(app.AppDB)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		appts)
+}

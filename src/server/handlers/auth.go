@@ -51,8 +51,13 @@ Authenticates that the provided user account exists in the database and that the
 
 		Required fields:
 
-			username  <string>
+			email  <string>
+
+				Email address entered into login form
+
 			password  <string>
+
+				Plain text (unhashed) password entered into login form
 
 		Optional fields:
 
@@ -62,7 +67,7 @@ Authenticates that the provided user account exists in the database and that the
 
 	POST /login
 	{
-		"username":"testuser123",
+		"email":"johndoe@example.com",
 		"password":"ILoveCats!"
 	}
 
@@ -78,7 +83,6 @@ Authenticates that the provided user account exists in the database and that the
 		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"DeletedAt": null,
-		"username": "testuser123",
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
 		"account_type": "Individual",

@@ -487,3 +487,27 @@ func (app *Application) DeleteInvoice(writer http.ResponseWriter, request *http.
 		deletedInvoice)
 
 }
+
+// TODO:  Add documentation (func GetInvoices)
+func (app *Application) GetInvoices(writer http.ResponseWriter, request *http.Request) {
+	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
+	invoice := models.Invoice{}
+	var invoices []models.Invoice
+
+	invoices, err := invoice.GetAll(app.AppDB)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		invoices)
+}
