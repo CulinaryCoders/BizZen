@@ -22,11 +22,11 @@
                     <!--editing-->
                     <div class="form-group" [hidden] = "!isEditing">
                         <input type="text" class="form-control" id="serviceDescription"
-                            [(ngModel)]="service.description" name="description"
+                            [(ngModel)]="service.desc" name="desc"
                             #serviceDescription ="ngModel">
                     </div>
                     <!--normal view-->
-                    <p [hidden] = "isEditing" class="card-text">{{service.description}}</p>
+                    <p [hidden] = "isEditing" class="card-text">{{service.desc}}</p>
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
                 <div class="card-body">
                      <!--editing-->
                      <div class="form-group" [hidden] = "!isEditing">
-                        <input type="text" class="form-control" id="serviceDate"
+                        <input type="datetime-local" class="form-control" id="serviceDate"
                             [(ngModel)]="service.start_date_time" name="date"
                             #serviceDate ="ngModel">
                         <br>
