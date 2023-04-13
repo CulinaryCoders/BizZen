@@ -16,7 +16,6 @@ import (
 type User struct {
 	gorm.Model
 	Email       string `gorm:"not null;unique;column:email" json:"email"`                             // User's email address
-	Username    string `gorm:"not null;unique;column:username" json:"username"`                       // Username
 	Password    string `gorm:"not null;column:password" json:"password"`                              // User's hashed password
 	AccountType string `gorm:"not null;column:account_type" json:"account_type"`                      // Account type of the User record (Individual, Business, System)
 	FirstName   string `gorm:"not null;column:first_name" json:"first_name"`                          // User's first name

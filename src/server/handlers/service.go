@@ -537,6 +537,30 @@ func (app *Application) DeleteService(writer http.ResponseWriter, request *http.
 
 }
 
+// TODO:  Add documentation (func GetServices)
+func (app *Application) GetServices(writer http.ResponseWriter, request *http.Request) {
+	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
+	service := models.Service{}
+	var services []models.Service
+
+	services, err := service.GetAll(app.AppDB)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		services)
+}
+
 // TODO:  Add documentation (func GetListOfEnrolledUsers)
 func (app *Application) GetListOfEnrolledUsers(writer http.ResponseWriter, request *http.Request) {
 	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")

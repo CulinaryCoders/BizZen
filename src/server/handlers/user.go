@@ -41,10 +41,6 @@ Creates a new user account record in the database.
 
 		Required fields:
 
-			username  <string>
-
-				The username for the new user account
-
 	  		email  <string>
 
 				The email address associated with the new user account
@@ -80,7 +76,6 @@ Creates a new user account record in the database.
 
 	POST /register
 	{
-	  "username": "johndoe",
 	  "email": "johndoe@example.com",
 	  "password": "secretpassword",
 	  "account_type": "Individual",
@@ -100,7 +95,6 @@ Creates a new user account record in the database.
 		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"DeletedAt": null,
-		"username": "johndoe",
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
 		"account_type": "Individual",
@@ -214,7 +208,6 @@ Retrieves a user account record from the database by user ID if the ID exists in
 		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"DeletedAt": null,
-		"username": "johndoe",
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
 		"account_type": "Individual",
@@ -314,10 +307,6 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 		Optional fields:
 
-			username  <string>
-
-				The username for the new user account
-
 			email  <string>
 
 				The email address associated with the new user account
@@ -367,7 +356,6 @@ If a specified field's value should be deleted from the record, the appropriate 
 		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"UpdatedAt": "2022-07-11T01:23:45.6789012-14:25",
 		"DeletedAt": null,
-		"username": "johndoe",
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
 		"account_type": "Individual",
@@ -487,7 +475,6 @@ Deleted user record is returned in the response body if the operation is sucessf
 		"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
 		"DeletedAt": "2022-07-11T01:23:45.6789012-14:25",
-		"username": "johndoe",
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
 		"account_type": "Individual",

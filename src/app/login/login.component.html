@@ -3,21 +3,20 @@
   <div style="box-shadow: 5px 5px 5px lightgrey; padding: 25px; border: 1px solid lightgrey; border-radius: 30px">
     <h2>Login</h2>
     <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-      
       <div class="form-group">
-          <label for="username">Username</label>
+          <label for="username">Email</label>
           <input type="text" class="form-control" id="username" required
               [(ngModel)]="model.email" name="username"
               #username ="ngModel">
           <div [hidden]="username.valid || username.pristine"
               class="alert alert-danger">
-              Username is required
+              Email is required
           </div>
       </div>
 
       <div class="form-group">
           <label for="password">Password</label>
-          <input type="text" class="form-control" id="password" required
+          <input type="password" class="form-control" id="password" required
               [(ngModel)]="model.password" name="password"
               #pass="ngModel">
 
@@ -35,6 +34,7 @@
 
       </div>
       <button id="submitButton" (click)="onSubmit()" type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Submit</button>
+      <div [hidden]="userExists" class="alert alert-danger">The email or password is incorrect.</div>
     </form>
   </div>
   <div style="text-align: center">

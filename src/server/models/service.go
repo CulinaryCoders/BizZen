@@ -108,6 +108,14 @@ func (service *Service) Get(db *gorm.DB, serviceID uint) (map[string]Model, erro
 	return returnRecords, err
 }
 
+// TODO:  Add documentation (func GetAll)
+func (service *Service) GetAll(db *gorm.DB) ([]Service, error) {
+	var services []Service
+	err := db.Find(&services).Error
+
+	return services, err
+}
+
 // TODO:  Add documentation (func GetRecordListFromPrimaryIDs)
 func (service *Service) GetRecordListFromPrimaryIDs(db *gorm.DB, ids []uint) ([]Service, error) {
 	var services []Service
