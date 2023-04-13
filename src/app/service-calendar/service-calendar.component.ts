@@ -30,6 +30,10 @@ export class ServiceCalendarComponent implements OnInit{
   @Input() user: User;
 
   viewDate: Date = new Date();
+  monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   // @ts-ignore
