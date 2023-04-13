@@ -5,6 +5,7 @@ import { ServiceService } from '../service.service';
 import {formatDate} from '@angular/common'
 
 import { Router } from '@angular/router';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-service-page',
@@ -21,7 +22,7 @@ export class ServicePageComponent {
   isBusiness : boolean = false;
   isEditing : boolean = false;
 
-  constructor(private router:Router, private serviceService : ServiceService){}
+  constructor(private router:Router, private serviceService : ServiceService, private userService:UserService){}
 
   //empty user
   currentUser:User = {} as User;
@@ -43,8 +44,8 @@ export class ServicePageComponent {
       this.backupService = this.copyService(this.service);
 
       //get all users attached to the current service (for business view)
-      //this.serviceService.getUsers(this.service.ID)
-      //.then((users) => {this.usersSignedUp = users})   //success
+      this.serviceService.getUsers(this.service.ID)
+       .then((users) => {this.usersSignedUp = users})   //success
 
 
       //set isBusiness boolean based on current user
@@ -80,8 +81,8 @@ export class ServicePageComponent {
   joinClass()
   {
     this.userJoined = true;
-    this.currentUser.classes.push(this.service);
-    
+    this.userService.addService(this.service.ID, this.currentUser.ID).then();
+
   }
   
 

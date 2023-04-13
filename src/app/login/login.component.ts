@@ -15,7 +15,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 export class LoginComponent {
 
 
-  model = new User("","", "", "", "", []);
+  model = new User("","","", "", "", "", []);
 
   checkbox : boolean = false;
   userExists : boolean = true;

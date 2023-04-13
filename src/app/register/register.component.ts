@@ -10,7 +10,7 @@ import {UserService} from "../user.service"
 })
 export class RegisterComponent {
   constructor(private router: Router, private activatedRoute:ActivatedRoute, private userService:UserService) {}
-  userModel = new User("","", "", "", "", []);
+  userModel = new User("","","", "", "", "", []);
   isBusiness = false;
   confPass = "";
   errorMsg = "";

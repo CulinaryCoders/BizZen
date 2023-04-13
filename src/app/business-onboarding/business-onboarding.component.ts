@@ -80,7 +80,7 @@ export class BusinessOnboardingComponent {
       // CONNECT BACKEND this.onboardingForm.value has all the info needed to add to DB User object
       console.log(this.onboardingForm.value);
 
-      let user = new User("", "", "", "", "", [])
+      let user = new User("","", "", "", "", "", [])
       this.router.navigate(['/profile'], {state: {user: user }});
     }
   }
