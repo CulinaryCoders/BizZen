@@ -53,8 +53,8 @@ export class RegisterComponent {
         }
 
         // Creates user in DB
-        let user1 = this.userService.addUser(this.userModel.firstName, this.userModel.lastName, this.userModel.email, this.userModel.password, this.userModel.accountType);
-        console.log("user response: ", user1);
+        // let user1 = this.userService.addUser(this.userModel.firstName, this.userModel.lastName, this.userModel.email, this.userModel.password, this.userModel.accountType);
+        // console.log("user response: ", user1);
 
         // Routes to profile
         this.router.navigateByUrl('/profile', {state: {user: this.userModel }});

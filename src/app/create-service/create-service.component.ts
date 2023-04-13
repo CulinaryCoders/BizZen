@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormControl, FormGroup} from "@angular/forms";
-import {User} from "../user";
+import {ServiceService} from "../service.service";
 
 @Component({
   selector: 'app-create-service',
@@ -9,7 +9,7 @@ import {User} from "../user";
   styleUrls: ['./create-service.component.scss']
 })
 export class CreateServiceComponent {
-  constructor(private router: Router) {};
+  constructor(private router: Router, private serviceService:ServiceService) {};
 
   errorMsg = "";
 
@@ -19,7 +19,7 @@ export class CreateServiceComponent {
     startDateTime: new FormControl(),
     length: new FormControl(),
     capacity: new FormControl(),
-    pricePerUnit: new FormControl(),
+    price: new FormControl(),
     cancellationFee: new FormControl(),
     // businessId: history.state.user.email // TODO: email or id
   })
@@ -31,7 +31,7 @@ export class CreateServiceComponent {
     let startDateTime = this.newService.value.startDateTime
     let length = this.newService.value.length
     let capacity = this.newService.value.capacity
-    let pricePerUnit = this.newService.value.pricePerUnit
+    let pricePerUnit = this.newService.value.price
     let cancellationFee = this.newService.value.cancellationFee
     if (!name || name === "") {
       errorMsg += "ERROR Business Name Required -- "
@@ -62,6 +62,9 @@ export class CreateServiceComponent {
     if (this.errorMsg === "") {
       // CONNECT BACKEND this.newService.value has all the info needed to add to DB User object
       console.log(this.newService.value);
+      // let res = this.serviceService.addService(this.newService.value.name, this.newService.value.description, this.newService.value.startDateTime, this.newService.value.length, this.newService.value.capacity, this.newService.value.price)
+      let res = this.serviceService.addService1(this.newService);
+      console.log("RESSS create service: ", res)
 
       this.router.navigateByUrl('/home', {state: {user: history.state.user}});
     }
