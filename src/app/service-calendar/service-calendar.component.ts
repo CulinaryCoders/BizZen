@@ -61,6 +61,6 @@ export class ServiceCalendarComponent implements OnInit{
   }
 
   eventClicked({ event }: { event: CalendarEvent }): void {
-    this.router.navigateByUrl('/class-summary', {state: {user: this.user, service: event.meta.serviceObj}});
+    this.router.navigateByUrl('/class-summary', {state: {user: history.state.user, service: event.meta.serviceObj}});
   }
 }
