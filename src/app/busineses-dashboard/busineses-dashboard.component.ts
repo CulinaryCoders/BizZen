@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {Router} from "@angular/router";
 import {formatDate} from "@angular/common";
-import {Service} from "../service";
 import {User} from "../user";
+import {ServiceService} from "../service.service";
 
 @Component({
   selector: 'app-busineses-dashboard',
@@ -11,54 +11,22 @@ import {User} from "../user";
 })
 
 export class BusinesesDashboardComponent {
+  constructor(private router: Router, private serviceService: ServiceService) {};
   // @ts-ignore
-  services: any[];
+  services: any[] = [];
   // @ts-ignore
   user: User;
 
   ngOnInit() {
     this.user = history.state.user;
-    this.services = [
-      {
-        id: 1,
-        name: "Yoga",
-        description: "Easy yoga class",
-        start_date_time: new Date("4/6/2023 11:00:00"),
-        length: 120,
-        capacity: 10,
-        price: 15
-      },
-      {
-        id: 2,
-        name: "Painting",
-        description: "Intro to painting class",
-        start_date_time: new Date("4/6/2023 10:00:00"),
-        length: 120,
-        capacity: 10,
-        price: 15
-      },
-      {
-        id: 3,
-        name: "Weightlifting",
-        description: "Do you even lift",
-        start_date_time: new Date("4/11/2023 15:00:00"),
-        length: 120,
-        capacity: 10,
-        price: 15
-      },
-      {
-        id: 4,
-        name: "Computers",
-        description: "Learn how to use computer applications like Excel",
-        start_date_time: new Date("4/22/2023 13:00:00"),
-        length: 120,
-        capacity: 10,
-        price: 15
-      },
-    ];
+
+    this.serviceService.getServices().then((res)=> {
+      for (let i=0; i<res.length; i++) {
+        this.services.push(res[i]);
+      }
+    })
   }
 
-  constructor(private router: Router) {};
   businessOwnerView = history.state.user.accountType === "business";
   // TODO: read from db
   business = {

@@ -13,9 +13,9 @@ export class UserService {
   private apiUrl = 'http://localhost:8080/register';
   private getUserURL = 'http://localhost:8080/user/';
 
-  addUser(userId: string, email: string, password: string, accountType:string) : Promise<User>{
+  addUser(firstName: string, lastName: string, email: string, password: string, accountType: string) : Promise<User>{
     return this.http.post<User>(this.apiUrl, {
-        email, password, accountType
+        first_name: firstName, last_name: lastName, email: email, password: password, account_type: accountType
     }).toPromise().then();
 
   }
@@ -25,9 +25,9 @@ export class UserService {
   login(username: string, password: string) : Promise<void | User> {
     return this.http.post<User>('http://localhost:8080/login', {
       username, password
-    }).toPromise().then(); 
+    }).toPromise().then();
   }
-  
+
   getUser(id: string, password: string) : Promise<User>{
     return this.http.get<User>(this.getUserURL+id, {
 

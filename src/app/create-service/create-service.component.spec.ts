@@ -32,7 +32,7 @@ describe('CreateServiceComponent', () => {
     component.newService.value.startTime = "11:10";
     component.newService.value.endTime = "12:10";
     component.newService.value.numParticipants = 5;
-    component.newService.value.pricePerUnit = 15;
+    component.newService.value.price = 15;
 
     const allFilled = component.verifyFields();
     // Returns error message, if empty string, no errors
