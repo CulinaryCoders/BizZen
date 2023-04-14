@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"server/config"
 	"server/utils"
 )
 
@@ -14,7 +15,7 @@ func RequestLoggingMiddleware(next http.Handler) http.Handler {
 		log.Printf("INFO:  Received %s request for %s", request.Method, request.URL)
 
 		//  Log JSON body of request for POST and PUT  requests for debugging purposes
-		if request.Method == "POST" || request.Method == "PUT" {
+		if request.Method == "POST" || request.Method == "PUT" || config.Debug {
 			requestBodyBytes, err := io.ReadAll(request.Body)
 
 			if err != nil {
