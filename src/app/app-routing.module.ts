@@ -10,12 +10,14 @@ import {CreateServiceComponent} from "./create-service/create-service.component"
 import { FindClassesComponent } from './find-classes/find-classes.component';
 import { ServicePageComponent } from './service-page/service-page.component';
 import {BusinesesDashboardComponent} from "./busineses-dashboard/busineses-dashboard.component";
+import { ViewAppointmentsComponent } from './view-appointments/view-appointments.component';
 
 export const routes: Routes = [
   //more specific routes should be above less specific routes
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'view-appointments', component: ViewAppointmentsComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'onboarding', component: OnboardingComponent },
   { path: 'business-onboarding', component: BusinessOnboardingComponent },

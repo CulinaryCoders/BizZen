@@ -42,9 +42,9 @@ export class UserService {
     }).toPromise().then();
   }
 
-  getUserServices(user_id: string) : Promise<Appointment>
+  getUserServices(user_id: string) : Promise<Appointment[]>
   {
-    return this.http.get<Appointment>(this.getUserURL+user_id+'/service-appointments').toPromise().then();
+    return this.http.get<Appointment[]>(this.getUserURL+user_id+'/service-appointments').toPromise().then();
   }
 
 }

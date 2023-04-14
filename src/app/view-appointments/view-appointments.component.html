@@ -1,0 +1,31 @@
+<app-navbar></app-navbar>
+<div class="container">
+
+    <h2 class="display-2">Your Appointments</h2>
+
+    <br><br>
+ 
+    <div class="scrollbar scrollbar-primary">
+    <cdk-virtual-scroll-viewport itemSize="50" class="scroll-view">
+
+        <div *cdkVirtualFor="let item of userAppointments" class="scroll-item">    
+            <div class="card">
+                <div class="card-header">
+                    <h4>{{item.service.name}}</h4>
+                </div>
+                <div class="card-body">
+                <p class="card-text">{{item.service.desc}}</p>
+                <button (click)="routeToService(item.service)" class="btn btn-primary">View Details</button>
+                </div>
+            </div>
+            <br>
+        </div>
+
+      </cdk-virtual-scroll-viewport>
+      
+    </div>
+
+    <br>
+    <button (click)="routeToProfile()" class="btn btn-primary">Back</button>
+
+</div>

@@ -28,5 +28,8 @@ export class ProfileComponent {
     routeToClasses() {
       this.router.navigateByUrl('/home', {state: {user: history.state.user}});
     }
+    routeToAppointments() {
+      this.router.navigateByUrl('/view-appointments', {state: {user: history.state.user}});
+    }
 
 }
