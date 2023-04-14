@@ -138,15 +138,67 @@ func (service *Service) GetAll(db *gorm.DB) ([]Service, error) {
 	return services, err
 }
 
-// TODO:  Add documentation (func GetRecordListFromPrimaryIDs)
-func (service *Service) GetRecordListFromPrimaryIDs(db *gorm.DB, ids []uint) ([]Service, error) {
+/*
+*Description*
+
+func GetRecordsByPrimaryIDs
+
+Retrieves a list of Service records from the database using their IDs (primary key).
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+	ids  <[]uint>
+
+		The list of Service IDs that will be used to retrieve Service records.
+
+*Returns*
+
+	_  <[]Service>
+
+		The list of Service records that are retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
+func (service *Service) GetRecordsByPrimaryIDs(db *gorm.DB, ids []uint) ([]Service, error) {
 	var services []Service
 
 	err := db.Where(ids).Find(&services).Error
 	return services, err
 }
 
-// TODO:  Add documentation (func GetAppointments)
+/*
+*Description*
+
+func GetAppointments
+
+Retrieves the list of all Appointments that are associated with the specified Service.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+	serviceID  <uint>
+
+		The Service ID that will be used to retrieve the list of Appointment records.
+
+*Returns*
+
+	_  <[]Appointment>
+
+		The list of Appointment records that are retrieved from the database that are associated with the specified Service.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (service *Service) GetAppointments(db *gorm.DB, serviceID uint) ([]Appointment, error) {
 	var appt Appointment
 	var appts []Appointment
@@ -159,12 +211,39 @@ func (service *Service) GetAppointments(db *gorm.DB, serviceID uint) ([]Appointm
 	}
 
 	// Get list of appointments for specified ServiceID
-	appts, err = appt.GetRecordListFromSecondaryID(db, "service_id", serviceID)
+	var serviceIDJsonKey string = "service_id"
+	appts, err = appt.GetRecordsBySecondaryID(db, serviceIDJsonKey, serviceID)
 
 	return appts, err
 }
 
-// TODO:  Add documentation (func GetUsers)
+/*
+*Description*
+
+func GetUsers
+
+Retrieves the list of all the Users that have signed up for a particular Service.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+	serviceID  <uint>
+
+		The Service ID that will be used to retrieve the list of User records.
+
+*Returns*
+
+	_  <[]User>
+
+		The list of User records that are retrieved from the database that have an appointment scheduled for the specified Service.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (service *Service) GetUsers(db *gorm.DB, serviceID uint) ([]User, error) {
 	var apptsUserIDs []uint
 	var user User
@@ -182,7 +261,7 @@ func (service *Service) GetUsers(db *gorm.DB, serviceID uint) ([]User, error) {
 	}
 
 	// Get list of Users from appointment UserIDs
-	users, err = user.GetRecordListFromPrimaryIDs(db, apptsUserIDs)
+	users, err = user.GetRecordsByPrimaryIDs(db, apptsUserIDs)
 
 	return users, err
 }

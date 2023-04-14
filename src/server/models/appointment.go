@@ -174,8 +174,38 @@ func (appt *Appointment) GetAll(db *gorm.DB) ([]Appointment, error) {
 	return appts, err
 }
 
-// TODO:  Add documentation (func GetRecordListFromSecondaryID)
-func (appt *Appointment) GetRecordListFromSecondaryID(db *gorm.DB, secondaryIDJsonKey string, secondaryID uint) ([]Appointment, error) {
+/*
+*Description*
+
+func GetRecordsBySecondaryID
+
+Retrieves a list of Appointment records from the database that are associated with the specified secondary key.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+	secondaryIDJsonKey  <string>
+
+		The JSON key for the secondary ID attribute.
+
+	secondaryID  <uint>
+
+		The secondary ID value.
+
+*Returns*
+
+	_  <[]Appointment>
+
+		The list of Appointment records that are retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
+func (appt *Appointment) GetRecordsBySecondaryID(db *gorm.DB, secondaryIDJsonKey string, secondaryID uint) ([]Appointment, error) {
 	var appts []Appointment
 
 	err := db.Where(map[string]interface{}{secondaryIDJsonKey: secondaryID}).Find(&appts).Error
