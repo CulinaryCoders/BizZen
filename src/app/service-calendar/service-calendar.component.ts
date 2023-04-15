@@ -1,9 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {CalendarEvent, CalendarView} from 'angular-calendar';
-import {startOfDay} from 'date-fns';
 import {Router} from "@angular/router";
-import {Service} from "../service";
 import {User} from "../user";
+import {ServiceService} from "../service.service";
 
 @Component({
   selector: 'app-service-calendar-component',
@@ -24,13 +23,17 @@ import {User} from "../user";
   ],
 })
 export class ServiceCalendarComponent implements OnInit{
-  constructor(private router: Router) {};
+  constructor(private router: Router, private serviceService: ServiceService) {};
   // @ts-ignore
   @Input() services: any[];
   // @ts-ignore
   @Input() user: User;
 
   viewDate: Date = new Date();
+  monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   // @ts-ignore
@@ -38,8 +41,9 @@ export class ServiceCalendarComponent implements OnInit{
 
   ngOnInit(): void {
     this.services.forEach((service) => {
+      // console.log("services received: ", service)
       this.events.push({
-        start: service.start_date_time,
+        start: new Date(service.start_date_time),
         title: service.name,
         meta: {serviceObj: service},
       })
@@ -57,6 +61,6 @@ export class ServiceCalendarComponent implements OnInit{
   }
 
   eventClicked({ event }: { event: CalendarEvent }): void {
-    this.router.navigateByUrl('/class-summary', {state: {user: this.user, service: event.meta.serviceObj}});
+    this.router.navigateByUrl('/class-summary', {state: {user: history.state.user, service: event.meta.serviceObj}});
   }
 }

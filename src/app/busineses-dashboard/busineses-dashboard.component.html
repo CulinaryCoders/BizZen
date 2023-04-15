@@ -65,7 +65,14 @@
     </div>
     <div style="width: 70%; padding: 10px">
       <div class="calendar-container">
-        <app-service-calendar-component [services]="services"></app-service-calendar-component>
+        <div *ngIf="services.length > 0">
+          <app-service-calendar-component [services]="services"></app-service-calendar-component>
+        </div>
+        <div *ngIf="services.length === 0" class="flex-centered" style="text-align: center; height: 500px">
+          <div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>

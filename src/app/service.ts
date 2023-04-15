@@ -2,9 +2,9 @@
 export class Service {
 
     constructor(
-        public serviceId : string,
+        public ID : string,
         public name : string,
-        public description : string,
+        public desc : string,
         public start_date_time: Date,
         public length: number,
         public capacity: number,

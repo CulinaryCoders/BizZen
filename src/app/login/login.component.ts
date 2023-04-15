@@ -15,7 +15,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 export class LoginComponent {
 
 
-  model = new User("","", "", "", "", []);
+  model = new User("","","", "", "", "", []);
 
   checkbox : boolean = false;
   userExists : boolean = true;
@@ -47,7 +47,7 @@ export class LoginComponent {
     this.model = returnedUser as User;
     this.userExists = true;
 
-    this.router.navigateByUrl('/profile', {state: {user: this.model }});
+    this.router.navigateByUrl('/profile', {state: {user: returnedUser as User }});
   }
 
   unsuccessfulLogin()

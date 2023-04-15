@@ -13,18 +13,23 @@ import {ServiceService} from "../service.service";
 export class BusinesesDashboardComponent {
   constructor(private router: Router, private serviceService: ServiceService) {};
   // @ts-ignore
-  services: any[] = [];
+  services: any[];
+
+  srv: any[] = [];
+
+
   // @ts-ignore
   user: User;
 
   ngOnInit() {
     this.user = history.state.user;
-
-    this.serviceService.getServices().then((res)=> {
+    this.serviceService.getServices().then((res) => {
       for (let i=0; i<res.length; i++) {
-        this.services.push(res[i]);
+        this.srv.push(res[i]);
       }
-    })
+      this.services = this.srv;
+    });
+    this.services = this.srv;
   }
 
   businessOwnerView = history.state.user.accountType === "business";

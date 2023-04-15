@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Service } from '../service';
 import { User } from '../user';
+import { ServiceService } from '../service.service';
 import {formatDate} from '@angular/common'
 
 import { Router } from '@angular/router';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-service-page',
@@ -13,20 +15,22 @@ import { Router } from '@angular/router';
 export class ServicePageComponent {
 
 
-  service:Service = new Service("123", "Test Service", "Test Service description", 
+  service:Service = new Service("123", "Test Service", "Test Service desc", 
     new Date("4/11/2023 11:00:00"), 120, 10, 15);
 
   userJoined : boolean = false;
   isBusiness : boolean = false;
   isEditing : boolean = false;
 
-  constructor(private router:Router){}
+  constructor(private router:Router, private serviceService : ServiceService, private userService:UserService){}
 
   //empty user
   currentUser:User = {} as User;
 
   //for canceling edits
   backupService:Service = {} as Service; 
+
+  usersSignedUp : User[] = [];
 
   //make sure the user has been passed throughout the routing
   ngOnInit()
@@ -36,8 +40,23 @@ export class ServicePageComponent {
     {
       this.currentUser = history.state.user;
       this.service = history.state.service;
-      
+
       this.backupService = this.copyService(this.service);
+
+      //get all users attached to the current service (for business view)
+      this.serviceService.getUsers(this.service.ID)
+
+      //successful get
+       .then((users) => {
+          this.usersSignedUp = users;
+
+          //check to see if the user has already signed up
+          let index:number = this.usersSignedUp.findIndex((findUser) => this.currentUser.email == findUser.email);
+          if(index != -1)
+            this.userJoined = true;
+        }
+      );  
+
 
       //set isBusiness boolean based on current user
       if(this.currentUser.accountType.toLowerCase() == "user")
@@ -49,17 +68,10 @@ export class ServicePageComponent {
         this.isBusiness = true;
       }
 
-      //find a service so that it matches this service
-      let index:number = this.currentUser.classes.findIndex((findService) => this.service.serviceId == findService.serviceId);
-
-      //the user has already joined if the class was found
-      if(index != -1)
-        this.userJoined = true;
-
     }
     else
     {
-      console.log("ERROR: the browser state is null. Did you pass the user correctly?");
+      console.log("ERROR: the browser state is null. DID you pass the user correctly?");
     }
   }
 
@@ -72,15 +84,15 @@ export class ServicePageComponent {
   joinClass()
   {
     this.userJoined = true;
-    this.currentUser.classes.push(this.service);
-    
+    this.userService.addService(this.service.ID, this.currentUser.ID).then((result)=>console.log(result));
+
   }
   
 
   leaveClass()
   {
     this.userJoined = false;
-    let index:number = this.currentUser.classes.findIndex((findService) => this.service.serviceId == findService.serviceId);
+    let index:number = this.currentUser.classes.findIndex((findService) => this.service.ID == findService.ID);
     
     //removes the service
     this.currentUser.classes.splice(index, 1);
@@ -97,7 +109,14 @@ export class ServicePageComponent {
   saveEdit()
   {
     this.backupService = this.copyService(this.service);
+
+    //backend connection
+    this.serviceService.updateService(
+      this.service.ID, this.service.name, this.service.desc, 
+      this.service.start_date_time, this.service.length, this.service.length, this.service.price).then();
     this.isEditing = false;
+
+    history.state.service = this.service;
   }
 
   cancelEdit()
@@ -115,19 +134,21 @@ export class ServicePageComponent {
     return formatDate(day, "MMM dd, yyyy", 'en')
   }
 
+  //performs a deep copy of an input service
   copyService(input:Service)
   {
       var returnService:Service = {} as Service;
 
-      returnService.serviceId = input.serviceId;
+      returnService.ID = input.ID;
       returnService.name = input.name;
-      returnService.description = input.description;
-      returnService.start_date_time = new Date(input.start_date_time.getTime());
+      returnService.desc = input.desc;
+      returnService.start_date_time = new Date(input.start_date_time);
       returnService.length = input.length;
       returnService.capacity = input.capacity;
       returnService.price = input.price;
 
       return returnService;
+
   }
   
 }

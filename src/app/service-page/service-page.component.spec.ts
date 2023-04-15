@@ -48,7 +48,7 @@ describe('ServicePageComponent', () => {
     expect(component.userJoined).toBeTruthy();
     
     //checks that the class was added to user
-    let index:number = component.currentUser.classes.findIndex((findService) => component.service.serviceId == findService.serviceId);
+    let index:number = component.currentUser.classes.findIndex((findService) => component.service.ID == findService.ID);
     expect(index).not.toBe(-1);
   });
 
@@ -61,7 +61,7 @@ describe('ServicePageComponent', () => {
     component.joinClass();
     component.leaveClass();
 
-    let index:number = component.currentUser.classes.findIndex((findService) => component.service.serviceId == findService.serviceId);
+    let index:number = component.currentUser.classes.findIndex((findService) => component.service.ID == findService.ID);
 
     expect(component.userJoined).toBeFalsy();
     expect(index).toBe(-1);

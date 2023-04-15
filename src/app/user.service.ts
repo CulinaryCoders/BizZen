@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { Appointment } from './appointment';
 import {User} from './user';
 
 @Injectable({
@@ -12,6 +12,7 @@ export class UserService {
 
   private apiUrl = 'http://localhost:8080/register';
   private getUserURL = 'http://localhost:8080/user/';
+  private apptUrl = 'http://localhost:8080/appointment';
 
   addUser(firstName: string, lastName: string, email: string, password: string, accountType: string) : Promise<User>{
     return this.http.post<User>(this.apiUrl, {
@@ -32,6 +33,18 @@ export class UserService {
     return this.http.get<User>(this.getUserURL+id, {
 
     }).toPromise().then();
+  }
+
+  addService(service_id: string, user_id:string) : Promise<Appointment>
+  {
+    return this.http.post<Appointment>(this.apptUrl, {
+      service_id: service_id, user_id: user_id
+    }).toPromise().then();
+  }
+
+  getUserServices(user_id: string) : Promise<Appointment[]>
+  {
+    return this.http.get<Appointment[]>(this.getUserURL+user_id+'/service-appointments').toPromise().then();
   }
 
 }

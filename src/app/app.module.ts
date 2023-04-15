@@ -21,6 +21,7 @@ import { ServicePageComponent } from './service-page/service-page.component';
 import { BusinesesDashboardComponent } from './busineses-dashboard/busineses-dashboard.component';
 import { ServiceCalendarComponent } from './service-calendar/service-calendar.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { ViewAppointmentsComponent } from './view-appointments/view-appointments.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     ServicePageComponent,
     BusinesesDashboardComponent,
     ServiceCalendarComponent,
-    NavbarComponent
+    NavbarComponent,
+    ViewAppointmentsComponent
   ],
   imports: [
     BrowserModule,
