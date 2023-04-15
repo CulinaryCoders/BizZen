@@ -40,7 +40,7 @@ export class BusinesesDashboardComponent {
     });
   }
 
-  businessOwnerView = history.state.user.accountType === "business";
+  businessOwnerView = history.state.user.account_type === "business";
   // TODO: read from db
   business = {
     id: 1,
