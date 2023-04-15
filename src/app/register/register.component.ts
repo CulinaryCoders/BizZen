@@ -16,8 +16,8 @@ export class RegisterComponent {
   errorMsg = "";
 
   registerForm = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
+    first_name: new FormControl(''),
+    last_name: new FormControl(''),
     email: new FormControl(''),
     password: new FormGroup({
       pass: new FormControl(''),
@@ -32,8 +32,8 @@ export class RegisterComponent {
   }
 
   allFieldsFilled() {
-    return this.userModel.firstName && this.userModel.firstName !== ""
-      && this.userModel.lastName && this.userModel.lastName !== ""
+    return this.userModel.first_name && this.userModel.first_name !== ""
+      && this.userModel.last_name && this.userModel.last_name !== ""
       && this.userModel.email && this.userModel.email !== ""
       && this.userModel.password && this.userModel.password !== "" || false
   }
@@ -53,10 +53,14 @@ export class RegisterComponent {
         }
 
         // Creates user in DB
-        let userResponse = this.userService.addUser(this.userModel.firstName, this.userModel.lastName, this.userModel.email, this.userModel.password, this.userModel.accountType);
+        this.userService.addUser(this.userModel.first_name, this.userModel.last_name, this.userModel.email, this.userModel.password, this.userModel.accountType)
+          .then((result) =>
+            //route to profile
+            this.router.navigateByUrl('/profile', {state: {user: result }})
+          );
 
         // Routes to profile
-        this.router.navigateByUrl('/profile', {state: {user: userResponse }});
+        //this.router.navigateByUrl('/profile', {state: {user: userResponse }});
       }
     }
   }

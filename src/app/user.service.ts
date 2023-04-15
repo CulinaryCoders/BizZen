@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Appointment } from './appointment';
 import {User} from './user';
+import { ServiceAppointment } from './service-appointment';
 
 @Injectable({
   providedIn: 'root'
@@ -42,9 +43,9 @@ export class UserService {
     }).toPromise().then();
   }
 
-  getUserServices(user_id: string) : Promise<Appointment[]>
+  getUserServices(user_id: string) : Promise<ServiceAppointment[]>
   {
-    return this.http.get<Appointment[]>(this.getUserURL+user_id+'/service-appointments').toPromise().then();
+    return this.http.get<ServiceAppointment[]>(this.getUserURL+user_id+'/service-appointments').toPromise().then();
   }
 
 }

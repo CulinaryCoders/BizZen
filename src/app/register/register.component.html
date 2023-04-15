@@ -14,7 +14,7 @@
 <!--      </div>-->
       <div class="form-group">
         <label for="firstName">First Name: </label>
-        <input id="firstName" type="text" class="form-control" [(ngModel)]="userModel.firstName" name="firstName" #firstName ="ngModel">
+        <input id="firstName" type="text" class="form-control" [(ngModel)]="userModel.first_name" name="firstName" #firstName ="ngModel">
         <div [hidden]="firstName.valid || firstName.pristine"
              class="alert alert-danger">
           First name is required
@@ -22,7 +22,7 @@
       </div>
       <div class="form-group">
         <label for="lastName">Last Name: </label>
-        <input id="lastName" type="text" class="form-control" [(ngModel)]="userModel.lastName" name="lastName" #lastName ="ngModel">
+        <input id="lastName" type="text" class="form-control" [(ngModel)]="userModel.last_name" name="lastName" #lastName ="ngModel">
         <div [hidden]="lastName.valid || lastName.pristine"
              class="alert alert-danger">
           Last name is required
