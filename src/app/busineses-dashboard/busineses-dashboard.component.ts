@@ -50,6 +50,11 @@ export class BusinesesDashboardComponent {
     });
   }
 
+  ngOnChanges() {
+    console.log()
+    this.filterByDateRange(this.viewDateRange)
+  }
+
   // ngAfterContentInit() {
   //   this.allServices = this.srv.sort((a,b) => new Date(a.start_date_time).getTime() - new Date(b.start_date_time).getTime());
   //   // Filter services by date range
