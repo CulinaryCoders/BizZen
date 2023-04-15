@@ -125,11 +125,6 @@ export class ServicePageComponent {
     this.isEditing = false;
   }
 
-  debug()
-  {
-    this.isBusiness = !this.isBusiness;
-  }
-
   formatDate(day: Date) {
     return formatDate(day, "MMM dd, yyyy", 'en')
   }
