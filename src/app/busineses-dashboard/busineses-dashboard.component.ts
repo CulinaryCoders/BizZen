@@ -21,6 +21,8 @@ export class BusinesesDashboardComponent {
   // @ts-ignore
   user: User;
 
+  businessOwnerView = false;
+
   viewDateRange: any[2]
   = [
     new Date(new Date().setDate(1)), // first of the month
@@ -31,6 +33,10 @@ export class BusinesesDashboardComponent {
 
   ngOnInit() {
     this.user = history.state.user;
+
+    if(this.user.accountType == "business")
+      this.businessOwnerView = true;
+
     this.serviceService.getServices().then((res) => {
       for (let i=0; i<res?.length; i++) {
         this.srv.push(res[i]);
@@ -40,7 +46,8 @@ export class BusinesesDashboardComponent {
     });
   }
 
-  businessOwnerView = history.state.user.accountType === "business";
+
+  
   // TODO: read from db
   business = {
     id: 1,
