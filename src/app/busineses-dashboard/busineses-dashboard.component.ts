@@ -33,7 +33,7 @@ export class BusinesesDashboardComponent {
       for (let i=0; i<res.length; i++) {
         this.srv.push(res[i]);
       }
-      this.allServices = this.srv;
+      this.allServices = this.srv.sort((a,b) => new Date(a.start_date_time).getTime() - new Date(b.start_date_time).getTime());
       // Filter services by date range
       this.filterByDateRange();
     });
