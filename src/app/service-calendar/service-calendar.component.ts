@@ -1,5 +1,10 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {CalendarEvent, CalendarView} from 'angular-calendar';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {
+  CalendarEvent,
+  CalendarMonthViewBeforeRenderEvent,
+  CalendarView,
+  CalendarWeekViewBeforeRenderEvent
+} from 'angular-calendar';
 import {Router} from "@angular/router";
 import {User} from "../user";
 import {ServiceService} from "../service.service";
@@ -28,6 +33,12 @@ export class ServiceCalendarComponent implements OnInit{
   @Input() services: any[];
   // @ts-ignore
   @Input() user: User;
+  @Output() newDateRangeEvent = new EventEmitter<any[]>();
+
+  viewDateRange: any[2] = [
+    new Date().setDate(1), // first of the month
+    new Date(new Date().getFullYear(), new Date().getMonth()+1, 0) // last day of the month
+  ];
 
   viewDate: Date = new Date();
   monthNames = ["January", "February", "March", "April", "May", "June",
@@ -52,6 +63,23 @@ export class ServiceCalendarComponent implements OnInit{
 
   setView(view: CalendarView) {
     this.view = view;
+  }
+
+  viewMonthChange(e: CalendarMonthViewBeforeRenderEvent) {
+    console.log("CHANGING VIEW TO ------ month")
+    this.viewDateRange = [e.period.start, e.period.end];
+    this.newDateRangeEvent.emit(this.viewDateRange);
+  }
+
+  viewWeekChange(e: CalendarWeekViewBeforeRenderEvent) {
+    console.log("CHANGING VIEW TO ------ month")
+    this.viewDateRange = [e.period.start, e.period.end];
+    this.newDateRangeEvent.emit(this.viewDateRange);
+  }
+
+  viewDayChange(e: CalendarWeekViewBeforeRenderEvent) {
+    this.viewDateRange = [e.period.start, e.period.end];
+    this.newDateRangeEvent.emit(this.viewDateRange);
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {

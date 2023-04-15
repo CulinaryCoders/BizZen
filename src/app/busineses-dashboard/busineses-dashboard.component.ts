@@ -15,11 +15,17 @@ export class BusinesesDashboardComponent {
   // @ts-ignore
   services: any[];
 
-  srv: any[] = [];
+  allServices: any[] = [];
 
+  srv: any[] = [];
 
   // @ts-ignore
   user: User;
+
+  viewDateRange: any[2] = [
+    new Date().setDate(1), // first of the month
+    new Date(new Date().getFullYear(), new Date().getMonth()+1, 0) // last day of the month
+  ];
 
   ngOnInit() {
     this.user = history.state.user;
@@ -27,9 +33,11 @@ export class BusinesesDashboardComponent {
       for (let i=0; i<res.length; i++) {
         this.srv.push(res[i]);
       }
-      this.services = this.srv;
+      this.allServices = this.srv;
+      // Filter services by date range
+      this.filterByDateRange();
     });
-    this.services = this.srv;
+
   }
 
   businessOwnerView = history.state.user.accountType === "business";
@@ -41,6 +49,15 @@ export class BusinesesDashboardComponent {
     created_at: new Date(),
     opening_time: "11:00",
     closing_time: "19:00"
+  }
+
+  filterByDateRange() {
+    this.services = this.allServices.filter((s) => {
+      let endDateTime = this.getEndDate(new Date(s.start_date_time), s.length);
+      if (new Date(s.start_date_time) >= this.viewDateRange[0] && endDateTime <= this.viewDateRange[1]) {
+        return s;
+      }
+    });
   }
 
   formatDate(day: Date) {
@@ -57,6 +74,17 @@ export class BusinesesDashboardComponent {
 
   goToServicePage(serviceToPass: any) {
     this.router.navigateByUrl('/class-summary', {state: {user: history.state.user, service:serviceToPass}});
+  }
+
+  // Returns end date from startDateTime and length of service
+  getEndDate(startDateTime: Date, length: number) {
+    return new Date(startDateTime.getTime() + length*60000);
+  }
+
+  // Gets child data from calendar for view range
+  updateDateRange(e: any[]) {
+    this.viewDateRange = e;
+    this.filterByDateRange();
   }
 
   routeToHome() {
