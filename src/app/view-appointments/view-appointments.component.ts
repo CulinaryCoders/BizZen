@@ -4,6 +4,7 @@ import { User } from '../user';
 import { Service } from '../service';
 import { UserService } from '../user.service';
 import { Appointment } from '../appointment';
+import { ServiceAppointment } from '../service-appointment';
 
 @Component({
   selector: 'app-view-appointments',
@@ -16,7 +17,7 @@ export class ViewAppointmentsComponent {
 
   user:User = {} as User;
   services:Service[] = [];
-  userAppointments: Appointment[] = [];
+  userAppointments: ServiceAppointment[] = [];
   
 
   ngOnInit()

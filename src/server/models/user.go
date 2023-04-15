@@ -130,6 +130,12 @@ Creates a new User record in the database and returns the created record along w
 */
 func (user *User) Create(db *gorm.DB) (map[string]Model, error) {
 	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
+	// err := user.HashPassword(user.Password)
+	// if err != nil {
+	// 	returnRecords := map[string]Model{"user": user}
+	// 	return returnRecords, err
+	// }
+
 	err := db.Create(&user).Error
 	returnRecords := map[string]Model{"user": user}
 	return returnRecords, err
@@ -354,7 +360,6 @@ Retrieves the list of all Appointments (and the Service each Appointment is for)
 func (user *User) GetServiceAppointments(db *gorm.DB, userID uint) ([]map[string]interface{}, error) {
 	var appts []Appointment
 	var apptServiceID uint
-	var apptService Service
 	var serviceAppointments []map[string]interface{}
 
 	// Get list of appointments for specified UserID
@@ -367,15 +372,16 @@ func (user *User) GetServiceAppointments(db *gorm.DB, userID uint) ([]map[string
 	// Get list of ServiceIDs from user's appointments
 	for _, appt := range appts {
 		// Get Service associated with each of the user's appointments
+		apptService := Service{}
 		apptServiceID = appt.GetServiceID()
-		returnedRecords, svcErr := apptService.Get(db, apptServiceID)
+		returnRecords, svcErr := apptService.Get(db, apptServiceID)
 		if svcErr != nil {
 			var errorMessage string = fmt.Sprintf("Service ID (%d) does not exist in the database, but is associated with Appointment ID (%d).  [%s]", userID, appt.GetID(), apptErr)
 			return serviceAppointments, errors.New(errorMessage)
 		}
 
 		// Structure JSON appropriately and append to list of service appointments
-		var svcAppt map[string]interface{} = map[string]interface{}{"appointment": appt, "service": returnedRecords["service"]}
+		var svcAppt map[string]interface{} = map[string]interface{}{"appointment": appt, "service": returnRecords["service"]}
 		serviceAppointments = append(serviceAppointments, svcAppt)
 	}
 

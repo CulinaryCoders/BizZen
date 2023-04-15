@@ -31,6 +31,7 @@ export class BusinesesDashboardComponent {
 
   ngOnInit() {
     this.user = history.state.user;
+
     this.serviceService.getServices().then((res) => {
       for (let i=0; i<res?.length; i++) {
         this.srv.push(res[i]);
@@ -41,6 +42,7 @@ export class BusinesesDashboardComponent {
   }
 
   businessOwnerView = history.state.user.account_type === "business";
+
   // TODO: read from db
   business = {
     id: 1,
