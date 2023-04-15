@@ -114,7 +114,7 @@ Creates a new service record in the database.
 	Failure:
 
 		-- Case = Bad request body
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -219,14 +219,16 @@ Get service record from the database by ID.
 		}
 
 	Failure:
+
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
 		"error":"ERROR MESSAGE TEXT HERE"
 		}
 
+		-- Case = Record not found in the database
 		HTTP/1.1 404 Resource Not Found
 		Content-Type: application/json
 
@@ -371,7 +373,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 	Failure:
 		-- Case = Bad request body or missing/misformatted ID in request URL
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -491,7 +493,7 @@ Deleted service record is returned in the response body if the operation is suce
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -537,9 +539,90 @@ func (app *Application) DeleteService(writer http.ResponseWriter, request *http.
 
 }
 
-// TODO:  Add documentation (func GetServices)
+/*
+*Description*
+
+func GetServices
+
+Get a list of all Service records in the database.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:	GET
+
+	Route:	/services
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	GET /services
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				"ID": 11,
+				"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"DeletedAt": null,
+				"business_id": 66,
+				"name":"Yoga class",
+				"desc":"30 minute beginner yoga class",
+				"start_date_time":"2023-05-31T14:30:00.0000000-05:00",
+				"length":30,
+				"capacity":20,
+				"price":2000,
+				"cancel_fee":0
+			},
+			{
+				"ID": 83,
+				"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+				"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+				"DeletedAt": null,
+				"business_id": 42,
+				"name":"Caligraphy lessons",
+				"desc":"60 minute instructor-led course on caligraphy.",
+				"start_date_time":"2023-05-31T14:30:00.0000000-05:00",
+				"length":60,
+				"capacity":10,
+				"price":10000,
+				"cancel_fee":2000
+			},
+			...
+		]
+
+	Failure:
+
+		HTTP/1.1 500 InternalServerError
+		Content-Type: application/json
+
+		{
+			"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetServices(writer http.ResponseWriter, request *http.Request) {
-	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
 	service := models.Service{}
 	var services []models.Service
 
@@ -561,9 +644,94 @@ func (app *Application) GetServices(writer http.ResponseWriter, request *http.Re
 		services)
 }
 
-// TODO:  Add documentation (func GetListOfEnrolledUsers)
+/*
+*Description*
+
+func GetListOfEnrolledUsers
+
+Get a list of the User records with an active Appointment for the specified Service.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:  	GET
+
+	Route:	/service/{id}/users
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	GET /service/42/users
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				"ID": 72,
+				"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"DeletedAt": null,
+				"email": "curb-it@example.com",
+				"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
+				"account_type": "Individual",
+				"first_name": "Larry",
+				"last_name": "David",
+				"business_id": null
+			},
+			{
+				"ID": 411,
+				"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+				"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+				"DeletedAt": null,
+				"email": "bubble.guppies.witch@hotmail.com",
+				"password": "qwerQEWR174$8O4$1Qfy31MinvsYvPbOCeIXj2fSxMCh8O4$IT",
+				"account_type": "Business",
+				"first_name": "Wanda",
+				"last_name": "Sykes",
+				"business_id": 31
+			},
+			...
+		]
+
+	Failure:
+		-- Case = ID missing from or incorrectly formatted in request url
+		HTTP/1.1 400 Bad Request
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
+		-- Case = No Users with an active appointment for the Service
+		HTTP/1.1 404 Resource Not Found
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetListOfEnrolledUsers(writer http.ResponseWriter, request *http.Request) {
-	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
 	service := models.Service{}
 	serviceID, err := utils.ParseRequestID(request)
 
@@ -595,9 +763,69 @@ func (app *Application) GetListOfEnrolledUsers(writer http.ResponseWriter, reque
 		users)
 }
 
-// TODO:  Add documentation (func GetEnrolledUsersCount)
+/*
+*Description*
+
+func GetEnrolledUsersCount
+
+Get the number of User records with an active Appointment for the specified Service.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:  	GET
+
+	Route:	/service/{id}/users-count
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	POST /service/42/users-count
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		Body (12 users with an active appointment for the specified Service ID):
+		12
+
+	Failure:
+		-- Case = ID missing from or incorrectly formatted in request url
+		HTTP/1.1 400 Bad Request
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
+		-- Case = Service record not found
+		HTTP/1.1 404 Resource Not Found
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetEnrolledUsersCount(writer http.ResponseWriter, request *http.Request) {
-	// log.Print("Undefined route handler requested  --  GetEnrolledUsersCount")
 	service := models.Service{}
 	serviceID, err := utils.ParseRequestID(request)
 

@@ -96,7 +96,6 @@ func (app *Application) initializeRoutes() {
 		fmt.Fprint(writer, "Hello, World!")
 	})
 
-	// TODO: Possible to create generic handler method(s) to reduce duplicate code?
 	// User routes
 	app.Router.HandleFunc("/register", app.CreateUser).Methods("POST")
 	app.Router.HandleFunc("/login", app.Authenticate).Methods("POST")
@@ -112,6 +111,8 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/business/{id}", app.UpdateBusiness).Methods("PUT")
 	app.Router.HandleFunc("/business/{id}", app.DeleteBusiness).Methods("DELETE")
 	app.Router.HandleFunc("/businesses", app.GetBusinesses).Methods("GET")
+	// TODO: app.Router.HandleFunc("/business/{id}/services", app.GetBusinessServices).Methods("GET")
+	// TODO: app.Router.HandleFunc("/business/{id}/service-appointments", app.GetBusinessServiceAppointments).Methods("GET")
 
 	// Address routes
 	// app.Router.HandleFunc("/address", app.CreateAddress).Methods("POST")
@@ -128,6 +129,7 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/service/{service-id}/user/{user-id}", app.GetUserEnrolledStatus).Methods("GET")
 	app.Router.HandleFunc("/service/{id}/users", app.GetListOfEnrolledUsers).Methods("GET")
 	app.Router.HandleFunc("/service/{id}/user-count", app.GetEnrolledUsersCount).Methods("GET")
+	// TODO: app.Router.HandleFunc("/service/{id}/user-appointments", app.GetUserAppointments).Methods("GET")
 
 	// Appointment routes
 	app.Router.HandleFunc("/appointment", app.CreateAppointment).Methods("POST")
@@ -135,6 +137,7 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/appointment/{id}", app.UpdateAppointment).Methods("PUT")
 	app.Router.HandleFunc("/appointment/{id}", app.DeleteAppointment).Methods("DELETE")
 	app.Router.HandleFunc("/appointments", app.GetAppointments).Methods("GET")
+	// TODO: app.Router.HandleFunc("/appointment/{id}/cancel", app.CancelAppointment).Methods("POST")
 
 	// Invoice routes
 	app.Router.HandleFunc("/invoice", app.CreateInvoice).Methods("POST")

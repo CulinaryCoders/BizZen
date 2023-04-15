@@ -168,7 +168,29 @@ func (user *User) Get(db *gorm.DB, userID uint) (map[string]Model, error) {
 	return returnRecords, err
 }
 
-// TODO:  Add documentation (func GetAll)
+/*
+*Description*
+
+func GetAll
+
+Retrieves all User records from the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+*Returns*
+
+	_  <[]User>
+
+		The list of User records that are retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (user *User) GetAll(db *gorm.DB) ([]User, error) {
 	var users []User
 	err := db.Find(&users).Error
@@ -176,24 +198,159 @@ func (user *User) GetAll(db *gorm.DB) ([]User, error) {
 	return users, err
 }
 
-// TODO:  Add documentation (func GetRecordListFromPrimaryIDs)
-func (user *User) GetRecordListFromPrimaryIDs(db *gorm.DB, ids []uint) ([]User, error) {
+/*
+*Description*
+
+func GetRecordsByPrimaryIDs
+
+Retrieves a list of User records from the database using their IDs (primary key).
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+	ids  <[]uint>
+
+		The list of User IDs that will be used to retrieve User records.
+
+*Returns*
+
+	_  <[]User>
+
+		The list of User records that are retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
+func (user *User) GetRecordsByPrimaryIDs(db *gorm.DB, ids []uint) ([]User, error) {
 	var users []User
 
 	err := db.Where(ids).Find(&users).Error
 	return users, err
 }
 
-// TODO:  Add documentation (func GetAppointments)
+/*
+*Description*
+
+func GetAppointments
+
+Retrieves the list of all Appointments that are associated with the specified User.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+	userID  <uint>
+
+		The User ID that will be used to retrieve the list of Appointment records.
+
+*Returns*
+
+	_  <[]Appointment>
+
+		The list of Appointment records that are retrieved from the database that are associated with the specified User.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (user *User) GetAppointments(db *gorm.DB, userID uint) ([]Appointment, error) {
 	var appt Appointment
 	var appts []Appointment
 
-	appts, err := appt.GetRecordListFromSecondaryID(db, "user_id", userID)
+	appts, err := appt.GetRecordsBySecondaryID(db, "user_id", userID)
 	return appts, err
 }
 
-// TODO:  Add documentation (func GetServiceAppointments)
+/*
+*Description*
+
+func GetServiceAppointments
+
+Retrieves the list of all Appointments (and the Service each Appointment is for) that are associated with the specified User.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+	userID  <uint>
+
+		The User ID that will be used to retrieve the list of Appointment/Service records.
+
+*Returns*
+
+	_  <[]map[string]interface{}>
+
+		A list of JSON objects that each have an "appointment" key and a "service" key with the respective Appointment/Service record.
+
+		Ex:
+			[
+				{
+					"appointment": {
+						"ID":11,
+						"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+						"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+						"DeletedAt": null,
+						"service_id":22,
+						"user_id":33,
+						"cancel_date_time":null,
+						"active":true
+					},
+					"service": {
+						"ID": 22,
+						"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+						"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+						"DeletedAt": null,
+						"business_id":42,
+						"name":"Yoga class",
+						"desc":"30 minute beginner yoga class",
+						"start_date_time":"2023-05-31T14:30:00.0000000-05:00",
+						"length":30,
+						"capacity":20,
+						"price":2000,
+						"cancel_fee":0
+					}
+				},
+				{
+					"appointment": {
+						"ID":44,
+						"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+						"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+						"DeletedAt": null,
+						"service_id":55,
+						"user_id":66,
+						"cancel_date_time":null,
+						"active":true
+					},
+					"service": {
+						"ID": 55,
+						"CreatedAt": "2020-02-05T01:23:45.6789012-05:00",
+						"UpdatedAt": "2020-02-05T01:23:45.6789012-05:00",
+						"DeletedAt": null,
+						"business_id":99,
+						"name":"Spin class",
+						"desc":"60 minute intermediate spin class",
+						"start_date_time":"2023-04-20T10:00:00.0000000-05:00",
+						"length":60,
+						"capacity":10,
+						"price":5000,
+						"cancel_fee":1000
+					}
+				},
+				...
+			]
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (user *User) GetServiceAppointments(db *gorm.DB, userID uint) ([]map[string]interface{}, error) {
 	var appts []Appointment
 	var apptServiceID uint
@@ -206,7 +363,6 @@ func (user *User) GetServiceAppointments(db *gorm.DB, userID uint) ([]map[string
 		var errorMessage string = fmt.Sprintf("User ID (%d) does not have any appointment records in the database.  [%s]", userID, apptErr)
 		return serviceAppointments, errors.New(errorMessage)
 	}
-	//err = db.Model(&Appointment{}).Distinct("services.*").Joins("left join appointments on appointments.service_id = services.id and appointments.user_id = ?", userID).Scan(&services).Error
 
 	// Get list of ServiceIDs from user's appointments
 	for _, appt := range appts {
@@ -226,6 +382,37 @@ func (user *User) GetServiceAppointments(db *gorm.DB, userID uint) ([]map[string
 	return serviceAppointments, nil
 }
 
+/*
+*Description*
+
+func HasServiceAppointment
+
+Returns whether the specified User has an Appointment scheduled for the specified Service.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be used to verify the User's Appointment status.
+
+	userID  <uint>
+
+		The ID of the User record
+
+	serviceID  <uint>
+
+		The ID of the Service record
+
+*Returns*
+
+	_  <bool>
+
+		'True' if User has an Appointment for the specfied Service. 'False' if not.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
 func (user *User) HasServiceAppointment(db *gorm.DB, userID uint, serviceID uint) (bool, error) {
 	var appts []Appointment
 	var apptServiceID uint

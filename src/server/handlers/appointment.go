@@ -89,7 +89,7 @@ Creates a new appointment record in the database.
 	Failure:
 
 		-- Case = Bad request body
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -191,7 +191,7 @@ Get appointment record from the database by ID.
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -321,7 +321,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 	Failure:
 		-- Case = Bad request body or missing/misformatted ID in request URL
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -437,7 +437,7 @@ Deleted appointment record is returned in the response body if the operation is 
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -483,9 +483,82 @@ func (app *Application) DeleteAppointment(writer http.ResponseWriter, request *h
 
 }
 
-// TODO:  Add documentation (func GetAppointments)
+/*
+*Description*
+
+func GetAppointments
+
+Get a list of all Appointment records in the database.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:	GET
+
+	Route:	/appointments
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	GET /appointments
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				"ID": 123,
+				"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"DeletedAt": null,
+				"service_id":11,
+				"user_id":22,
+				"cancel_date_time":null,
+				"active":true
+			},
+			{
+				"ID": 456,
+				"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+				"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+				"DeletedAt": null,
+				"service_id":42,
+				"user_id":99,
+				"cancel_date_time":null,
+				"active":true
+			},
+			...
+		]
+
+	Failure:
+
+		HTTP/1.1 500 InternalServerError
+		Content-Type: application/json
+
+		{
+			"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetAppointments(writer http.ResponseWriter, request *http.Request) {
-	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
 	appt := models.Appointment{}
 	var appts []models.Appointment
 

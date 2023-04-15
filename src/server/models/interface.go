@@ -18,6 +18,10 @@ type Model interface {
 	Update(db *gorm.DB, id uint, updates map[string]interface{}) (map[string]Model, error)
 	Delete(db *gorm.DB, id uint) (map[string]Model, error)
 	GetID() uint
+	// TODO: GetAll
+	// TODO: GetRecordsByPrimaryIDs
+	// TODO: GetRecordsBySecondaryID
+	// TODO: GetRecordsBySecondaryIDs
 }
 
 /*

@@ -45,7 +45,17 @@ export class ServicePageComponent {
 
       //get all users attached to the current service (for business view)
       this.serviceService.getUsers(this.service.ID)
-       .then((users) => {this.usersSignedUp = users})   //success
+
+      //successful get
+       .then((users) => {
+          this.usersSignedUp = users;
+
+          //check to see if the user has already signed up
+          let index:number = this.usersSignedUp.findIndex((findUser) => this.currentUser.email == findUser.email);
+          if(index != -1)
+            this.userJoined = true;
+        }
+      );  
 
 
       //set isBusiness boolean based on current user
@@ -57,13 +67,6 @@ export class ServicePageComponent {
       {
         this.isBusiness = true;
       }
-
-      //find a service so that it matches this service
-      let index:number = this.currentUser.classes.findIndex((findService) => this.service.ID == findService.ID);
-
-      //the user has already joined if the class was found
-      if(index != -1)
-        this.userJoined = true;
 
     }
     else
@@ -81,7 +84,7 @@ export class ServicePageComponent {
   joinClass()
   {
     this.userJoined = true;
-    this.userService.addService(this.service.ID, this.currentUser.ID).then();
+    this.userService.addService(this.service.ID, this.currentUser.ID).then((result)=>console.log(result));
 
   }
   
