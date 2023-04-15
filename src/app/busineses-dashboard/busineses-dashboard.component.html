@@ -28,7 +28,7 @@
         Open from <b>{{business.opening_time}}</b> until <b>{{business.closing_time}}</b>
         <br/><br/>
       </div>
-      services: {{services.length}}
+<!--      <p *ngIf="services">services: {{services.length}}</p>-->
       <ul style="padding: 5px 20px; border: 1px solid grey; border-radius: 5px; max-height: 70vh; overflow: scroll">
         <li
           *ngFor="let service of services"
@@ -70,7 +70,7 @@
         <div *ngIf="services !== undefined">
           <app-service-calendar-component [services]="services" (newDateRangeEvent)="updateDateRange($event)"></app-service-calendar-component>
         </div>
-        <div *ngIf="services.length === 0" class="flex-centered" style="text-align: center; height: 500px">
+        <div *ngIf="services === undefined" class="flex-centered" style="text-align: center; height: 500px">
           <div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
             <span class="sr-only">Loading...</span>
           </div>

@@ -33,7 +33,7 @@ export class ServiceCalendarComponent implements OnInit{
   @Input() services: any[];
   // @ts-ignore
   @Input() user: User;
-  @Output() newDateRangeEvent = new EventEmitter<any[]>();
+  @Output() newDateRangeEvent = new EventEmitter<any[]>(true);
 
   viewDateRange: any[2] = [
     new Date().setDate(1), // first of the month
@@ -52,7 +52,6 @@ export class ServiceCalendarComponent implements OnInit{
 
   ngOnInit(): void {
     this.services.forEach((service) => {
-      // console.log("services received: ", service)
       this.events.push({
         start: new Date(service.start_date_time),
         title: service.name,
@@ -66,13 +65,11 @@ export class ServiceCalendarComponent implements OnInit{
   }
 
   viewMonthChange(e: CalendarMonthViewBeforeRenderEvent) {
-    console.log("CHANGING VIEW TO ------ month")
     this.viewDateRange = [e.period.start, e.period.end];
     this.newDateRangeEvent.emit(this.viewDateRange);
   }
 
   viewWeekChange(e: CalendarWeekViewBeforeRenderEvent) {
-    console.log("CHANGING VIEW TO ------ month")
     this.viewDateRange = [e.period.start, e.period.end];
     this.newDateRangeEvent.emit(this.viewDateRange);
   }
@@ -83,7 +80,6 @@ export class ServiceCalendarComponent implements OnInit{
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    console.log(date);
     this.viewDate = date;
     this.view = CalendarView.Day;
   }
