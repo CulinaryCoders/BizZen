@@ -94,7 +94,7 @@ Creates a new invoice record in the database.
 	Failure:
 
 		-- Case = Bad request body
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -196,7 +196,7 @@ Get invoice record from the database by ID.
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -326,7 +326,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 	Failure:
 		-- Case = Bad request body or missing/misformatted ID in request URL
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -442,7 +442,7 @@ Deleted invoice record is returned in the response body if the operation is suce
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -488,9 +488,82 @@ func (app *Application) DeleteInvoice(writer http.ResponseWriter, request *http.
 
 }
 
-// TODO:  Add documentation (func GetInvoices)
+/*
+*Description*
+
+func GetInvoices
+
+Get a list of all Invoice records in the database.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:	GET
+
+	Route:	/invoices
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	GET /invoices
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				"ID": 123,
+				"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"DeletedAt": null,
+				"appointment_id":41,
+				"original_balance":5000,
+				"remaining_balance":5000,
+				"status":"Unpaid"
+			},
+			{
+				"ID": 98,
+				"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+				"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+				"DeletedAt": null,
+				"appointment_id":292,
+				"original_balance":2000,
+				"remaining_balance":0,
+				"status":"Paid"
+			},
+			...
+		]
+
+	Failure:
+
+		HTTP/1.1 500 InternalServerError
+		Content-Type: application/json
+
+		{
+			"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetInvoices(writer http.ResponseWriter, request *http.Request) {
-	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
 	invoice := models.Invoice{}
 	var invoices []models.Invoice
 

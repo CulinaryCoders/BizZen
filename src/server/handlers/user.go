@@ -105,7 +105,7 @@ Creates a new user account record in the database.
 
 	Failure:
 		-- Case = Bad request body
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -218,7 +218,7 @@ Retrieves a user account record from the database by user ID if the ID exists in
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -366,7 +366,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 	Failure:
 		-- Case = Bad request body or missing/bad ID in request URL
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -485,7 +485,7 @@ Deleted user record is returned in the response body if the operation is sucessf
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -530,9 +530,86 @@ func (app *Application) DeleteUser(writer http.ResponseWriter, request *http.Req
 		deletedUser)
 }
 
-// TODO:  Add documentation (func GetUsers)
+/*
+*Description*
+
+func GetUsers
+
+Get a list of all User records in the database.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:	GET
+
+	Route:	/users
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	GET /users
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				"ID": 72,
+				"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"DeletedAt": null,
+				"email": "curb-it@example.com",
+				"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
+				"account_type": "Individual",
+				"first_name": "Larry",
+				"last_name": "David",
+				"business_id": null
+			},
+			{
+				"ID": 411,
+				"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+				"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+				"DeletedAt": null,
+				"email": "bubble.guppies.witch@hotmail.com",
+				"password": "qwerQEWR174$8O4$1Qfy31MinvsYvPbOCeIXj2fSxMCh8O4$IT",
+				"account_type": "Business",
+				"first_name": "Wanda",
+				"last_name": "Sykes",
+				"business_id": 31
+			},
+			...
+		]
+
+	Failure:
+
+		HTTP/1.1 500 InternalServerError
+		Content-Type: application/json
+
+		{
+			"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetUsers(writer http.ResponseWriter, request *http.Request) {
-	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
 	user := models.User{}
 	var users []models.User
 
@@ -554,7 +631,68 @@ func (app *Application) GetUsers(writer http.ResponseWriter, request *http.Reque
 		users)
 }
 
-// TODO:  Add documentation (func GetUserEnrolledStatus)
+/*
+*Description*
+
+func GetUserEnrolledStatus
+
+Returns 'true' if User has an active appointment for the specified Service ('false' if they don't).
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+	   The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:  	GET
+
+	Route:	/user/{id}/service/{id}
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	GET /user/420/service/99
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		Body:
+		true/false
+
+	Failure:
+		-- Case = Required ID field missing from or incorrectly formatted in request url
+		HTTP/1.1 400 Bad Request
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
+		-- Other errors
+		HTTP/1.1 500 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetUserEnrolledStatus(writer http.ResponseWriter, request *http.Request) {
 	var serviceIDKey string = "service-id"
 	var userIDKey string = "user-id"
@@ -596,9 +734,122 @@ func (app *Application) GetUserEnrolledStatus(writer http.ResponseWriter, reques
 		hasServiceAppointment)
 }
 
-// TODO:  Add documentation (func GetUserServiceAppointments)
+/*
+*Description*
+
+func GetUserServiceAppointments
+
+Get a list of all the Appointments (and the associated Service for each Appointment record) for the specified User.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:  	GET
+
+	Route:	/user/{id}/service-appointments
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	POST /user/42/service-appointments
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				"appointment": {
+					"ID": 123,
+					"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+					"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+					"DeletedAt": null,
+					"service_id":11,
+					"user_id":42,
+					"cancel_date_time":null,
+					"active":true
+				},
+				"service": {
+					"ID": 11,
+					"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+					"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+					"DeletedAt": null,
+					"business_id": 66,
+					"name":"Yoga class",
+					"desc":"30 minute beginner yoga class",
+					"start_date_time":"2023-05-31T14:30:00.0000000-05:00",
+					"length":30,
+					"capacity":20,
+					"price":2000,
+					"cancel_fee":0
+				}
+			},
+			{
+				"appointment": {
+					"ID": 456,
+					"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+					"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+					"DeletedAt": null,
+					"service_id":83,
+					"user_id":42,
+					"cancel_date_time":null,
+					"active":true
+				},
+				"service": {
+					"ID": 83,
+					"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+					"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+					"DeletedAt": null,
+					"business_id": 91,
+					"name":"Caligraphy lessons",
+					"desc":"60 minute instructor-led course on caligraphy.",
+					"start_date_time":"2023-05-31T14:30:00.0000000-05:00",
+					"length":60,
+					"capacity":10,
+					"price":10000,
+					"cancel_fee":2000
+				}
+			},
+			...
+		]
+
+	Failure:
+		-- Case = ID missing from or incorrectly formatted in request url
+		HTTP/1.1 400 Bad Request
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
+		-- Other errors
+		HTTP/1.1 500 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetUserServiceAppointments(writer http.ResponseWriter, request *http.Request) {
-	// log.Print("Undefined route handler requested  --  GetUserServiceAppointments")
 	user := models.User{}
 	userID, err := utils.ParseRequestID(request)
 
@@ -616,7 +867,7 @@ func (app *Application) GetUserServiceAppointments(writer http.ResponseWriter, r
 	if err != nil {
 		utils.RespondWithError(
 			writer,
-			http.StatusNotFound,
+			http.StatusInternalServerError,
 			err.Error())
 
 		log.Printf("ERROR:  %s", err.Error())
