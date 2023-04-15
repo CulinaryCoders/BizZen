@@ -58,7 +58,7 @@ export class ServiceCalendarComponent implements OnInit{
         title: service.name,
         meta: {serviceObj: service},
       })
-    })
+    });
   }
 
   setView(view: CalendarView) {

@@ -11,9 +11,8 @@ import {ServiceService} from "../service.service";
 })
 
 export class BusinesesDashboardComponent {
-  constructor(private router: Router, private serviceService: ServiceService) {};
   // @ts-ignore
-  services: any[];
+  services: any[]; // services to be displayed (filtered)
 
   allServices: any[] = [];
 
@@ -22,23 +21,40 @@ export class BusinesesDashboardComponent {
   // @ts-ignore
   user: User;
 
-  viewDateRange: any[2] = [
-    new Date().setDate(1), // first of the month
+  viewDateRange: any[2]
+  = [
+    new Date(new Date().setDate(1)), // first of the month
     new Date(new Date().getFullYear(), new Date().getMonth()+1, 0) // last day of the month
   ];
+
+  constructor(private router: Router, private serviceService: ServiceService) {};
 
   ngOnInit() {
     this.user = history.state.user;
     this.serviceService.getServices().then((res) => {
-      for (let i=0; i<res.length; i++) {
-        this.srv.push(res[i]);
+      if (res !== undefined) {
+        for (let i=0; i<res.length; i++) {
+          this.srv.push(res[i]);
+        }
+        this.allServices = this.srv.sort((a,b) => new Date(a.start_date_time).getTime() - new Date(b.start_date_time).getTime());
+        this.services = this.allServices;
       }
-      this.allServices = this.srv.sort((a,b) => new Date(a.start_date_time).getTime() - new Date(b.start_date_time).getTime());
-      // Filter services by date range
-      this.filterByDateRange();
-    });
 
+      // Filter services by date range
+      // this.services =
+      // this.filterByDateRange();
+      // this.filterByDateRange([
+      //   new Date(new Date().setDate(1)), // first of the month
+      //   new Date(new Date().getFullYear(), new Date().getMonth()+1, 0) // last day of the month
+      // ]);
+    });
   }
+
+  // ngAfterContentInit() {
+  //   this.allServices = this.srv.sort((a,b) => new Date(a.start_date_time).getTime() - new Date(b.start_date_time).getTime());
+  //   // Filter services by date range
+  //   this.services = this.filterByDateRange();
+  // }
 
   businessOwnerView = history.state.user.accountType === "business";
   // TODO: read from db
@@ -51,13 +67,24 @@ export class BusinesesDashboardComponent {
     closing_time: "19:00"
   }
 
-  filterByDateRange() {
+  filterByDateRange(e: any[]) {
+    // console.log("e received: ", e);
+    this.viewDateRange = e;
+    // console.log("viewdaterange: ", this.viewDateRange);
     this.services = this.allServices.filter((s) => {
       let endDateTime = this.getEndDate(new Date(s.start_date_time), s.length);
-      if (new Date(s.start_date_time) >= this.viewDateRange[0] && endDateTime <= this.viewDateRange[1]) {
-        return s;
-      }
+      // if (new Date(s.start_date_time) >= this.viewDateRange[0] && endDateTime <= this.viewDateRange[1]) {
+      //   return s;
+      // }
+      // return new Date(s.start_date_time) >= this.viewDateRange[0] && endDateTime <= this.viewDateRange[1]
+      return new Date(s.start_date_time) >= e[0] && endDateTime <= e[1]
     });
+    // return this.allServices.filter((s) => {
+    //   let endDateTime = this.getEndDate(new Date(s.start_date_time), s.length);
+    //   if (new Date(s.start_date_time) >= this.viewDateRange[0] && endDateTime <= this.viewDateRange[1]) {
+    //     return s;
+    //   }
+    // });
   }
 
   formatDate(day: Date) {
@@ -83,8 +110,17 @@ export class BusinesesDashboardComponent {
 
   // Gets child data from calendar for view range
   updateDateRange(e: any[]) {
+    console.log("--- date range: ", e)
+    console.log("--- BEFORE updated serviceSSSSSS: ", this.services)
+
+    console.log("e received: ", e);
     this.viewDateRange = e;
-    this.filterByDateRange();
+    console.log("viewdaterange: ", this.viewDateRange);
+
+
+    // this.services =
+    this.filterByDateRange(e);
+    console.log("--- updated serviceSSSSSS: ", this.services)
   }
 
   routeToHome() {

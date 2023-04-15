@@ -67,7 +67,7 @@
     </div>
     <div style="width: 70%; padding: 10px">
       <div class="calendar-container">
-        <div *ngIf="services.length > 0">
+        <div *ngIf="services !== undefined">
           <app-service-calendar-component [services]="services" (newDateRangeEvent)="updateDateRange($event)"></app-service-calendar-component>
         </div>
         <div *ngIf="services.length === 0" class="flex-centered" style="text-align: center; height: 500px">
