@@ -37,6 +37,7 @@
     <h4 *ngIf="view === CalendarView.Month" style="text-align: center; margin-top: 0">{{monthNames[viewDate.getMonth()]}}</h4>
     <mwl-calendar-month-view
       (dayClicked)="dayClicked($event.day)"
+      (beforeViewRender)="viewMonthChange($event)"
       *ngSwitchCase="CalendarView.Month"
       [viewDate]="viewDate"
       [events]="events"
@@ -44,6 +45,7 @@
     </mwl-calendar-month-view>
 
     <mwl-calendar-week-view
+      (beforeViewRender)="viewWeekChange($event)"
       *ngSwitchCase="CalendarView.Week"
       [viewDate]="viewDate"
       [events]="events"
@@ -58,6 +60,7 @@
       {{viewDate.getFullYear()}}
     </h4>
     <mwl-calendar-day-view
+      (beforeViewRender)="viewDayChange($event)"
       *ngSwitchCase="CalendarView.Day"
       [viewDate]="viewDate"
       [events]="events"

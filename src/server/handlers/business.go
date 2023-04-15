@@ -85,7 +85,7 @@ Creates a new business record in the database and returns them as JSON in the re
 	Failure:
 
 		-- Case = Bad request body
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -184,7 +184,7 @@ Get Business record from the database by ID.
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -306,7 +306,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 	Failure:
 		-- Case = Bad request body or missing/misformatted ID in request URL
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -416,7 +416,7 @@ Deleted Business record is returned in the response body if the operation is suc
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -457,9 +457,78 @@ func (app *Application) DeleteBusiness(writer http.ResponseWriter, request *http
 		deletedBusiness)
 }
 
-// TODO:  Add documentation (func GetInvoices)
+/*
+*Description*
+
+func GetBusinesses
+
+Get a list of all Business records in the database.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:	GET
+
+	Route:	/businesses
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	GET /businesses
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				"ID": 727,
+				"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"DeletedAt": null,
+				"owner_id": 123,
+				"name": "Later Gator LLC"
+			},
+			{
+				"ID": 813,
+				"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+				"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+				"DeletedAt": null,
+				"owner_id": 420,
+				"name": "Abraham's Resort & Spa"
+			},
+			...
+		]
+
+	Failure:
+
+		HTTP/1.1 500 InternalServerError
+		Content-Type: application/json
+
+		{
+			"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetBusinesses(writer http.ResponseWriter, request *http.Request) {
-	// log.Print("Undefined route handler requested  --  GetListOfEnrolledUsers")
 	business := models.Business{}
 	var businesses []models.Business
 

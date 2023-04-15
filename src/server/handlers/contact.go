@@ -97,7 +97,7 @@ Creates a new address record in the database.
 	Failure:
 
 		-- Case = Bad request body
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -200,7 +200,7 @@ Get address record from the database by ID.
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -338,7 +338,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 
 	Failure:
 		-- Case = Bad request body or missing/misformatted ID in request URL
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{
@@ -455,7 +455,7 @@ Deleted address record is returned in the response body if the operation is suce
 
 	Failure:
 		-- Case = ID missing from or incorrectly formatted in request url
-		HTTP/1.1 400 Internal Server Error
+		HTTP/1.1 400 Bad Request
 		Content-Type: application/json
 
 		{

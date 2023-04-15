@@ -91,7 +91,7 @@ Authenticates that the provided user account exists in the database and that the
 		"contact_info_id": 45,
 		"business_id": null,
 		"permissions_id": 123,
-		"user_pref_id": 88,
+		"user_pref_id": 42,
 		"profile_pic_id": 79
 		}
 
