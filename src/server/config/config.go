@@ -29,6 +29,7 @@ type Configuration struct {
 	FRONTEND_HOST     string `mapstructure:"FRONTEND_HOST"`
 	FRONTEND_PORT     int    `mapstructure:"FRONTEND_PORT"`
 	DEBUG_MODE        bool   `mapstructure:"DEBUG_MODE"`
+	LOAD_TEST_RECORDS bool   `mapstructure:"LOAD_TEST_RECORDS"`
 }
 
 // Initialize method creates and initializes new Configuration object

@@ -12,5 +12,6 @@
     "API_SERVER_PORT": null,
     "FRONTEND_HOST": null,
     "FRONTEND_PORT": null,
-    "DEBUG_MODE": null
+    "DEBUG_MODE": null,
+    "LOAD_TEST_RECORDS": null
 }
