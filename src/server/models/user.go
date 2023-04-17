@@ -11,7 +11,6 @@ import (
 )
 
 // TODO: Add foreign key logic to User model
-// TODO: Add constraint for AccountType column to limit user types
 // GORM model for all User records in the database
 type User struct {
 	gorm.Model
@@ -23,12 +22,24 @@ type User struct {
 	BusinessID  *uint  `gorm:"column:business_id;default:null" json:"business_id"` // ID of the Business record associated with the User record
 }
 
-// TODO:  Add documentation for GORM db hook (func StandardizeFields)
+// TODO:  Add documentation for function (func StandardizeFields)
 func (user *User) StandardizeFields() {
 	user.Email = StandardizeEmailAddress(user.Email)
 	user.FirstName = StandardizeNameField(user.FirstName)
 	user.LastName = StandardizeNameField(user.LastName)
 	user.AccountType = StandardizeUserAccountType(user.AccountType)
+}
+
+// TODO:  Add documentation for GORM db hook (func BeforeCreate)
+func (user *User) BeforeCreate(db *gorm.DB) error {
+	user.StandardizeFields()
+
+	if !UserAccountTypeIsValid(user.AccountType) {
+		var errorMessage string = fmt.Sprintf("Invalid account type specified when creating new User record (account_type = %s). Account type must be 'Individual', 'Business', or 'System'.", user.AccountType)
+		return errors.New(errorMessage)
+	}
+
+	return nil
 }
 
 /*
