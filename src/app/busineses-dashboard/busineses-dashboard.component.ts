@@ -76,7 +76,7 @@ export class BusinesesDashboardComponent {
   }
 
   goToServicePage(serviceToPass: any) {
-    this.router.navigateByUrl('/class-summary', {state: {user: history.state.user, service:serviceToPass}});
+    this.router.navigateByUrl('/class-summary', {state: {user: history.state.user, service:serviceToPass, prevPage: '/home'}});
   }
 
   // Returns end date from startDateTime and length of service
