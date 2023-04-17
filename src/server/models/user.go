@@ -145,7 +145,7 @@ Retrieves a User record in the database by ID if it exists and returns that reco
 		Encountered error (nil if no errors are encountered)
 */
 func (user *User) Get(db *gorm.DB, userID uint) (map[string]Model, error) {
-	err := db.First(&user, userID).Error
+	err := db.Find(&user, userID).Error
 	returnRecords := map[string]Model{"user": user}
 	return returnRecords, err
 }
