@@ -6,6 +6,7 @@ import (
 	"server/config"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // TODO: Add foreign key logic to Business model
@@ -194,7 +195,7 @@ func (business *Business) Update(db *gorm.DB, businessID uint, updates map[strin
 
 	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 
-	err = db.Model(&updateBusiness).Where("id = ?", businessID).Updates(updates).Error
+	err = db.Model(&updateBusiness).Clauses(clause.Returning{}).Where("id = ?", businessID).Updates(updates).Error
 	returnRecords = map[string]Model{"business": updateBusiness}
 
 	return returnRecords, err

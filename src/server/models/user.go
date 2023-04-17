@@ -8,6 +8,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // TODO: Add foreign key logic to User model
@@ -531,7 +532,7 @@ func (user *User) Update(db *gorm.DB, userID uint, updates map[string]interface{
 	}
 
 	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
-	err = db.Model(&updateUser).Where("id = ?", userID).Updates(updates).Error
+	err = db.Model(&updateUser).Clauses(clause.Returning{}).Where("id = ?", userID).Updates(updates).Error
 	returnRecords = map[string]Model{"user": updateUser}
 
 	return returnRecords, err

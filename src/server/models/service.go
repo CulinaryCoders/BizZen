@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // TODO: Add foreign key logic to Service model
@@ -320,7 +321,7 @@ func (service *Service) Update(db *gorm.DB, serviceID uint, updates map[string]i
 
 	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 
-	err = db.Model(&updateService).Where("id = ?", serviceID).Updates(updates).Error
+	err = db.Model(&updateService).Clauses(clause.Returning{}).Where("id = ?", serviceID).Updates(updates).Error
 	returnRecords = map[string]Model{"service": updateService}
 
 	return returnRecords, err

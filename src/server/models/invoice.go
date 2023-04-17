@@ -5,6 +5,7 @@ import (
 	"server/config"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // TODO: Add foreign key logic to Invoice model
@@ -185,7 +186,7 @@ func (invoice *Invoice) Update(db *gorm.DB, invoiceID uint, updates map[string]i
 
 	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 
-	err = db.Model(&updateInvoice).Where("id = ?", invoiceID).Updates(updates).Error
+	err = db.Model(&updateInvoice).Clauses(clause.Returning{}).Where("id = ?", invoiceID).Updates(updates).Error
 	returnRecords = map[string]Model{"invoice": updateInvoice}
 
 	return returnRecords, err

@@ -5,6 +5,7 @@ import (
 	"server/config"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // TODO: Add foreign key logic to ContactInfo model
@@ -249,7 +250,7 @@ func (address *Address) Update(db *gorm.DB, addressID uint, updates map[string]i
 	}
 
 	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
-	err = db.Model(&updateAddress).Where("id = ?", addressID).Updates(updates).Error
+	err = db.Model(&updateAddress).Clauses(clause.Returning{}).Where("id = ?", addressID).Updates(updates).Error
 	returnRecords = map[string]Model{"address": updateAddress}
 
 	return returnRecords, err
