@@ -178,6 +178,44 @@ func (service *Service) GetRecordsByPrimaryIDs(db *gorm.DB, ids []uint) ([]Servi
 /*
 *Description*
 
+func GetRecordsBySecondaryID
+
+Retrieves a list of Service records from the database that are associated with the specified secondary key.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+	secondaryIDJsonKey  <string>
+
+		The JSON key for the secondary ID attribute.
+
+	secondaryID  <uint>
+
+		The secondary ID value.
+
+*Returns*
+
+	_  <[]Service>
+
+		The list of Service records that are retrieved from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
+func (service *Service) GetRecordsBySecondaryID(db *gorm.DB, secondaryIDJsonKey string, secondaryID uint) ([]Service, error) {
+	var services []Service
+
+	err := db.Where(map[string]interface{}{secondaryIDJsonKey: secondaryID}).Find(&services).Error
+	return services, err
+}
+
+/*
+*Description*
+
 func GetAppointments
 
 Retrieves the list of all Appointments that are associated with the specified Service.
