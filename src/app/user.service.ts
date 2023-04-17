@@ -43,6 +43,12 @@ export class UserService {
     }).toPromise().then();
   }
 
+  /*
+  cancelAppointment(appointment_id: string) : Promise<Appointment>
+  {
+    return 
+  }*/
+
   getUserServices(user_id: string) : Promise<ServiceAppointment[]>
   {
     return this.http.get<ServiceAppointment[]>(this.getUserURL+user_id+'/service-appointments').toPromise().then();

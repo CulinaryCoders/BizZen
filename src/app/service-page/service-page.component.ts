@@ -87,7 +87,7 @@ export class ServicePageComponent {
   joinClass()
   {
     this.userJoined = true;
-    this.userService.addService(this.service.ID, this.currentUser.ID).then((result)=>console.log(result));
+    this.userService.addService(this.service.ID, this.currentUser.ID).then();
 
   }
   
