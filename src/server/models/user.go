@@ -6,7 +6,6 @@ import (
 	"log"
 	"server/config"
 
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -22,67 +21,6 @@ type User struct {
 	FirstName   string `gorm:"not null;column:first_name" json:"first_name"`                          // User's first name
 	LastName    string `gorm:"not null;column:last_name" json:"last_name"`                            // User's last name
 	BusinessID  *uint  `gorm:"column:business_id;default:null" json:"business_id" sql:"DEFAULT:NULL"` // ID of the Business record associated with the User record
-}
-
-/*
-*Description*
-
-func HashPassword
-
-Generates a hash from the provided password string and assigns it to the calling User's Password attribute.
-
-This conforms to best practice of storing hashed passwords in the application database, rather than plain text.
-
-*Parameters*
-
-	password  <string>
-
-		The plain text password that will be hashed.
-
-*Returns*
-
-	_  <error>
-
-		Encountered error (nil if no errors encountered).
-*/
-func (user *User) HashPassword(password string) error {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	if err != nil {
-		return err
-	}
-	user.Password = string(bytes)
-	return nil
-}
-
-/*
-*Description*
-
-func CheckPassword
-
-Checks if a given password matches the hashed password associated with the calling User record's account.
-
-This function uses the bcrypt algorithm to compare the given password with the hashed password stored in the calling User struct.
-
-If the given password matches the hashed password, nil is returned.
-
-*Parameters*
-
-	password  <string>
-
-		The password to be checked against the calling User's hashed password.
-
-*Returns*
-
-	_  <error>
-
-		Encountered error (nil if no errors are encountered)
-*/
-func (user *User) CheckPassword(providedPassword string) error {
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(providedPassword))
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 /*
@@ -145,13 +83,18 @@ Creates a new User record in the database and returns the created record along w
 */
 func (user *User) Create(db *gorm.DB) (map[string]Model, error) {
 	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
-	// err := user.HashPassword(user.Password)
-	// if err != nil {
-	// 	returnRecords := map[string]Model{"user": user}
-	// 	return returnRecords, err
-	// }
+	// High hash cost translates to longer processing times. 10 is default.
+	// 8 used for  the purposes of quicker bulk test data loads.
+	var hashCost int = 8
+	hashedPassword, err := HashPassword(user.Password, hashCost)
+	if err != nil {
+		returnRecords := map[string]Model{"user": user}
+		return returnRecords, err
+	}
 
-	err := db.Create(&user).Error
+	user.Password = hashedPassword
+
+	err = db.Create(&user).Error
 	returnRecords := map[string]Model{"user": user}
 	return returnRecords, err
 }
@@ -490,13 +433,15 @@ Retrieves a User record in the database by email if it exists and returns that r
 		Encountered error (nil if no errors are encountered)
 */
 func (user *User) GetUserByEmail(db *gorm.DB, userEmail string) (*User, error) {
-	err := db.First(&user, userEmail).Error
+	foundUser := &User{}
+
+	err := db.Model(User{}).Where("email = ?", userEmail).Find(&foundUser).Error
 
 	if err != nil {
-		return user, err
+		return foundUser, err
 	}
 
-	return user, nil
+	return foundUser, nil
 }
 
 /*
