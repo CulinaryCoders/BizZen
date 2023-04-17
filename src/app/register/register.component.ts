@@ -10,7 +10,7 @@ import {UserService} from "../user.service"
 })
 export class RegisterComponent {
   constructor(private router: Router, private activatedRoute:ActivatedRoute, private userService:UserService) {}
-  userModel = new User("","","", "", "", "", []);
+  // userModel = new User("","","", "", "", "", []);
   isBusiness = false;
   confPass = "";
   errorMsg = "";
@@ -19,23 +19,19 @@ export class RegisterComponent {
     first_name: new FormControl(''),
     last_name: new FormControl(''),
     email: new FormControl(''),
-    password: new FormGroup({
-      pass: new FormControl(''),
-      confPass: new FormControl('')
-    }),
-    isBusiness: new FormControl(false)
-  }
-  )
+    password: new FormControl(''),
+    accountType: new FormControl("user")
+  })
 
   passwordsMatch() {
-    return this.userModel.password === this.confPass;
+    return this.registerForm.value.password === this.confPass;
   }
 
   allFieldsFilled() {
-    return this.userModel.first_name && this.userModel.first_name !== ""
-      && this.userModel.last_name && this.userModel.last_name !== ""
-      && this.userModel.email && this.userModel.email !== ""
-      && this.userModel.password && this.userModel.password !== "" || false
+    return this.registerForm.value.first_name && this.registerForm.value.first_name !== ""
+      && this.registerForm.value.last_name && this.registerForm.value.last_name !== ""
+      && this.registerForm.value.email && this.registerForm.value.email !== ""
+      && this.registerForm.value.password && this.registerForm.value.password !== "" || false
   }
 
   onSubmit() {
@@ -45,22 +41,19 @@ export class RegisterComponent {
         this.errorMsg = "ERROR Passwords must match"
       } else {
         if (this.isBusiness) {
-          this.userModel.accountType = "business"
-          this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
+          this.registerForm.value.accountType = "business"
         } else {
-          this.userModel.accountType = "user"
-          this.router.navigateByUrl('/profile', {state: {user: this.userModel }});
+          this.registerForm.value.accountType = "user"
         }
 
         // Creates user in DB
-        this.userService.addUser(this.userModel.first_name, this.userModel.last_name, this.userModel.email, this.userModel.password, this.userModel.accountType)
+        this.userService.addUser(this.registerForm.value.first_name!, this.registerForm.value.last_name!, this.registerForm.value.email!, this.registerForm.value.password!, this.registerForm.value.accountType)
           .then((result) =>
             //route to profile
             this.router.navigateByUrl('/profile', {state: {user: result }})
-          );
-
-        // Routes to profile
-        //this.router.navigateByUrl('/profile', {state: {user: userResponse }});
+          ).catch((err) => {
+            console.error("ERROR creating user: ", err)
+        });
       }
     }
   }
