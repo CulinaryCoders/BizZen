@@ -15,7 +15,7 @@ type Appointment struct {
 	gorm.Model
 	UserID         uint       `gorm:"column:user_id" json:"user_id"`                                  // ID of user that booked the appointment
 	ServiceID      uint       `gorm:"column:service_id" json:"service_id"`                            // ID of service that appointment is for
-	Active         bool       `gorm:"column:active" json:"active"`                                    // 1 for Active, 0 for Cancelled
+	Active         bool       `gorm:"column:active;default:true" json:"active"`                       // 1 for Active, 0 for Cancelled
 	CancelDateTime *time.Time `gorm:"column:cancel_date_time" json:"cancel_date_time" default:"null"` // Date/time when appointment was cancelled (if cancelled, else null)
 }
 
