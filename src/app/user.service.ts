@@ -24,9 +24,9 @@ export class UserService {
 
   //to access user obj in other code (console.log example)
   // call login.then( (user) => { console.log(user); });
-  login(username: string, password: string) : Promise<void | User> {
+  login(email: string, password: string) : Promise<void | User> {
     return this.http.post<User>('http://localhost:8080/login', {
-      username, password
+      email, password
     }).toPromise().then();
   }
 
