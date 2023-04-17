@@ -137,7 +137,7 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/appointment/{id}", app.UpdateAppointment).Methods("PUT")
 	app.Router.HandleFunc("/appointment/{id}", app.DeleteAppointment).Methods("DELETE")
 	app.Router.HandleFunc("/appointments", app.GetAppointments).Methods("GET")
-	// TODO: app.Router.HandleFunc("/appointment/{id}/cancel", app.CancelAppointment).Methods("POST")
+	app.Router.HandleFunc("/appointment/{id}/cancel", app.CancelAppointment).Methods("POST")
 
 	// Invoice routes
 	app.Router.HandleFunc("/invoice", app.CreateInvoice).Methods("POST")

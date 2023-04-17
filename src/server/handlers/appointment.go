@@ -579,3 +579,47 @@ func (app *Application) GetAppointments(writer http.ResponseWriter, request *htt
 		http.StatusOK,
 		appts)
 }
+
+// TODO:  Add documentation (func CancelAppointment)
+func (app *Application) CancelAppointment(writer http.ResponseWriter, request *http.Request) {
+	appt := models.Appointment{}
+	apptID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
+
+	_, err = appt.Get(app.AppDB, apptID)
+	if err != nil {
+		var errorMessage string = fmt.Sprintf("Appointment ID (%d) does not exist in the database.  [%s]", apptID, err)
+
+		utils.RespondWithError(
+			writer,
+			http.StatusNotFound,
+			errorMessage)
+
+		log.Printf("ERROR:  %s", errorMessage)
+
+		return
+	}
+
+	returnedRecords, err := appt.Cancel(app.AppDB, apptID)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		returnedRecords)
+}

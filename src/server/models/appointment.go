@@ -6,16 +6,17 @@ import (
 	"time"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // TODO: Add foreign key logic to Appointment model
 // TODO: Update time columns type / formatting to ensure behavior/values are expected
 type Appointment struct {
 	gorm.Model
-	UserID         uint      `gorm:"column:user_id" json:"user_id"`                   // ID of user that booked the appointment
-	ServiceID      uint      `gorm:"column:service_id" json:"service_id"`             // ID of service that appointment is for
-	Active         bool      `gorm:"column:active" json:"active"`                     // 1 for Active, 0 for Cancelled
-	CancelDateTime time.Time `gorm:"column:cancel_date_time" json:"cancel_date_time"` // Date/time when appointment was cancelled (if cancelled, else null)
+	UserID         uint       `gorm:"column:user_id" json:"user_id"`                                  // ID of user that booked the appointment
+	ServiceID      uint       `gorm:"column:service_id" json:"service_id"`                            // ID of service that appointment is for
+	Active         bool       `gorm:"column:active" json:"active"`                                    // 1 for Active, 0 for Cancelled
+	CancelDateTime *time.Time `gorm:"column:cancel_date_time" json:"cancel_date_time" default:"null"` // Date/time when appointment was cancelled (if cancelled, else null)
 }
 
 /*
@@ -266,10 +267,21 @@ func (appt *Appointment) Update(db *gorm.DB, apptID uint, updates map[string]int
 
 	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 
-	err = db.Model(&updateAppointment).Where("id = ?", apptID).Updates(updates).Error
+	err = db.Model(&updateAppointment).Clauses(clause.Returning{}).Where("id = ?", apptID).Updates(updates).Error
 	returnRecords = map[string]Model{"appointment": updateAppointment}
 
 	return returnRecords, err
+}
+
+// TODO:  Add documentation (func Cancel)
+func (appt *Appointment) Cancel(db *gorm.DB, apptID uint) (map[string]Model, error) {
+	var updates map[string]interface{} = map[string]interface{}{
+		"active":           false,
+		"cancel_date_time": time.Now(),
+	}
+	returnedRecords, err := appt.Update(db, apptID, updates)
+	log.Println(time.Now())
+	return returnedRecords, err
 }
 
 // TODO: Cascade delete all records associated with appointment (AppointmentOfferings, etc.)
