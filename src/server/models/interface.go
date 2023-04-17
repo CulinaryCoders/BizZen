@@ -19,6 +19,7 @@ type Model interface {
 	Delete(db *gorm.DB, id uint) (map[string]Model, error)
 	GetID() uint
 	// TODO: IDExists
+	// TODO: StandardizeFields
 	// TODO: GetAll
 	// TODO: GetRecordsByPrimaryIDs
 	// TODO: GetRecordsBySecondaryID

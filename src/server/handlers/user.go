@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -145,6 +146,8 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 
 	defer request.Body.Close()
 
+	//  Confirm email address doesn't already exist in the DB before creating User.
+	//  Check performed here so that 409 status can be passed more easily in the event of a duplicate email.
 	isDuplicateEmail, err := user.EmailExists(app.AppDB)
 	if isDuplicateEmail {
 
@@ -165,6 +168,20 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 		return
 	}
 
+	//  Standardize all User attribute values
+	user.StandardizeFields()
+
+	//  Confirm User has valid AccountType
+	if !models.UserAccountTypeIsValid(user.AccountType) {
+		var errorMessage string = fmt.Sprintf("Invalid account type specified when creating new User record (account_type = %s). Account type must be 'Individual', 'Business', or 'System'.", user.AccountType)
+
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			errors.New(errorMessage).Error())
+	}
+
+	// Create new Business record if User is a business account
 	if user.AccountType == "Business" {
 		var businessName string = fmt.Sprintf("%s %s's Business", user.FirstName, user.LastName)
 		business := &models.Business{
@@ -183,7 +200,10 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 		}
 
 		createdBusiness = createdRecords["business"]
-		user.BusinessID = createdBusiness.GetID()
+
+		// Set User's BusinessID field to the ID of the newly created Business record
+		createdBusinessID := createdBusiness.GetID()
+		user.BusinessID = &createdBusinessID
 	}
 
 	createdRecords, err := user.Create(app.AppDB)
@@ -195,6 +215,7 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 
 		return
 	}
+
 	createdUser = createdRecords["user"]
 
 	returnRecords := map[string]interface{}{

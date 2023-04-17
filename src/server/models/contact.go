@@ -158,7 +158,6 @@ Creates a new Address record in the database and returns the created record alon
 		Encountered error (nil if no errors are encountered).
 */
 func (address *Address) Create(db *gorm.DB) (map[string]Model, error) {
-	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
 	err := db.Create(&address).Error
 	returnRecords := map[string]Model{"address": address}
 	return returnRecords, err
@@ -249,7 +248,6 @@ func (address *Address) Update(db *gorm.DB, addressID uint, updates map[string]i
 		return returnRecords, err
 	}
 
-	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 	err = db.Model(&updateAddress).Clauses(clause.Returning{}).Where("id = ?", addressID).Updates(updates).Error
 	returnRecords = map[string]Model{"address": updateAddress}
 

@@ -13,10 +13,10 @@ import (
 // TODO: Update time columns type / formatting to ensure behavior/values are expected
 type Appointment struct {
 	gorm.Model
-	UserID         uint       `gorm:"column:user_id" json:"user_id"`                                  // ID of user that booked the appointment
-	ServiceID      uint       `gorm:"column:service_id" json:"service_id"`                            // ID of service that appointment is for
-	Active         bool       `gorm:"column:active;default:true" json:"active"`                       // 1 for Active, 0 for Cancelled
-	CancelDateTime *time.Time `gorm:"column:cancel_date_time" json:"cancel_date_time" default:"null"` // Date/time when appointment was cancelled (if cancelled, else null)
+	UserID         uint       `gorm:"column:user_id" json:"user_id"`                                // ID of user that booked the appointment
+	ServiceID      uint       `gorm:"column:service_id" json:"service_id"`                          // ID of service that appointment is for
+	Active         bool       `gorm:"column:active;default:true" json:"active"`                     // 1 for Active, 0 for Cancelled
+	CancelDateTime *time.Time `gorm:"column:cancel_date_time;default:null" json:"cancel_date_time"` // Date/time when appointment was cancelled (if cancelled, else null)
 }
 
 // TODO:  Add documentation for GORM db hook (func AfterCreate)
@@ -197,7 +197,6 @@ Creates a new Appointment record in the database and returns the created record 
 		Encountered error (nil if no errors are encountered).
 */
 func (appt *Appointment) Create(db *gorm.DB) (map[string]Model, error) {
-	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
 	err := db.Create(&appt).Error
 	returnRecords := map[string]Model{"appointment": appt}
 	return returnRecords, err
@@ -355,8 +354,6 @@ func (appt *Appointment) Update(db *gorm.DB, apptID uint, updates map[string]int
 	if err != nil {
 		return returnRecords, err
 	}
-
-	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 
 	err = db.Model(&updateAppointment).Clauses(clause.Returning{}).Where("id = ?", apptID).Updates(updates).Error
 	returnRecords = map[string]Model{"appointment": updateAppointment}

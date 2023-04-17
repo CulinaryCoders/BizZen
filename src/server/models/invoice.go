@@ -63,7 +63,6 @@ Creates a new Invoice record in the database and returns the created record alon
 		Encountered error (nil if no errors are encountered).
 */
 func (invoice *Invoice) Create(db *gorm.DB) (map[string]Model, error) {
-	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
 	err := db.Create(&invoice).Error
 	returnRecords := map[string]Model{"invoice": invoice}
 	return returnRecords, err
@@ -183,8 +182,6 @@ func (invoice *Invoice) Update(db *gorm.DB, invoiceID uint, updates map[string]i
 	if err != nil {
 		return returnRecords, err
 	}
-
-	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 
 	err = db.Model(&updateInvoice).Clauses(clause.Returning{}).Where("id = ?", invoiceID).Updates(updates).Error
 	returnRecords = map[string]Model{"invoice": updateInvoice}

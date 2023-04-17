@@ -15,12 +15,20 @@ import (
 // GORM model for all User records in the database
 type User struct {
 	gorm.Model
-	Email       string `gorm:"not null;unique;column:email" json:"email"`                             // User's email address
-	Password    string `gorm:"not null;column:password" json:"password"`                              // User's hashed password
-	AccountType string `gorm:"not null;column:account_type" json:"account_type"`                      // Account type of the User record (Individual, Business, System)
-	FirstName   string `gorm:"not null;column:first_name" json:"first_name"`                          // User's first name
-	LastName    string `gorm:"not null;column:last_name" json:"last_name"`                            // User's last name
-	BusinessID  uint   `gorm:"column:business_id;default:null" json:"business_id" sql:"DEFAULT:NULL"` // ID of the Business record associated with the User record
+	Email       string `gorm:"not null;unique;column:email" json:"email"`          // User's email address
+	Password    string `gorm:"not null;column:password" json:"password"`           // User's hashed password
+	AccountType string `gorm:"not null;column:account_type" json:"account_type"`   // Account type of the User record (Individual, Business, System)
+	FirstName   string `gorm:"not null;column:first_name" json:"first_name"`       // User's first name
+	LastName    string `gorm:"not null;column:last_name" json:"last_name"`         // User's last name
+	BusinessID  *uint  `gorm:"column:business_id;default:null" json:"business_id"` // ID of the Business record associated with the User record
+}
+
+// TODO:  Add documentation for GORM db hook (func StandardizeFields)
+func (user *User) StandardizeFields() {
+	user.Email = StandardizeEmailAddress(user.Email)
+	user.FirstName = StandardizeNameField(user.FirstName)
+	user.LastName = StandardizeNameField(user.LastName)
+	user.AccountType = StandardizeUserAccountType(user.AccountType)
 }
 
 /*
@@ -82,7 +90,6 @@ Creates a new User record in the database and returns the created record along w
 		Encountered error (nil if no errors are encountered).
 */
 func (user *User) Create(db *gorm.DB) (map[string]Model, error) {
-	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
 	// High hash cost translates to longer processing times. 10 is default.
 	// 8 used for  the purposes of quicker bulk test data loads.
 	var hashCost int = 8
@@ -496,7 +503,6 @@ func (user *User) Update(db *gorm.DB, userID uint, updates map[string]interface{
 		return returnRecords, err
 	}
 
-	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 	err = db.Model(&updateUser).Clauses(clause.Returning{}).Where("id = ?", userID).Updates(updates).Error
 	returnRecords = map[string]Model{"user": updateUser}
 

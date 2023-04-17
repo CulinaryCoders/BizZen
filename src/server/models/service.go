@@ -72,7 +72,6 @@ Creates a new Service record in the database and returns the created record alon
 		Encountered error (nil if no errors are encountered).
 */
 func (service *Service) Create(db *gorm.DB) (map[string]Model, error) {
-	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
 	err := db.Create(&service).Error
 	returnRecords := map[string]Model{"service": service}
 	return returnRecords, err
@@ -360,8 +359,6 @@ func (service *Service) Update(db *gorm.DB, serviceID uint, updates map[string]i
 	if err != nil {
 		return returnRecords, err
 	}
-
-	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 
 	err = db.Model(&updateService).Clauses(clause.Returning{}).Where("id = ?", serviceID).Updates(updates).Error
 	returnRecords = map[string]Model{"service": updateService}

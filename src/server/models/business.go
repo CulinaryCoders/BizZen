@@ -68,7 +68,6 @@ Creates a new Business record in the database and returns the created record alo
 		Encountered error (nil if no errors are encountered).
 */
 func (business *Business) Create(db *gorm.DB) (map[string]Model, error) {
-	// TODO: Add field validation logic (func Create) -- add as BeforeCreate gorm hook definition at the top of this file
 	err := db.Create(&business).Error
 	if err != nil {
 		returnRecords := map[string]Model{"business": business}
@@ -351,8 +350,6 @@ func (business *Business) Update(db *gorm.DB, businessID uint, updates map[strin
 	if err != nil {
 		return returnRecords, err
 	}
-
-	// TODO: Add field validation logic (func Update) -- add as BeforeUpdate gorm hook definition at the top of this file
 
 	err = db.Model(&updateBusiness).Clauses(clause.Returning{}).Where("id = ?", businessID).Updates(updates).Error
 	returnRecords = map[string]Model{"business": updateBusiness}
