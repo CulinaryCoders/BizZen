@@ -27,7 +27,7 @@ export class ViewAppointmentsComponent {
     {
       this.user = history.state.user;
       this.userService.getUserServices(this.user.ID)
-        .then((result)=>{console.log(result[0]); this.userAppointments = result})
+        .then((result)=>{console.log(result); this.userAppointments = result})
         .catch((reason) => console.log(reason));
 
     }
