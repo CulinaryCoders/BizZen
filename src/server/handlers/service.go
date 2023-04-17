@@ -656,6 +656,40 @@ func (app *Application) GetServices(writer http.ResponseWriter, request *http.Re
 		services)
 }
 
+// TODO:  Add documentation (func GetServiceAppointments)
+func (app *Application) GetServiceAppointments(writer http.ResponseWriter, request *http.Request) {
+	appt := models.Appointment{}
+	var appts []models.Appointment
+	serviceID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
+
+	var serviceIDJsonKey string = "service_id"
+	appts, err = appt.GetRecordsBySecondaryID(app.AppDB, serviceIDJsonKey, serviceID)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		appts)
+}
+
 /*
 *Description*
 

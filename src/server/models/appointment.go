@@ -19,6 +19,97 @@ type Appointment struct {
 	CancelDateTime *time.Time `gorm:"column:cancel_date_time" json:"cancel_date_time" default:"null"` // Date/time when appointment was cancelled (if cancelled, else null)
 }
 
+// TODO:  Add documentation for GORM db hook (func AfterCreate)
+func (appt *Appointment) AfterCreate(db *gorm.DB) error {
+	if config.Debug {
+		log.Println("AfterCreate hook executed [Appointment model].")
+	}
+
+	var serviceIDJsonKey string = "service_id"
+	appts, err := appt.GetRecordsBySecondaryID(db, serviceIDJsonKey, appt.ServiceID)
+	if err != nil {
+		return err
+	}
+
+	service := Service{}
+	err = db.Model(Service{}).Where(appt.ServiceID).Find(&service).Error
+	if err != nil {
+		return err
+	}
+
+	if config.Debug {
+		log.Printf("Original Service:\n\n%v\n\n", service)
+	}
+
+	var active_appt_ct int = 0
+	for _, appt := range appts {
+		if appt.Active {
+			active_appt_ct++
+		}
+	}
+	updates := map[string]interface{}{
+		"appt_ct": active_appt_ct,
+		"is_full": active_appt_ct == int(service.Capacity),
+	}
+
+	updatedService, err := service.Update(db, appt.ServiceID, updates)
+	if err != nil {
+		return err
+	}
+
+	if config.Debug {
+		log.Printf("Updated Service:\n\n%v\n\n", updatedService["service"])
+	}
+
+	return nil
+}
+
+// TODO:  Add documentation for GORM db hook (func AfterUpdate)
+func (appt *Appointment) AfterUpdate(db *gorm.DB) error {
+	if config.Debug {
+		log.Println("AfterCreate hook executed [Appointment model].")
+	}
+
+	var serviceIDJsonKey string = "service_id"
+	appts, err := appt.GetRecordsBySecondaryID(db, serviceIDJsonKey, appt.ServiceID)
+	if err != nil {
+		return err
+	}
+
+	service := Service{}
+	err = db.Model(Service{}).Where(appt.ServiceID).Find(&service).Error
+	if err != nil {
+		return err
+	}
+
+	if config.Debug {
+		log.Printf("Appointment:\n\n%v\n\n", appt)
+		log.Printf("Original Service:\n\n%v\n\n", service)
+	}
+
+	var active_appt_ct int = 0
+	for _, appt := range appts {
+		if appt.Active {
+			active_appt_ct++
+		}
+	}
+	updates := map[string]interface{}{
+		"appt_ct": active_appt_ct,
+		"is_full": active_appt_ct == int(service.Capacity),
+	}
+
+	updatedService, err := service.Update(db, appt.ServiceID, updates)
+	if err != nil {
+		return err
+	}
+
+	if config.Debug {
+		log.Printf("Updated Service:\n\n%v\n\n", updatedService["service"])
+	}
+
+	return nil
+}
+
 /*
 *Description*
 

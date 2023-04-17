@@ -129,6 +129,7 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/service/{service-id}/user/{user-id}", app.GetUserEnrolledStatus).Methods("GET")
 	app.Router.HandleFunc("/service/{id}/users", app.GetListOfEnrolledUsers).Methods("GET")
 	app.Router.HandleFunc("/service/{id}/user-count", app.GetEnrolledUsersCount).Methods("GET")
+	app.Router.HandleFunc("/service/{id}/appointments", app.GetServiceAppointments).Methods("GET")
 	// TODO: app.Router.HandleFunc("/service/{id}/user-appointments", app.GetUserAppointments).Methods("GET")
 
 	// Appointment routes
