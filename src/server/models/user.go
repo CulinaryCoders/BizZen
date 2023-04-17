@@ -106,6 +106,20 @@ func (user *User) GetID() uint {
 	return user.ID
 }
 
+// TODO:  Add documentation (func IDExists)
+func (user *User) IDExists(db *gorm.DB, userID uint) (bool, error) {
+	var idExists bool
+	err := db.Model(User{}).Select("count(*) > 0").Where("id = ?", userID).Find(&idExists).Error
+	return idExists, err
+}
+
+// TODO:  Add documentation (func EmailExists)
+func (user *User) EmailExists(db *gorm.DB) (bool, error) {
+	var emailExists bool
+	err := db.Model(User{}).Select("count(*) > 0").Where("email = ?", user.Email).Find(&emailExists).Error
+	return emailExists, err
+}
+
 /*
 *Description*
 

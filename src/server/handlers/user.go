@@ -112,6 +112,14 @@ Creates a new user account record in the database.
 		"error":"ERROR MESSAGE TEXT HERE"
 		}
 
+		-- Case = Email address already exists in database
+		HTTP/1.1 409 Conflict
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
 		-- Case = Database operation error
 		HTTP/1.1 500 Internal Server Error
 		Content-Type: application/json
@@ -134,6 +142,26 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 	}
 
 	defer request.Body.Close()
+
+	isDuplicateEmail, err := user.EmailExists(app.AppDB)
+	if isDuplicateEmail {
+
+		utils.RespondWithError(
+			writer,
+			http.StatusConflict,
+			err.Error())
+
+		return
+
+	} else if err != nil {
+
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		return
+	}
 
 	if err := user.HashPassword(user.Password); err != nil {
 		utils.RespondWithError(
