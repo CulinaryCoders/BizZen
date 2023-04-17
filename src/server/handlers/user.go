@@ -800,7 +800,9 @@ Get a list of all the Appointments (and the associated Service for each Appointm
 					"length":30,
 					"capacity":20,
 					"price":2000,
-					"cancel_fee":0
+					"cancel_fee":0,
+					"appt_ct":0,
+					"is_full":false
 				}
 			},
 			{
@@ -826,7 +828,9 @@ Get a list of all the Appointments (and the associated Service for each Appointm
 					"length":60,
 					"capacity":10,
 					"price":10000,
-					"cancel_fee":2000
+					"cancel_fee":2000,
+					"appt_ct":0,
+					"is_full":false
 				}
 			},
 			...

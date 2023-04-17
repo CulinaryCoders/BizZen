@@ -88,6 +88,21 @@
       "max": 100000,
       "decimals": 0,
       "formula": null
+    },
+    {
+      "name": "appt_ct",
+      "null_percentage": 0,
+      "type": "Number",
+      "min": 0,
+      "max": 50,
+      "decimals": 0,
+      "formula": "if this > capacity then capacity\nelse this end"
+    },
+    {
+      "name": "is_full",
+      "null_percentage": 0,
+      "type": "Boolean",
+      "formula": "if appt_ct === capacity then true\nelse false end"
     }
   ]
 }

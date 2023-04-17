@@ -322,7 +322,9 @@ Retrieves the list of all Appointments (and the Service each Appointment is for)
 						"length":30,
 						"capacity":20,
 						"price":2000,
-						"cancel_fee":0
+						"cancel_fee":0,
+						"appt_ct":0,
+						"is_full":false
 					}
 				},
 				{
@@ -348,7 +350,9 @@ Retrieves the list of all Appointments (and the Service each Appointment is for)
 						"length":60,
 						"capacity":10,
 						"price":5000,
-						"cancel_fee":1000
+						"cancel_fee":1000,
+						"appt_ct":0,
+						"is_full":false
 					}
 				},
 				...

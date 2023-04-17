@@ -108,7 +108,9 @@ Creates a new service record in the database.
 			"length":30,
 			"capacity":20,
 			"price":2000,
-			"cancel_fee":0
+			"cancel_fee":0,
+			"appt_ct":0,
+			"is_full":false
 		}
 
 	Failure:
@@ -215,7 +217,9 @@ Get service record from the database by ID.
 			"length":30,
 			"capacity":20,
 			"price":2000,
-			"cancel_fee":0
+			"cancel_fee":0,
+			"appt_ct":0,
+			"is_full":false
 		}
 
 	Failure:
@@ -368,7 +372,9 @@ If a specified field's value should be deleted from the record, the appropriate 
 			"length":30,
 			"capacity":20,
 			"price":2500,
-			"cancel_fee":1000
+			"cancel_fee":1000,
+			"appt_ct":0,
+			"is_full":false
 		}
 
 	Failure:
@@ -488,7 +494,9 @@ Deleted service record is returned in the response body if the operation is suce
 			"length":30,
 			"capacity":20,
 			"price":2000,
-			"cancel_fee":0
+			"cancel_fee":0,
+			"appt_ct":0,
+			"is_full":false
 		}
 
 	Failure:
@@ -594,7 +602,9 @@ Get a list of all Service records in the database.
 				"length":30,
 				"capacity":20,
 				"price":2000,
-				"cancel_fee":0
+				"cancel_fee":0,
+				"appt_ct":0,
+				"is_full":false
 			},
 			{
 				"ID": 83,
@@ -608,7 +618,9 @@ Get a list of all Service records in the database.
 				"length":60,
 				"capacity":10,
 				"price":10000,
-				"cancel_fee":2000
+				"cancel_fee":2000,
+				"appt_ct":0,
+				"is_full":false
 			},
 			...
 		]
