@@ -19,15 +19,20 @@ export class ViewAppointmentsComponent {
   services:Service[] = [];
   userAppointments: ServiceAppointment[] = [];
   
+  hasAppointments = false;
 
   ngOnInit()
   {
+
     //console.log(history.state.user);
     if(history.state != null)
     {
       this.user = history.state.user;
       this.userService.getUserServices(this.user.ID)
-        .then((result)=>{console.log(result); this.userAppointments = result})
+        .then((result)=>{
+          this.hasAppointments = true; 
+          this.userAppointments = result
+        })
         .catch((reason) => console.log(reason));
 
     }

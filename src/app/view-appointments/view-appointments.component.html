@@ -5,6 +5,9 @@
 
     <br><br>
  
+    <h3>You have {{userAppointments.length}} upcoming appointments</h3>
+    <br>
+    
     <div class="scrollbar scrollbar-primary">
     <cdk-virtual-scroll-viewport itemSize="50" class="scroll-view">
 
@@ -24,6 +27,7 @@
       </cdk-virtual-scroll-viewport>
       
     </div>
+
 
     <br>
     <button (click)="routeToProfile()" class="btn btn-primary">Back</button>
