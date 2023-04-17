@@ -41,7 +41,7 @@ export class ViewAppointmentsComponent {
   }
   routeToService(serviceToPass:Service)
   {
-    this.router.navigateByUrl('/class-summary', {state: {user: this.user, service: serviceToPass}});
+    this.router.navigateByUrl('/class-summary', {state: {user: this.user, service: serviceToPass, prevPage: '/view-appointments'}});
 
   }
 

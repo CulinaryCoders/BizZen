@@ -77,8 +77,11 @@ export class ServicePageComponent {
 
   routeToFindClass()
   {
-    //this.router.navigateByUrl('find-classes', {state:{user: this.currentUser}});
-    this.router.navigateByUrl('home', {state:{user: this.currentUser}});
+    if(history.state.prevPage != null)
+      this.router.navigateByUrl(history.state.prevPage, {state:{user: this.currentUser}});
+    else
+      this.router.navigateByUrl('/home', {state:{user: this.currentUser}});
+
   }
 
   joinClass()
