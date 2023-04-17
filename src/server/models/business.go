@@ -257,7 +257,7 @@ Retrieves the list of all Appointments (and the Service each Appointment is for)
 
 		Encountered error (nil if no errors are encountered)
 */
-func (business *Business) GetServiceAppointments(db *gorm.DB, businessID uint) ([]map[string]interface{}, error) {
+func (business *Business) GetServiceAppointments(db *gorm.DB, businessID uint, activeOnly bool) ([]map[string]interface{}, error) {
 	service := Service{}
 	var services []Service
 	var serviceAppointments []map[string]interface{}
@@ -281,8 +281,19 @@ func (business *Business) GetServiceAppointments(db *gorm.DB, businessID uint) (
 			return serviceAppointments, apptErr
 		}
 
+		var finalApptList []Appointment
+		if activeOnly {
+			for _, appt := range appts {
+				if appt.Active {
+					finalApptList = append(finalApptList, appt)
+				}
+			}
+		} else {
+			finalApptList = appts
+		}
+
 		// Structure JSON appropriately and append to list of service appointments
-		var svcAppt map[string]interface{} = map[string]interface{}{"service": service, "appointments": appts}
+		var svcAppt map[string]interface{} = map[string]interface{}{"service": service, "appointments": finalApptList}
 		serviceAppointments = append(serviceAppointments, svcAppt)
 	}
 

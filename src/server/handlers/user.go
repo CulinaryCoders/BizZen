@@ -895,7 +895,7 @@ func (app *Application) GetUserServiceAppointments(writer http.ResponseWriter, r
 	}
 
 	var userSvcAppts []map[string]interface{}
-	userSvcAppts, err = user.GetServiceAppointments(app.AppDB, userID)
+	userSvcAppts, err = user.GetServiceAppointments(app.AppDB, userID, true)
 	if err != nil {
 		utils.RespondWithError(
 			writer,

@@ -23,7 +23,7 @@ type Service struct {
 	Capacity      uint      `gorm:"column:capacity" json:"capacity"`               // Number of users that can sign up for the service
 	CancelFee     uint      `gorm:"column:cancel_fee" json:"cancel_fee"`           // Fee (in cents) for cancelling appointment after minimum notice cutoff
 	Price         uint      `gorm:"column:price" json:"price"`                     // Price (in cents) for the service being offered
-	AppointmentCt uint      `gorm:"column:appt_ct" json:"appt_ct" default:"0"`     // Number of active appointments scheduled for the Service
+	AppointmentCt int       `gorm:"column:appt_ct" json:"appt_ct" default:"0"`     // Number of active appointments scheduled for the Service
 	IsFull        bool      `gorm:"column:is_full" json:"is_full" default:"false"` // True if number of active appointments equals the capacity for the Service (False if not)
 }
 
@@ -285,7 +285,7 @@ Retrieves the list of all the Users that have signed up for a particular Service
 
 		Encountered error (nil if no errors are encountered)
 */
-func (service *Service) GetUsers(db *gorm.DB, serviceID uint) ([]User, error) {
+func (service *Service) GetUsers(db *gorm.DB, serviceID uint, activeOnly bool) ([]User, error) {
 	var apptsUserIDs []uint
 	var user User
 	var users []User
@@ -297,8 +297,10 @@ func (service *Service) GetUsers(db *gorm.DB, serviceID uint) ([]User, error) {
 	}
 
 	// Get list of UserIDs from appointments
-	for _, record := range appts {
-		apptsUserIDs = append(apptsUserIDs, record.GetUserID())
+	for _, appt := range appts {
+		if !activeOnly || (activeOnly && appt.Active) {
+			apptsUserIDs = append(apptsUserIDs, appt.GetUserID())
+		}
 	}
 
 	// Get list of Users from appointment UserIDs
