@@ -8,7 +8,7 @@ import (
 	"server/middleware"
 	"server/models"
 
-	"github.com/go-redis/redis/v7"
+	//"github.com/go-redis/redis/v7"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/rs/cors"
@@ -28,8 +28,8 @@ type Application struct {
 	Router      *mux.Router           // Gorilla Mux Router (used to define/configure API endpoints)
 	CookieStore *sessions.CookieStore // Gorilla Sessions CookieStore for storing session/cookie data
 	AppDB       *gorm.DB              // gorm.DB instance used as main application database
-	CacheDB     *redis.Client         // redis.Client instance used for caching database
-	NGHandler   *AngularHandler       // AngularHandler that allows the frontend to connect to the backend API server
+	// CacheDB     *redis.Client         // redis.Client instance used for caching database
+	NGHandler *AngularHandler // AngularHandler that allows the frontend to connect to the backend API server
 }
 
 /*
@@ -55,8 +55,8 @@ func (app *Application) Initialize(appDBName string) {
 	App.AppDB = models.InitializePostgresDB(dbConnectionString, config.Debug)
 
 	// Initialize cache db
-	var cacheDSN string = config.AppConfig.GetRedisDBNetworkAddress()
-	App.CacheDB = models.InitializeRedisDB(cacheDSN)
+	// var cacheDSN string = config.AppConfig.GetRedisDBNetworkAddress()
+	// App.CacheDB = models.InitializeRedisDB(cacheDSN)
 
 	// Initialize cookie store
 	App.CookieStore = sessions.NewCookieStore([]byte("super-secret"))
