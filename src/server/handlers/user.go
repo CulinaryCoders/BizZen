@@ -130,6 +130,8 @@ Creates a new user account record in the database.
 */
 func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
+	var createdUser models.Model
+	var createdBusiness models.Model
 
 	decoder := json.NewDecoder(request.Body)
 	if err := decoder.Decode(&user); err != nil {
@@ -163,8 +165,28 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 		return
 	}
 
-	returnRecords, err := user.Create(app.AppDB)
-	createdUser := returnRecords["user"]
+	if user.AccountType == "Business" {
+		var businessName string = fmt.Sprintf("%s %s's Business", user.FirstName, user.LastName)
+		business := &models.Business{
+			OwnerID: user.ID,
+			Name:    businessName,
+		}
+
+		createdRecords, err := business.Create(app.AppDB)
+		if err != nil {
+			utils.RespondWithError(
+				writer,
+				http.StatusInternalServerError,
+				err.Error())
+
+			return
+		}
+
+		createdBusiness = createdRecords["business"]
+		user.BusinessID = createdBusiness.GetID()
+	}
+
+	createdRecords, err := user.Create(app.AppDB)
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -173,11 +195,17 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 
 		return
 	}
+	createdUser = createdRecords["user"]
+
+	returnRecords := map[string]interface{}{
+		"user":     createdUser,
+		"business": createdBusiness,
+	}
 
 	utils.RespondWithJSON(
 		writer,
 		http.StatusCreated,
-		createdUser)
+		returnRecords)
 }
 
 /*
