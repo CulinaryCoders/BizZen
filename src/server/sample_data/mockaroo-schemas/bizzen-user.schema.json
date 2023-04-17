@@ -41,7 +41,7 @@
           }
         },
         {
-          "rule": "field('ID') = 999001",
+          "rule": "field('ID') === 999001",
           "frequencies": {
             "Individual": "0",
             "Business": "1"
@@ -66,7 +66,7 @@
       "name": "business_id",
       "null_percentage": 0,
       "type": "Row Number",
-      "formula": "if account_type === \"Individual\" then null\nelse this + 999000 end"
+      "formula": "if account_type === \"Individual\" then nil\nelse this + 999000 end"
     }
   ]
 }

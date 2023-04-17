@@ -163,15 +163,6 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 		return
 	}
 
-	if err := user.HashPassword(user.Password); err != nil {
-		utils.RespondWithError(
-			writer,
-			http.StatusBadRequest,
-			err.Error())
-
-		return
-	}
-
 	returnRecords, err := user.Create(app.AppDB)
 	createdUser := returnRecords["user"]
 	if err != nil {
