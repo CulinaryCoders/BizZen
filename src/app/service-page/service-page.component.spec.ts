@@ -6,21 +6,48 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Service } from '../service';
 import { ServiceOffering } from '../service-offering';
 
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {HttpClient, HttpResponse} from '@angular/common/http'
+
+import { NavbarComponent } from '../navbar/navbar.component';
+import { FormsModule } from '@angular/forms'
+import { UserService } from '../user.service';
+import { Appointment } from '../appointment';
+
+
 describe('ServicePageComponent', () => {
   let component: ServicePageComponent;
   let fixture: ComponentFixture<ServicePageComponent>;
   let router : Router;
+  let userService: UserService;
+  let httpClient: HttpClient;
+  let httpTestController:HttpTestingController;
+
+  let service:Service = new Service("123", "Test Service", "Test Service desc", 
+    new Date("4/11/2023 11:00:00"), 120, 10, 15);
+
+  let testUser = new User("12345","firstname", "lastname", "email", "pass", "User", [service]);
 
   beforeEach(async () => {
+    window.history.pushState({user: testUser, service: service}, '');
+
     await TestBed.configureTestingModule({
-      declarations: [ ServicePageComponent ],
-      imports: [ RouterTestingModule]
+      declarations: [ ServicePageComponent, NavbarComponent ],
+      imports: [ 
+        RouterTestingModule, 
+        HttpClientTestingModule, 
+        FormsModule
+      ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(ServicePageComponent);
     component = fixture.componentInstance;
+
     router = TestBed.inject(Router);
+    httpClient = TestBed.inject(HttpClient);
+    userService = TestBed.inject(UserService);
+    httpTestController = TestBed.inject(HttpTestingController);
 
     fixture.detectChanges();
 
@@ -35,28 +62,36 @@ describe('ServicePageComponent', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
     component.routeToFindClass();
-    expect(navigateSpy).toHaveBeenCalledWith('find-classes', {state:{user:component.currentUser}});
+    expect(navigateSpy).toHaveBeenCalledWith('/home', {state:{user:component.currentUser}});
 
   });
   
   it('should join class', () => {
 
-    component.currentUser = new User("firstname", "lastname", "email", "pass", "User", 
-      [new Service("123", "Test Service", "Test Service description", new Date("4/11/2023 11:00:00"), 120, 10, 15)]);
+    component.currentUser = testUser;
+    component.service = service;
 
     component.joinClass();
     expect(component.userJoined).toBeTruthy();
+
+    const req = httpTestController.expectOne("http://localhost:8080/appointment");
+    expect(req.request.method).toEqual("POST");
     
-    //checks that the class was added to user
-    let index:number = component.currentUser.classes.findIndex((findService) => component.service.ID == findService.ID);
-    expect(index).not.toBe(-1);
+
   });
 
+  it('should edit', () => {
+
+    component.editService();
+    expect(component.isEditing).toBeTruthy();
+
+  });
+
+
+//TODO: fix
   it('should leave class after joining', () => {
 
-    component.currentUser = new User("firstname", "lastname", "email", "pass", "User", 
-      [new Service("123", "Test Service", "Test Service description", new Date("4/11/2023 11:00:00"), 120, 10, 15)]);
-
+    component.currentUser = testUser;
 
     component.joinClass();
     component.leaveClass();

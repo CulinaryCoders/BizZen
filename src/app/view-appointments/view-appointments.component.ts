@@ -22,7 +22,7 @@ export class ViewAppointmentsComponent {
 
   ngOnInit()
   {
-    console.log(history.state.user);
+    //console.log(history.state.user);
     if(history.state != null)
     {
       this.user = history.state.user;

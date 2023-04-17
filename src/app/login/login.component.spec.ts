@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login.component';
 import { routes } from '../app-routing.module';
 import { DebugElement } from '@angular/core';
+import { User } from '../user';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -55,7 +56,7 @@ describe('LoginComponent', () => {
 
   });
 
-  it('should navigate to home', () => {
+  it('should navigate to /', () => {
 
       const navigateSpy = spyOn(router, 'navigate');
 
@@ -65,13 +66,22 @@ describe('LoginComponent', () => {
 
   });
 
-  it('should navigate to profile', () => {
+  it('should pass user when logging in successfully', () => {
 
       const navigateSpy = spyOn(router, 'navigateByUrl');
 
-      component.onSubmit();
+      let testUser = new User("","","","","","", []);
+      component.successfulLogin(testUser);
 
-      expect(navigateSpy).toHaveBeenCalledWith('/profile', {state: {user:component.model}});
+      expect(navigateSpy).toHaveBeenCalledWith('/profile', {state: {user:testUser}});
+
+  });
+
+  it('should say user does not exist when unsuccessfully logging in', () => {
+
+      component.unsuccessfulLogin();
+
+      expect(component.userExists).toBeFalsy();
 
   });
 

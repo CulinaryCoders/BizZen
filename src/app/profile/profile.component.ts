@@ -15,7 +15,6 @@ export class ProfileComponent {
 
     ngOnInit()
     {
-      console.log(history.state.user);
       //this.route.params.subscribe((params:Params) => this.userIdParameter = params['idToPass'])
         if(history.state.user != null)
           this.userIdParameter = history.state.user.first_name;
@@ -26,9 +25,11 @@ export class ProfileComponent {
       this.router.navigate(['/']);
     }
     routeToClasses() {
+
       this.router.navigateByUrl('/home', {state: {user: history.state.user}});
-    }
+    } 
     routeToAppointments() {
+
       this.router.navigateByUrl('/view-appointments', {state: {user: history.state.user}});
     }
 
