@@ -129,7 +129,9 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/service/{service-id}/user/{user-id}", app.GetUserEnrolledStatus).Methods("GET")
 	app.Router.HandleFunc("/service/{id}/users", app.GetListOfEnrolledUsers).Methods("GET")
 	app.Router.HandleFunc("/service/{id}/user-count", app.GetEnrolledUsersCount).Methods("GET")
-	app.Router.HandleFunc("/service/{id}/appointments", app.GetServiceAppointments).Methods("GET")
+	app.Router.HandleFunc("/service/{id}/appointments", app.GetActiveServiceAppointments).Methods("GET")
+	app.Router.HandleFunc("/service/{id}/appointments/active", app.GetActiveServiceAppointments).Methods("GET")
+	app.Router.HandleFunc("/service/{id}/appointments/all", app.GetServiceAppointments).Methods("GET")
 	// TODO: app.Router.HandleFunc("/service/{id}/user-appointments", app.GetUserAppointments).Methods("GET")
 
 	// Appointment routes
@@ -137,7 +139,9 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/appointment/{id}", app.GetAppointment).Methods("GET")
 	app.Router.HandleFunc("/appointment/{id}", app.UpdateAppointment).Methods("PUT")
 	app.Router.HandleFunc("/appointment/{id}", app.DeleteAppointment).Methods("DELETE")
-	app.Router.HandleFunc("/appointments", app.GetAppointments).Methods("GET")
+	app.Router.HandleFunc("/appointments", app.GetActiveAppointments).Methods("GET")
+	app.Router.HandleFunc("/appointments/active", app.GetActiveAppointments).Methods("GET")
+	app.Router.HandleFunc("/appointments/all", app.GetAppointments).Methods("GET")
 	app.Router.HandleFunc("/appointment/{id}/cancel", app.CancelAppointment).Methods("POST")
 
 	// Invoice routes

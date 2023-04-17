@@ -813,7 +813,7 @@ func (app *Application) GetBusinessServiceAppointments(writer http.ResponseWrite
 	}
 
 	var businessSvcAppts []map[string]interface{}
-	businessSvcAppts, err = business.GetServiceAppointments(app.AppDB, businessID)
+	businessSvcAppts, err = business.GetServiceAppointments(app.AppDB, businessID, true)
 	if err != nil {
 		utils.RespondWithError(
 			writer,

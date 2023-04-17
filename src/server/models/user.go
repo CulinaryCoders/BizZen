@@ -376,7 +376,7 @@ Retrieves the list of all Appointments (and the Service each Appointment is for)
 
 		Encountered error (nil if no errors are encountered)
 */
-func (user *User) GetServiceAppointments(db *gorm.DB, userID uint) ([]map[string]interface{}, error) {
+func (user *User) GetServiceAppointments(db *gorm.DB, userID uint, activeOnly bool) ([]map[string]interface{}, error) {
 	var appts []Appointment
 	var apptServiceID uint
 	var serviceAppointments []map[string]interface{}
@@ -390,18 +390,20 @@ func (user *User) GetServiceAppointments(db *gorm.DB, userID uint) ([]map[string
 
 	// Get list of ServiceIDs from user's appointments
 	for _, appt := range appts {
-		// Get Service associated with each of the user's appointments
-		apptService := Service{}
-		apptServiceID = appt.GetServiceID()
-		returnRecords, svcErr := apptService.Get(db, apptServiceID)
-		if svcErr != nil {
-			var errorMessage string = fmt.Sprintf("Service ID (%d) does not exist in the database, but is associated with Appointment ID (%d).  [%s]", userID, appt.GetID(), apptErr)
-			return serviceAppointments, errors.New(errorMessage)
-		}
+		if !activeOnly || (activeOnly && appt.Active) {
+			// Get Service associated with each of the user's appointments
+			apptService := Service{}
+			apptServiceID = appt.GetServiceID()
+			returnRecords, svcErr := apptService.Get(db, apptServiceID)
+			if svcErr != nil {
+				var errorMessage string = fmt.Sprintf("Service ID (%d) does not exist in the database, but is associated with Appointment ID (%d).  [%s]", userID, appt.GetID(), apptErr)
+				return serviceAppointments, errors.New(errorMessage)
+			}
 
-		// Structure JSON appropriately and append to list of service appointments
-		var svcAppt map[string]interface{} = map[string]interface{}{"appointment": appt, "service": returnRecords["service"]}
-		serviceAppointments = append(serviceAppointments, svcAppt)
+			// Structure JSON appropriately and append to list of service appointments
+			var svcAppt map[string]interface{} = map[string]interface{}{"appointment": appt, "service": returnRecords["service"]}
+			serviceAppointments = append(serviceAppointments, svcAppt)
+		}
 	}
 
 	return serviceAppointments, nil

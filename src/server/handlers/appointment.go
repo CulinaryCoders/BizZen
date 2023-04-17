@@ -508,7 +508,7 @@ Get a list of all Appointment records in the database.
 
 	Type:	GET
 
-	Route:	/appointments
+	Route:	/appointments/all
 
 	Body:
 
@@ -516,7 +516,7 @@ Get a list of all Appointment records in the database.
 
 *Example request(s)*
 
-	GET /appointments
+	GET /appointments/all
 
 *Response format*
 
@@ -578,6 +578,111 @@ func (app *Application) GetAppointments(writer http.ResponseWriter, request *htt
 		writer,
 		http.StatusOK,
 		appts)
+}
+
+/*
+*Description*
+
+func GetActiveAppointments
+
+Get a list of all active Appointment records in the database.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:	GET
+
+	Routes:	/appointments
+			/appointments/active
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	GET /appointments
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				"ID": 123,
+				"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"DeletedAt": null,
+				"service_id":11,
+				"user_id":22,
+				"cancel_date_time":null,
+				"active":true
+			},
+			{
+				"ID": 456,
+				"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+				"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+				"DeletedAt": null,
+				"service_id":42,
+				"user_id":99,
+				"cancel_date_time":null,
+				"active":true
+			},
+			...
+		]
+
+	Failure:
+
+		HTTP/1.1 500 InternalServerError
+		Content-Type: application/json
+
+		{
+			"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
+func (app *Application) GetActiveAppointments(writer http.ResponseWriter, request *http.Request) {
+	appt := models.Appointment{}
+	var appts []models.Appointment
+
+	appts, err := appt.GetAll(app.AppDB)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	var activeAppts []models.Appointment
+	for _, appt := range appts {
+		if appt.Active {
+			activeAppts = append(activeAppts, appt)
+		}
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		activeAppts)
 }
 
 // TODO:  Add documentation (func CancelAppointment)

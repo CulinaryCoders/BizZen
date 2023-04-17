@@ -285,7 +285,7 @@ Retrieves the list of all the Users that have signed up for a particular Service
 
 		Encountered error (nil if no errors are encountered)
 */
-func (service *Service) GetUsers(db *gorm.DB, serviceID uint) ([]User, error) {
+func (service *Service) GetUsers(db *gorm.DB, serviceID uint, activeOnly bool) ([]User, error) {
 	var apptsUserIDs []uint
 	var user User
 	var users []User
@@ -297,8 +297,10 @@ func (service *Service) GetUsers(db *gorm.DB, serviceID uint) ([]User, error) {
 	}
 
 	// Get list of UserIDs from appointments
-	for _, record := range appts {
-		apptsUserIDs = append(apptsUserIDs, record.GetUserID())
+	for _, appt := range appts {
+		if !activeOnly || (activeOnly && appt.Active) {
+			apptsUserIDs = append(apptsUserIDs, appt.GetUserID())
+		}
 	}
 
 	// Get list of Users from appointment UserIDs

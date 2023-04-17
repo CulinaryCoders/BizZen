@@ -690,6 +690,47 @@ func (app *Application) GetServiceAppointments(writer http.ResponseWriter, reque
 		appts)
 }
 
+// TODO:  Add documentation (func GetActiveServiceAppointments)
+func (app *Application) GetActiveServiceAppointments(writer http.ResponseWriter, request *http.Request) {
+	appt := models.Appointment{}
+	var appts []models.Appointment
+	serviceID, err := utils.ParseRequestID(request)
+
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusBadRequest,
+			err.Error())
+
+		return
+	}
+
+	var serviceIDJsonKey string = "service_id"
+	appts, err = appt.GetRecordsBySecondaryID(app.AppDB, serviceIDJsonKey, serviceID)
+	if err != nil {
+		utils.RespondWithError(
+			writer,
+			http.StatusInternalServerError,
+			err.Error())
+
+		log.Printf("ERROR:  %s", err.Error())
+
+		return
+	}
+
+	var activeAppts []models.Appointment
+	for _, appt := range appts {
+		if appt.Active {
+			activeAppts = append(activeAppts, appt)
+		}
+	}
+
+	utils.RespondWithJSON(
+		writer,
+		http.StatusOK,
+		activeAppts)
+}
+
 /*
 *Description*
 
@@ -791,7 +832,7 @@ func (app *Application) GetListOfEnrolledUsers(writer http.ResponseWriter, reque
 	}
 
 	var users []models.User
-	users, err = service.GetUsers(app.AppDB, serviceID)
+	users, err = service.GetUsers(app.AppDB, serviceID, true)
 	if err != nil {
 		utils.RespondWithError(
 			writer,
@@ -885,7 +926,7 @@ func (app *Application) GetEnrolledUsersCount(writer http.ResponseWriter, reques
 	}
 
 	var users []models.User
-	users, err = service.GetUsers(app.AppDB, serviceID)
+	users, err = service.GetUsers(app.AppDB, serviceID, true)
 	if err != nil {
 		utils.RespondWithError(
 			writer,
