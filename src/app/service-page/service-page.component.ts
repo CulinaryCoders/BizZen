@@ -71,7 +71,7 @@ export class ServicePageComponent {
     }
     else
     {
-      console.log("ERROR: the browser state is null. DID you pass the user correctly?");
+      console.log("ERROR: the browser state is null. Did you pass the user correctly?");
     }
   }
 
@@ -95,11 +95,22 @@ export class ServicePageComponent {
   leaveClass()
   {
     this.userJoined = false;
-    let index:number = this.currentUser.classes.findIndex((findService) => this.service.ID == findService.ID);
-    
-    //removes the service
-    this.currentUser.classes.splice(index, 1);
 
+    //find the appointment ID 
+    this.userService.getUserServices(this.currentUser.ID)
+    .then((result) => {
+
+      let index:number = result.findIndex((findServiceAppt) => this.service.ID == findServiceAppt.service.ID);
+      
+      // to account for a strange situation where the user leaves without joining
+      if(index != -1)
+      {
+        this.userService.cancelAppointment(result.at(index)?.appointment.ID as string).then((canceledResult)=>console.log(canceledResult));
+      }
+
+    });
+        
+    
   }
 
   editService()
@@ -108,7 +119,6 @@ export class ServicePageComponent {
 
   }
 
-  //TODO: update the service in DB
   saveEdit()
   {
     this.backupService = this.copyService(this.service);

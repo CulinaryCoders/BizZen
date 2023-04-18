@@ -18,6 +18,8 @@ export class BusinesesDashboardComponent {
 
   srv: any[] = [];
 
+  searchQuery: string = "";
+
   // @ts-ignore
   user: User;
 
@@ -61,6 +63,20 @@ export class BusinesesDashboardComponent {
         return s;
       }
     });
+  }
+
+  filterBySearchTerm(searchQuery: Event) {
+    this.searchQuery = (searchQuery.target as HTMLTextAreaElement).value;
+    if (this.searchQuery === "") {
+      this.resetServiceList();
+    } else {
+      this.services = this.allServices.filter((service) => service.name?.toLowerCase().includes(this.searchQuery.toLowerCase()));
+    }
+  }
+
+  resetServiceList() {
+    this.filterByDateRange(this.viewDateRange);
+    this.searchQuery = "";
   }
 
   formatDate(day: Date) {

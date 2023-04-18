@@ -88,19 +88,41 @@ describe('ServicePageComponent', () => {
   });
 
 
-//TODO: fix
   it('should leave class after joining', () => {
 
     component.currentUser = testUser;
+    component.service = service;
 
     component.joinClass();
+    expect(component.userJoined).toBeTruthy();
+
+    const req = httpTestController.expectOne("http://localhost:8080/appointment");
+    expect(req.request.method).toEqual("POST");
+
     component.leaveClass();
 
-    let index:number = component.currentUser.classes.findIndex((findService) => component.service.ID == findService.ID);
-
     expect(component.userJoined).toBeFalsy();
-    expect(index).toBe(-1);
 
+
+  });
+
+  it('should update service', () => {
+
+    component.service = service;
+
+    component.saveEdit();
+
+    const req = httpTestController.expectOne("http://localhost:8080/service/"+service.ID);
+    expect(req.request.method).toEqual("PUT");
+
+  });
+
+  it('should cancel edit', () => {
+
+    component.service = service;
+
+    component.cancelEdit();
+    expect(component.isEditing).toBeFalsy();
 
   });
 
