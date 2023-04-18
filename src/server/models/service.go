@@ -27,6 +27,19 @@ type Service struct {
 	IsFull        bool      `gorm:"column:is_full" json:"is_full" default:"false"` // True if number of active appointments equals the capacity for the Service (False if not)
 }
 
+// TODO:  Add documentation for GORM db hook (func AfterDelete)
+func (service *Service) AfterDelete(db *gorm.DB) error {
+	appt := Appointment{}
+	var serviceIDJsonKey string = "service_id"
+
+	_, err := appt.DeleteRecordsBySecondaryID(db, serviceIDJsonKey, service.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 /*
 *Description*
 

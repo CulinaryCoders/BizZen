@@ -422,3 +422,55 @@ func (appt *Appointment) Delete(db *gorm.DB, apptID uint) (map[string]Model, err
 
 	return returnRecords, err
 }
+
+/*
+*Description*
+
+func DeleteRecordsBySecondaryID
+
+Deletes a list of Appointment records from the database that are associated with the specified secondary key.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+	secondaryIDJsonKey  <string>
+
+		The JSON key for the secondary ID attribute.
+
+	secondaryID  <uint>
+
+		The secondary ID value.
+
+*Returns*
+
+	_  <[]Appointment>
+
+		The list of Appointment records that were deleted from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
+func (appt *Appointment) DeleteRecordsBySecondaryID(db *gorm.DB, secondaryIDJsonKey string, secondaryID uint) ([]Model, error) {
+	var appts []Appointment
+	var deletedAppts []Model
+
+	appts, err := appt.GetRecordsBySecondaryID(db, secondaryIDJsonKey, secondaryID)
+	if err != nil {
+		return deletedAppts, err
+	}
+
+	for _, deleteAppt := range appts {
+		returnedRecords, err := deleteAppt.Delete(db, deleteAppt.ID)
+		if err != nil {
+			return deletedAppts, err
+		}
+
+		deletedAppts = append(deletedAppts, returnedRecords["appointment"])
+	}
+
+	return deletedAppts, nil
+}
