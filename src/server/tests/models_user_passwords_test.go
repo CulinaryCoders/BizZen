@@ -6,9 +6,10 @@ import (
 )
 
 func TestHashPassword(t *testing.T) {
-	user := &models.User{Password: "password"}
+	var testPassword string = "password"
+	var hashCost int = 8
 
-	err := user.HashPassword(user.Password)
+	hashedPassword, err := models.HashPassword(testPassword, hashCost)
 
 	// assert that the function returns no error
 	if err != nil {
@@ -16,12 +17,12 @@ func TestHashPassword(t *testing.T) {
 	}
 
 	// assert that the password is not empty
-	if user.Password == "" {
+	if hashedPassword == "" {
 		t.Errorf("expected hashed password to not be empty, but got an empty string")
 	}
 
 	// assert that the hashed password is different from the original password
-	if user.Password == "password" {
+	if hashedPassword == "password" {
 		t.Errorf("expected hashed password to be different from the original password, but they are the same")
 	}
 }
