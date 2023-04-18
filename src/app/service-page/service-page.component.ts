@@ -59,7 +59,7 @@ export class ServicePageComponent {
 
 
       //set isBusiness boolean based on current user
-      if(this.currentUser.accountType.toLowerCase() == "user")
+      if(this.currentUser.accountType == "User")
       {
         this.isBusiness = false;
       }
