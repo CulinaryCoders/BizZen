@@ -64,7 +64,16 @@ export class BusinesesDashboardComponent {
   }
 
   filterBySearchTerm(searchQuery: Event) {
-    this.services = this.allServices.filter((service) => service.name?.toLowerCase().includes((searchQuery.target as HTMLTextAreaElement).value.toLowerCase()));
+    let query: string = (searchQuery.target as HTMLTextAreaElement).value;
+    if (query === "") {
+      this.resetServiceList();
+    } else {
+      this.services = this.allServices.filter((service) => service.name?.toLowerCase().includes(query.toLowerCase()));
+    }
+  }
+
+  resetServiceList() {
+    this.filterByDateRange(this.viewDateRange);
   }
 
   formatDate(day: Date) {
