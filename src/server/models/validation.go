@@ -162,7 +162,7 @@ Valid account types:
 			'true' if account type is a valid value, else 'false'.
 */
 func UserAccountTypeIsValid(userAcctType string) bool {
-	validAccountTypes := []string{"business", "user", "system"}
+	validAccountTypes := []string{"Business", "User", "System"}
 	stdUserAcctType := StandardizeUserAccountType(userAcctType)
 	return slices.Contains(validAccountTypes, stdUserAcctType)
 }
