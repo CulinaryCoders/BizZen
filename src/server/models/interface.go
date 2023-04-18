@@ -24,6 +24,9 @@ type Model interface {
 	// TODO: GetRecordsByPrimaryIDs
 	// TODO: GetRecordsBySecondaryID
 	// TODO: GetRecordsBySecondaryIDs
+	// TODO: DeleteRecordsByPrimaryIDs
+	// TODO: DeleteRecordsBySecondaryID
+	// TODO: DeleteRecordsBySecondaryIDs
 }
 
 /*
