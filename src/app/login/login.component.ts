@@ -29,11 +29,11 @@ export class LoginComponent {
 
     if(this.checkbox)
     {
-      this.model.accountType = "business";
+      this.model.account_type = "business";
     }
     else
     {
-      this.model.accountType = "user";
+      this.model.account_type = "user";
     }
 
   
