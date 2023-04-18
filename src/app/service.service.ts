@@ -40,4 +40,10 @@ export class ServiceService {
   getUsers(ID: string) : Promise<User[]>{
     return this.http.get<User[]>(this.apiUrl+'/'+ID+'/users').toPromise().then();
   }
+
+  //Delete service
+  deleteService(ID:string) : Promise<Service> {
+    console.log("service id to delete: ", ID)
+    return this.http.delete<Service>(this.apiUrl+"/"+ID).toPromise().then();
+  }
 }

@@ -57,6 +57,10 @@ export class BusinesesDashboardComponent {
     closing_time: "19:00"
   }
 
+  deleteService(serviceID: string) {
+    this.serviceService.deleteService(serviceID);
+  }
+
   filterByDateRange(e: any[]) {
     this.viewDateRange = e;
     this.services = this.allServices.filter((s) => {
