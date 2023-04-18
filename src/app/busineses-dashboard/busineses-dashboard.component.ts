@@ -36,13 +36,7 @@ export class BusinesesDashboardComponent {
     console.log("date conversion: ", "2023-04-18T11:00", new Date("2023-04-18T11:00"))
     this.user = history.state.user;
 
-    this.serviceService.getServices().then((res) => {
-      for (let i=0; i<res?.length; i++) {
-        this.srv.push(res[i]);
-      }
-      this.allServices = this.srv.sort((a,b) => new Date(a.start_date_time).getTime() - new Date(b.start_date_time).getTime());
-      this.services = this.allServices;
-    });
+    this.fetchServices();
   }
 
   businessOwnerView = history.state.user.account_type === "Business";
@@ -57,8 +51,20 @@ export class BusinesesDashboardComponent {
     closing_time: "19:00"
   }
 
+  fetchServices() {
+    this.serviceService.getServices().then((res) => {
+      for (let i=0; i<res?.length; i++) {
+        this.srv.push(res[i]);
+      }
+      this.allServices = this.srv.sort((a,b) => new Date(a.start_date_time).getTime() - new Date(b.start_date_time).getTime());
+      this.services = this.allServices;
+    });
+  }
+
   deleteService(serviceID: string) {
-    this.serviceService.deleteService(serviceID);
+    this.serviceService.deleteService(serviceID).then(() => {
+      this.fetchServices();
+    })
   }
 
   filterByDateRange(e: any[]) {
