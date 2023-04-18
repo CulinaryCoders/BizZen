@@ -63,8 +63,8 @@ export class BusinesesDashboardComponent {
     });
   }
 
-  filterBySearchTerm(searchQuery: string) {
-    this.services = this.allServices.filter((service) => service.includes(searchQuery))
+  filterBySearchTerm(searchQuery: Event) {
+    this.services = this.allServices.filter((service) => service.name?.toLowerCase().includes((searchQuery.target as HTMLTextAreaElement).value.toLowerCase()));
   }
 
   formatDate(day: Date) {

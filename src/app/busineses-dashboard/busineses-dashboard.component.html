@@ -27,6 +27,12 @@
         <br/><br/>
       </div>
       <ul style="padding: 5px 20px; border: 1px solid grey; border-radius: 5px; max-height: 70vh; overflow: scroll">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">@</span>
+          </div>
+          <input (change)="filterBySearchTerm($event)" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
         <p *ngIf="services && services.length === 0" style="margin-top: 10px">
           No services in calendar date range!
         </p>
