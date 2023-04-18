@@ -15,11 +15,10 @@ export class UserService {
   private getUserURL = 'http://localhost:8080/user/';
   private apptUrl = 'http://localhost:8080/appointment';
 
-  addUser(firstName: string, lastName: string, email: string, password: string, accountType: string) : Promise<User>{
+  addUser(firstName: string, lastName: string, email: string, password: string, accountType: string) : Promise<any | User>{
     return this.http.post<User>(this.apiUrl, {
         first_name: firstName, last_name: lastName, email: email, password: password, account_type: accountType
     }).toPromise().then();
-
   }
 
   //to access user obj in other code (console.log example)
@@ -43,7 +42,7 @@ export class UserService {
     }).toPromise().then();
   }
 
-  
+
   cancelAppointment(appointment_id: string) : Promise<Appointment>
   {
     return this.http.post<Appointment>(this.apptUrl+'/'+appointment_id+'/cancel', {}).toPromise().then();
