@@ -178,7 +178,7 @@ func (app *Application) Run(networkAddress string) {
 
 	corsOptions := cors.Options{
 		AllowedOrigins:      []string{appHTTPAddress, networkAddress, app.NGHandler.HTTPAddress, app.NGHandler.Host},
-		AllowedMethods:      []string{"GET", "POST", "PUT", "HEAD", "OPTIONS"},
+		AllowedMethods:      []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"},
 		AllowedHeaders:      []string{"X-Requested-With", "Content-Type", "Authorization", "DNT", "Keep-Alive", "User-Agent", "X-Requested-With", "If-Modified-Since", "Cache-Control", "Content-Range", "Range"},
 		ExposedHeaders:      []string{"DNT", "Keep-Alive", "User-Agent", "X-Requested-With", "If-Modified-Since", "Cache-Control", "Content-Type", "Content-Range", "Range", "Content-Disposition"},
 		MaxAge:              86400,
