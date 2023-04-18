@@ -29,6 +29,7 @@ type Configuration struct {
 	FRONTEND_HOST     string `mapstructure:"FRONTEND_HOST"`
 	FRONTEND_PORT     int    `mapstructure:"FRONTEND_PORT"`
 	DEBUG_MODE        bool   `mapstructure:"DEBUG_MODE"`
+	FORMAT_DB_ON_INIT bool   `mapstructure:"FORMAT_DB_ON_INIT"`
 	LOAD_TEST_RECORDS bool   `mapstructure:"LOAD_TEST_RECORDS"`
 }
 

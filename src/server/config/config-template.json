@@ -13,5 +13,6 @@
     "FRONTEND_HOST": null,
     "FRONTEND_PORT": null,
     "DEBUG_MODE": null,
+    "FORMAT_DB_ON_INIT": null,
     "LOAD_TEST_RECORDS": null
 }
