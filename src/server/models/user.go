@@ -16,7 +16,7 @@ type User struct {
 	gorm.Model
 	Email       string `gorm:"not null;unique;column:email" json:"email"`          // User's email address
 	Password    string `gorm:"not null;column:password" json:"password"`           // User's hashed password
-	AccountType string `gorm:"not null;column:account_type" json:"account_type"`   // Account type of the User record (Individual, Business, System)
+	AccountType string `gorm:"not null;column:account_type" json:"account_type"`   // Account type of the User record (User, Business, System)
 	FirstName   string `gorm:"not null;column:first_name" json:"first_name"`       // User's first name
 	LastName    string `gorm:"not null;column:last_name" json:"last_name"`         // User's last name
 	BusinessID  *uint  `gorm:"column:business_id;default:null" json:"business_id"` // ID of the Business record associated with the User record

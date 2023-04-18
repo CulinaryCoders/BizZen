@@ -21,7 +21,7 @@ func TestCreateUser(t *testing.T) {
 	testCreateUser := models.User{
 		Email:       "test@gmail.com",
 		Password:    "pw123",
-		AccountType: "Individual",
+		AccountType: "User",
 		FirstName:   "John",
 		LastName:    "Smith",
 	}

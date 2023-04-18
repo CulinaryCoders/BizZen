@@ -781,7 +781,7 @@ Get a list of the User records with an active Appointment for the specified Serv
 				"DeletedAt": null,
 				"email": "curb-it@example.com",
 				"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
-				"account_type": "Individual",
+				"account_type": "User",
 				"first_name": "Larry",
 				"last_name": "David",
 				"business_id": null

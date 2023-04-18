@@ -55,7 +55,7 @@ Creates a new user account record in the database.
 				The user account type
 
 				Permitted values:
-					Individual
+					User
 					Business
 					System
 
@@ -79,7 +79,7 @@ Creates a new user account record in the database.
 	{
 	  "email": "johndoe@example.com",
 	  "password": "secretpassword",
-	  "account_type": "Individual",
+	  "account_type": "User",
 	  "first_name": "John",
 	  "last_name": "Doe"
 	}
@@ -98,7 +98,7 @@ Creates a new user account record in the database.
 		"DeletedAt": null,
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
-		"account_type": "Individual",
+		"account_type": "User",
 		"first_name": "John",
 		"last_name": "Doe",
 		"business_id": null
@@ -173,7 +173,7 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 
 	//  Confirm User has valid AccountType
 	if !models.UserAccountTypeIsValid(user.AccountType) {
-		var errorMessage string = fmt.Sprintf("Invalid account type specified when creating new User record (account_type = %s). Account type must be 'Individual', 'Business', or 'System'.", user.AccountType)
+		var errorMessage string = fmt.Sprintf("Invalid account type specified when creating new User record (account_type = %s). Account type must be 'User', 'Business', or 'System'.", user.AccountType)
 
 		utils.RespondWithError(
 			writer,
@@ -278,7 +278,7 @@ Retrieves a user account record from the database by user ID if the ID exists in
 		"DeletedAt": null,
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
-		"account_type": "Individual",
+		"account_type": "User",
 		"first_name": "John",
 		"last_name": "Doe",
 		"business_id": null
@@ -388,7 +388,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 				The user account type
 
 				Permitted values:
-					Individual
+					User
 					Business
 					System
 
@@ -426,7 +426,7 @@ If a specified field's value should be deleted from the record, the appropriate 
 		"DeletedAt": null,
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
-		"account_type": "Individual",
+		"account_type": "User",
 		"first_name": "Luke",
 		"last_name": "Skywalker",
 		"business_id": null
@@ -545,7 +545,7 @@ Deleted user record is returned in the response body if the operation is sucessf
 		"DeletedAt": "2022-07-11T01:23:45.6789012-14:25",
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
-		"account_type": "Individual",
+		"account_type": "User",
 		"first_name": "John",
 		"last_name": "Doe",
 		"business_id": null
@@ -648,7 +648,7 @@ Get a list of all User records in the database.
 				"DeletedAt": null,
 				"email": "curb-it@example.com",
 				"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
-				"account_type": "Individual",
+				"account_type": "User",
 				"first_name": "Larry",
 				"last_name": "David",
 				"business_id": null

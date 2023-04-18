@@ -85,7 +85,7 @@ Authenticates that the provided user account exists in the database and that the
 		"DeletedAt": null,
 		"email": "johndoe@example.com",
 		"password": "$2a$14$ITcK9ZosVTZpx3OeJT8qu.I1Qfy31MinvsYvPbOCeIXj2fSxMCh8O",
-		"account_type": "Individual",
+		"account_type": "User",
 		"first_name": "John",
 		"last_name": "Doe",
 		"contact_info_id": 45,
