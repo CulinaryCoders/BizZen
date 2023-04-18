@@ -50,7 +50,7 @@ export class RegisterComponent {
         this.userService.addUser(this.registerForm.value.first_name!, this.registerForm.value.last_name!, this.registerForm.value.email!, this.registerForm.value.password!, this.registerForm.value.accountType)
           .then((result) =>
             //route to profile
-            this.router.navigateByUrl('/profile', {state: {user: result }})
+            this.router.navigateByUrl('/profile', {state: {user: result.user }})
           ).catch((err) => {
             console.error("ERROR creating user: ", err)
         });

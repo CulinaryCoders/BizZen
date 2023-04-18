@@ -61,6 +61,7 @@ export class CreateServiceComponent {
     this.errorMsg = this.verifyFields();
     if (this.errorMsg === "") {
       let res = this.serviceService.addService(this.newService);
+      console.log("AFTER result: ", res)
       this.router.navigateByUrl('/home', {state: {user: history.state.user}});
     }
   }

@@ -16,7 +16,7 @@ export class ServiceService {
   // Adds service to DB with specified properties
   addService(service: FormGroup) : Promise<Service>{
     return this.http.post<Service>(this.apiUrl, {
-      name: service.value.name, desc: service.value.description, start_date_time: service.value.start_date_time, length: service.value.length, capacity: service.value.capacity, price: service.value.price
+      name: service.value.name, desc: service.value.description, start_date_time: new Date(service.value.startDateTime), length: service.value.length, capacity: service.value.capacity, price: service.value.price
     }).toPromise().then();
   }
 
@@ -39,5 +39,11 @@ export class ServiceService {
   //get all users attached to service with id given
   getUsers(ID: string) : Promise<User[]>{
     return this.http.get<User[]>(this.apiUrl+'/'+ID+'/users').toPromise().then();
+  }
+
+  //Delete service
+  deleteService(ID:string) : Promise<Service> {
+    console.log("service id to delete: ", ID)
+    return this.http.delete<Service>(this.apiUrl+"/"+ID).toPromise().then();
   }
 }
