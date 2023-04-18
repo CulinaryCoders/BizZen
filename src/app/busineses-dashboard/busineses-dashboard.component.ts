@@ -63,6 +63,10 @@ export class BusinesesDashboardComponent {
     });
   }
 
+  filterBySearchTerm(searchQuery: string) {
+    this.services = this.allServices.filter((service) => service.includes(searchQuery))
+  }
+
   formatDate(day: Date) {
     return formatDate(day, "MMM dd, yyyy", 'en')
   }
