@@ -38,10 +38,10 @@ describe('ServiceCalendarComponent', () => {
     component.setView(CalendarView.Month);
     expect(component.view).toBe(CalendarView.Month);
 
-    // component.setView(CalendarView.Week);
-    // expect(component.view).toBe(CalendarView.Week);
-    //
-    // component.setView(CalendarView.Day);
-    // expect(component.view).toBe(CalendarView.Day);
+    component.setView(CalendarView.Week);
+    expect(component.view).toBe(CalendarView.Week);
+
+    component.setView(CalendarView.Day);
+    expect(component.view).toBe(CalendarView.Day);
   });
 });
