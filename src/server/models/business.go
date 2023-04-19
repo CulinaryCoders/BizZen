@@ -11,7 +11,6 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// TODO: Add foreign key logic to Business model
 // GORM model for all Business records in the database
 type Business struct {
 	gorm.Model
@@ -357,7 +356,6 @@ func (business *Business) Update(db *gorm.DB, businessID uint, updates map[strin
 	return returnRecords, err
 }
 
-// TODO: Cascade delete all records associated with business (operating hours, offices, contact info, etc.)
 /*
 *Description*
 
@@ -386,7 +384,6 @@ Deleted record is returned along with any errors that are thrown.
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
 */
 func (business *Business) Delete(db *gorm.DB, businessID uint) (map[string]Model, error) {
 	// Confirm businessID exists in the database and get current object
@@ -401,7 +398,6 @@ func (business *Business) Delete(db *gorm.DB, businessID uint) (map[string]Model
 		log.Printf("\n\nBusiness object targeted for deletion:\n\n%+v\n\n", deleteBusiness)
 	}
 
-	// TODO:  Extend delete operations to all of the other object types associated with the Business record as is appropriate (Offices, Services, etc.)
 	err = db.Delete(deleteBusiness).Error
 	returnRecords = map[string]Model{"business": deleteBusiness}
 

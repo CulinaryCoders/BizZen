@@ -97,7 +97,7 @@ Tests the ParseRequestID method to confirm that the ID field from the request UR
 func TestParseRequestID(t *testing.T) {
 	req, err := http.NewRequest("GET", "/", nil)
 	if err != nil {
-		t.Fatalf("Failed to create request: %s", err)
+		t.Errorf("Failed to create request: %s", err)
 	}
 
 	var testUserID uint = 123
@@ -127,7 +127,7 @@ Tests the ParseRequestIDField method to confirm that the specified ID field from
 func TestParseRequestIDField(t *testing.T) {
 	req, err := http.NewRequest("GET", "/", nil)
 	if err != nil {
-		t.Fatalf("Failed to create request: %s", err)
+		t.Errorf("Failed to create request: %s", err)
 	}
 
 	svcIDFieldKey := "service-id"
