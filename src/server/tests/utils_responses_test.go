@@ -4,14 +4,22 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 
 	"server/utils"
 
 	"github.com/gorilla/mux"
+	"github.com/stretchr/testify/assert"
 )
 
-// TODO:  Add documentation (func TestRespondWithJSON)
+/*
+*Description*
+
+func TestRespondWithJSON
+
+Tests the RespondWithJSON method and ensures that the response being returned by the method is formatted correctly and returns what is expected.
+*/
 func TestRespondWithJSON(t *testing.T) {
 	// Create a mock HTTP response writer
 	w := httptest.NewRecorder()
@@ -45,7 +53,13 @@ func TestRespondWithJSON(t *testing.T) {
 	}
 }
 
-// TODO:  Add documentation (func TestRespondWithError)
+/*
+*Description*
+
+func TestRespondWithError
+
+Tests the RespondWithError method and ensures that the response being returned by the method is formatted correctly and returns what is expected
+*/
 func TestRespondWithError(t *testing.T) {
 	// Create a mock HTTP response
 	w := httptest.NewRecorder()
@@ -73,19 +87,73 @@ func TestRespondWithError(t *testing.T) {
 	}
 }
 
-// TODO:  Add documentation (func TestParseRequestID)
-func TestParseRequestID(t *testing.T) {
-	req, err := http.NewRequest("GET", "/users/123", nil)
-	if err != nil {
-		t.Fatalf("Failed to create request: %v", err)
-	}
-	req = mux.SetURLVars(req, map[string]string{"id": "123"})
+/*
+*Description*
 
-	id, err := utils.ParseRequestID(req)
+func TestParseRequestID
+
+Tests the ParseRequestID method to confirm that the ID field from the request URL is parsed into uint format and that the appropriate error is returned if the ID is missing or formatted incorrectly.
+*/
+func TestParseRequestID(t *testing.T) {
+	req, err := http.NewRequest("GET", "/", nil)
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
+		t.Fatalf("Failed to create request: %s", err)
 	}
-	if id != 123 {
-		t.Errorf("Unexpected id value: %d", id)
+
+	var testUserID uint = 123
+	idKey := "id"
+
+	requestVars := map[string]string{
+		idKey: strconv.FormatUint(uint64(testUserID), 10),
 	}
+
+	req = mux.SetURLVars(req, requestVars)
+
+	returnedID, err := utils.ParseRequestID(req)
+	if err != nil {
+		t.Errorf("Encountered unexpected error when retrieving 'id' variable from request URL: %s", err)
+	}
+
+	assert.Equal(t, returnedID, testUserID, "Returned ID value (%d) should match expected ID value (%d).", returnedID, testUserID)
+}
+
+/*
+*Description*
+
+func TestParseRequestIDField
+
+Tests the ParseRequestIDField method to confirm that the specified ID field from the request URL is parsed into uint format and that the appropriate error is returned if the field is missing or formatted incorrectly.
+*/
+func TestParseRequestIDField(t *testing.T) {
+	req, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatalf("Failed to create request: %s", err)
+	}
+
+	svcIDFieldKey := "service-id"
+	apptIDFieldKey := "appointment-id"
+
+	var testSvcID uint = 123
+	var testApptID uint = 456
+
+	requestVars := map[string]string{
+		svcIDFieldKey:  strconv.FormatUint(uint64(testSvcID), 10),
+		apptIDFieldKey: strconv.FormatUint(uint64(testApptID), 10),
+	}
+
+	req = mux.SetURLVars(req, requestVars)
+
+	returnedSvcID, err := utils.ParseRequestIDField(req, svcIDFieldKey)
+	if err != nil {
+		t.Errorf("Unexpected error when getting '%s' variable from request.  --  %s", svcIDFieldKey, err)
+	}
+
+	returnedApptID, err := utils.ParseRequestIDField(req, apptIDFieldKey)
+	if err != nil {
+		t.Errorf("Unexpected error when getting '%s' variable from request.  --  %s", apptIDFieldKey, err)
+	}
+
+	assert.Equal(t, returnedSvcID, testSvcID, "Returned '%s' ID value (%d) should match expected ID value (%d).", svcIDFieldKey, returnedSvcID, testSvcID)
+	assert.Equal(t, returnedApptID, testApptID, "Returned '%s' ID value (%d) should match expected ID value (%d).", apptIDFieldKey, returnedApptID, testApptID)
+
 }
