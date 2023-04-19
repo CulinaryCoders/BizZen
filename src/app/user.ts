@@ -7,7 +7,7 @@ export class User {
         public last_name : string,
         public email : string,
         public password : string,
-        public accountType : string,
+        public account_type : string,
 
         public classes : Service[]
 

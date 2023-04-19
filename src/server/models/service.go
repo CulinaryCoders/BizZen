@@ -316,9 +316,14 @@ func (service *Service) GetUsers(db *gorm.DB, serviceID uint, activeOnly bool) (
 	}
 
 	// Get list of Users from appointment UserIDs
-	users, err = user.GetRecordsByPrimaryIDs(db, apptsUserIDs)
+	if len(apptsUserIDs) > 0 {
+		users, err = user.GetRecordsByPrimaryIDs(db, apptsUserIDs)
+		if err != nil {
+			return users, err
+		}
+	}
 
-	return users, err
+	return users, nil
 }
 
 /*

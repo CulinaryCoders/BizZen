@@ -35,7 +35,7 @@ func (user *User) BeforeCreate(db *gorm.DB) error {
 	user.StandardizeFields()
 
 	if !UserAccountTypeIsValid(user.AccountType) {
-		var errorMessage string = fmt.Sprintf("Invalid account type specified when creating new User record (account_type = %s). Account type must be 'Individual', 'Business', or 'System'.", user.AccountType)
+		var errorMessage string = fmt.Sprintf("Invalid account type specified when creating new User record (account_type = %s). Account type must be 'User', 'Business', or 'System'.", user.AccountType)
 		return errors.New(errorMessage)
 	}
 
