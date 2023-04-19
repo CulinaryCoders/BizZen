@@ -51,13 +51,15 @@ export class ServiceCalendarComponent implements OnInit{
   events: CalendarEvent[] = [];
 
   ngOnInit(): void {
-    this.services.forEach((service) => {
-      this.events.push({
-        start: new Date(service.start_date_time),
-        title: service.name,
-        meta: {serviceObj: service},
-      })
-    });
+    if (this.services && this.services.length > 0) {
+      this.services.forEach((service) => {
+        this.events.push({
+          start: new Date(service.start_date_time),
+          title: service.name,
+          meta: {serviceObj: service},
+        })
+      });
+    }
   }
 
   setView(view: CalendarView) {

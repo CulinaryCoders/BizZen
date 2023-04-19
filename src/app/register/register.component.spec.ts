@@ -63,6 +63,7 @@ describe('RegisterComponent', () => {
 
   it('should check that all fields are filled in', () => {
     component.registerForm.value.first_name = "test"
+    component.registerForm.value.last_name = "test"
     component.registerForm.value.email = "test@example.com"
     component.registerForm.value.password = "pass123"
 
