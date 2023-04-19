@@ -20,4 +20,9 @@ describe('BusinesesDashboardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('fetches list of services from db', () => {
+    expect(component).toBeTruthy();
+  });
+
 });

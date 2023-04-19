@@ -32,16 +32,12 @@ export class BusinesesDashboardComponent {
   constructor(private router: Router, private serviceService: ServiceService) {};
 
   ngOnInit() {
-
-    console.log("date conversion: ", "2023-04-18T11:00", new Date("2023-04-18T11:00"))
     this.user = history.state.user;
-
     this.fetchServices();
   }
 
   businessOwnerView = history.state.user.account_type === "Business";
 
-  // TODO: read from db
   business = {
     id: 1,
     name: "CEN Recreational Center",
