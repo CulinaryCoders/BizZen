@@ -211,18 +211,24 @@ func LoadJSONSampleData(db *gorm.DB) error {
 	}
 
 	//  Businesses
-	var businessJSONKey string = "business"
+	/*
+		UPDATE:
 
-	businessLoadMapping := DataLoadMapping[*models.Business]{
-		Records:                   sampleData.Businesses,
-		PrimaryReturnObjectKey:    businessJSONKey,
-		SecondaryReturnObjectKeys: []string{},
-	}
+			Temporarily commenting out business sample records load.
+			User 'Business' account types already creates a new business record.
+	*/
+	// var businessJSONKey string = "business"
 
-	err = businessLoadMapping.CreateSampleRecords(db)
-	if err != nil {
-		return err
-	}
+	// businessLoadMapping := DataLoadMapping[*models.Business]{
+	// 	Records:                   sampleData.Businesses,
+	// 	PrimaryReturnObjectKey:    businessJSONKey,
+	// 	SecondaryReturnObjectKeys: []string{},
+	// }
+
+	// err = businessLoadMapping.CreateSampleRecords(db)
+	// if err != nil {
+	// 	return err
+	// }
 
 	//  Services
 	var serviceJSONKey string = "service"

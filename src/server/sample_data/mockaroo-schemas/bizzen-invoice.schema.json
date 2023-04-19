@@ -1,6 +1,6 @@
 {
   "id": 514498,
-  "num_rows": 500,
+  "num_rows": 800,
   "file_format": "json",
   "name": "bizzen-invoice",
   "array": false,
@@ -22,16 +22,16 @@
       "null_percentage": 0,
       "type": "Number",
       "min": 0,
-      "max": 100000,
+      "max": 10000,
       "decimals": 0,
-      "formula": ""
+      "formula": "round(this/500, 0) * 500"
     },
     {
       "name": "remaining_balance",
       "null_percentage": 0,
       "type": "Number",
       "min": 0,
-      "max": 100000,
+      "max": 10000,
       "decimals": 0,
       "formula": "if appointment_id > 999300 then (original_balance - random(0, original_balance))\nelse 0 end"
     },
