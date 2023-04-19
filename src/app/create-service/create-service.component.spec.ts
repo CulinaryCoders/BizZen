@@ -29,10 +29,11 @@ describe('CreateServiceComponent', () => {
   it('verifies that all fields are entered', () => {
     component.newService.value.name = "test";
     component.newService.value.description = "test descr";
-    component.newService.value.startDateTime = "11:10";
-    component.newService.value.length = "12:10";
+    component.newService.value.startDateTime = new Date();
+    component.newService.value.length = 12;
     component.newService.value.capacity = 5;
     component.newService.value.price = 15;
+    component.newService.value.cancellationFee = 15;
 
     const allFilled = component.verifyFields();
     // Returns error message, if empty string, no errors

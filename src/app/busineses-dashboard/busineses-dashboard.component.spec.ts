@@ -76,9 +76,6 @@ describe('BusinesesDashboardComponent', () => {
     let duration = 10;
     let endDate = component.getEndDate(startDateTime, duration);
     expect(endDate).toEqual(new Date(startDateTime.getTime() + length*60000))
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.goToServicePage(service);
-    expect(navigateSpy).toHaveBeenCalledWith('/class-summary', {state:{user:history.state.user, service: service, prevPage: "/home"}});
   });
 
   it('Should navigate to service info page', () => {
@@ -89,6 +86,6 @@ describe('BusinesesDashboardComponent', () => {
 
   it('Updates the view date range for services to be filtered by', () => {
     component.updateDateRange([new Date("4/11/2023"), new Date("4/12/2023")]);
-    expect(component.viewDateRange).toBe([new Date("4/11/2023"), new Date("4/12/2023")])
+    expect(component.viewDateRange).toEqual([new Date("4/11/2023"), new Date("4/12/2023")])
   });
 });
