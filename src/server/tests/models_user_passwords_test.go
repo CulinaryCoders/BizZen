@@ -1,46 +1,61 @@
 package tests
 
 import (
+	"server/config"
 	"server/models"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
+/*
+*Description*
+
+func TestHashPassword
+
+Tests the HashPassword method to ensure that user passwords are being hashed as expected.
+*/
 func TestHashPassword(t *testing.T) {
-	var testPassword string = "password"
-	var hashCost int = 8
+	var plainTextPassword string = "to8Od5DGg"
+	var expectedHashString string = "$2a$08$IUhUwqZdaRG1K0.IRUqBj.X2zOZpBQWAAzHFKj6cp1kmIxKnLVSuq"
 
-	hashedPassword, err := models.HashPassword(testPassword, hashCost)
+	returnedHashString, err := models.HashPassword(plainTextPassword, config.PWHashCost)
 
-	// assert that the function returns no error
 	if err != nil {
-		t.Errorf("expected no error, but got %v", err)
+		t.Errorf("Error returned when one wasn't expected. ERROR:  %s", err)
 	}
 
-	// assert that the password is not empty
-	if hashedPassword == "" {
-		t.Errorf("expected hashed password to not be empty, but got an empty string")
-	}
-
-	// assert that the hashed password is different from the original password
-	if hashedPassword == "password" {
-		t.Errorf("expected hashed password to be different from the original password, but they are the same")
-	}
+	assert.Equal(t, returnedHashString, expectedHashString, "Returned password should match expected hashed password.\n\nReturned password:  %s\nExpected hashed password:  %s\n\n", returnedHashString, expectedHashString)
 }
 
+/*
+*Description*
+
+func TestCheckPassword
+
+Tests the CheckPassword method to ensure the method is correctly confirming when passwords match and throwing the appropriate error/response when they don't.
+*/
 func TestCheckPassword(t *testing.T) {
-	user := &models.User{
-		Password: "$2a$14$yYPvfXdM7SaAdxA5jQr4Bu1jq9AsqBSA4lL.8LI8FostoL1UCcth2",
-	}
+	testUserPassword := "Jzb!yxK@Ito5h&A_1"
+	hashedPassword, err := models.HashPassword(testUserPassword, config.PWHashCost)
 
-	// Test with correct password
-	err := user.CheckPassword("password123")
 	if err != nil {
-		t.Errorf("CheckPassword() returned an unexpected error: %v", err)
+		t.Errorf("Error returned by HashPassword when one wasn't expected. ERROR:  %s", err)
 	}
 
-	// Test with incorrect password
-	err = user.CheckPassword("wrongpassword")
+	user := &models.User{
+		Password: hashedPassword,
+	}
+
+	//  Confirm correct password doesn't return an error
+	err = user.CheckPassword(testUserPassword)
+	if err != nil {
+		t.Errorf("CASE [Correct Password]:  Error returned by CheckPassword when one wasn't expected. ERROR:  %s", err)
+	}
+
+	//  Confirm incorrect password returns an error
+	err = user.CheckPassword("WrongPassword")
 	if err == nil {
-		t.Error("CheckPassword() did not return an error with an incorrect password")
+		t.Error("CASE [Incorrect Password]:  CheckPassword did not return error when incorrect password was provided.")
 	}
 }
