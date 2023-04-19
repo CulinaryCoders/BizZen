@@ -1,13 +1,16 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, NgModule, OnInit, Output} from '@angular/core';
 import {
-  CalendarEvent,
+  CalendarDateFormatter,
+  CalendarEvent, CalendarModule, CalendarMomentDateFormatter,
   CalendarMonthViewBeforeRenderEvent,
   CalendarView,
-  CalendarWeekViewBeforeRenderEvent
+  CalendarWeekViewBeforeRenderEvent, DateAdapter
 } from 'angular-calendar';
 import {Router} from "@angular/router";
 import {User} from "../user";
 import {ServiceService} from "../service.service";
+import {CommonModule} from "@angular/common";
+import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
 
 @Component({
   selector: 'app-service-calendar-component',
@@ -27,6 +30,7 @@ import {ServiceService} from "../service.service";
     `,
   ],
 })
+
 export class ServiceCalendarComponent implements OnInit{
   constructor(private router: Router, private serviceService: ServiceService) {};
   // @ts-ignore
@@ -51,13 +55,15 @@ export class ServiceCalendarComponent implements OnInit{
   events: CalendarEvent[] = [];
 
   ngOnInit(): void {
-    this.services.forEach((service) => {
-      this.events.push({
-        start: new Date(service.start_date_time),
-        title: service.name,
-        meta: {serviceObj: service},
-      })
-    });
+    if (this.services && this.services.length > 0) {
+      this.services.forEach((service) => {
+        this.events.push({
+          start: new Date(service.start_date_time),
+          title: service.name,
+          meta: {serviceObj: service},
+        })
+      });
+    }
   }
 
   setView(view: CalendarView) {

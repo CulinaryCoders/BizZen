@@ -1,0 +1,23 @@
+{
+    "getUsers": {
+        "userList": [
+            {
+                "ID": "1",
+                "first_name": "First Name",
+                "last_name": "Last Name",
+                "email": "test@email.com",
+                "password": "pass",
+                "account_type": "User"
+            },
+            {
+                "ID": "2",
+                "first_name": "Business",
+                "last_name": "Last Name",
+                "email": "business@email.com",
+                "password": "pass",
+                "account_type": "Business"
+            }
+        ]
+    }
+
+}

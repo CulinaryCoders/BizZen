@@ -2,21 +2,34 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateServiceComponent } from './create-service.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {HttpClientTestingModule} from '@angular/common/http/testing'
+import { NavbarComponent } from '../navbar/navbar.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import {User} from "../user";
+import {Router} from "@angular/router";
 
 describe('CreateServiceComponent', () => {
   let component: CreateServiceComponent;
   let fixture: ComponentFixture<CreateServiceComponent>;
+  let router : Router;
+
+  let testUser = new User("12345","firstname", "lastname", "email", "pass", "Business", []);
 
   beforeEach(async () => {
+    window.history.pushState({user: testUser}, '');
+
     await TestBed.configureTestingModule({
-      declarations: [ CreateServiceComponent ],
+      declarations: [ CreateServiceComponent, NavbarComponent],
       imports: [
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientTestingModule,
+        RouterTestingModule
       ]
     })
     .compileComponents();
 
+    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(CreateServiceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -29,10 +42,11 @@ describe('CreateServiceComponent', () => {
   it('verifies that all fields are entered', () => {
     component.newService.value.name = "test";
     component.newService.value.description = "test descr";
-    component.newService.value.startDateTime = "11:10";
-    component.newService.value.length = "12:10";
+    component.newService.value.startDateTime = new Date();
+    component.newService.value.length = 12;
     component.newService.value.capacity = 5;
     component.newService.value.price = 15;
+    component.newService.value.cancellationFee = 15;
 
     const allFilled = component.verifyFields();
     // Returns error message, if empty string, no errors
@@ -49,15 +63,17 @@ describe('CreateServiceComponent', () => {
     expect(allFilled).not.toBe("");
   });
 
-  it('checks that the specified start is before the end', () => {
-    component.newService.value.startDateTime = "11:12";
-    component.newService.value.length = "12:12";
-    // expect(component.validStartEndTime()).toBeTruthy();
+  it('Routes to landing', () => {
+    const navigateSpy = spyOn(router, 'navigate');
+    component.routeToHome();
+    expect(navigateSpy).toHaveBeenCalledWith(['/']);
+
   });
 
-  it('returns error if end time is before start', () => {
-    component.newService.value.startDateTime = "13:12";
-    component.newService.value.length = "11:12";
-    // expect(component.validStartEndTime()).toBeFalsy();
+  it('Routes to Business Dashboard', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.routeToDash();
+    expect(navigateSpy).toHaveBeenCalledWith('/home', {state: {user: history.state.user}});
+
   });
 });
