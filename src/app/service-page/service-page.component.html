@@ -109,7 +109,7 @@
                             #servicePrice ="ngModel">
                     </div>
                     <!--normal view-->
-                    <p class="card-text" [hidden] = "isEditing"><b>Classes start at: </b>${{service.price/100}}</p>
+                    <p class="card-text" onchange="setTwoNumberDecimal" [hidden] = "isEditing"><b>Classes start at: </b>${{service.price/100}}</p>
                 </div>
                 
             </div>
