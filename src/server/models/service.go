@@ -11,7 +11,6 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// TODO: Add foreign key logic to Service model
 // GORM model for all Service records in the database
 type Service struct {
 	gorm.Model
@@ -27,7 +26,26 @@ type Service struct {
 	IsFull        bool      `gorm:"column:is_full" json:"is_full" default:"false"` // True if number of active appointments equals the capacity for the Service (False if not)
 }
 
-// TODO:  Add documentation for GORM db hook (func AfterDelete)
+/*
+*Description*
+
+func AfterDelete (GORM hook)
+
+Deletes all of the Appointment records in the database that are associated with a Service record
+when the Service record is deleted.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func (service *Service) AfterDelete(db *gorm.DB) error {
 	appt := Appointment{}
 	var serviceIDJsonKey string = "service_id"
@@ -384,7 +402,6 @@ func (service *Service) Update(db *gorm.DB, serviceID uint, updates map[string]i
 	return returnRecords, err
 }
 
-// TODO: Cascade delete all records associated with service (ServiceOfferings, etc.)
 /*
 *Description*
 
@@ -413,7 +430,6 @@ Deleted record is returned along with any errors that are thrown.
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
 */
 func (service *Service) Delete(db *gorm.DB, serviceID uint) (map[string]Model, error) {
 	// Confirm serviceID exists in the database and get current object
@@ -428,7 +444,6 @@ func (service *Service) Delete(db *gorm.DB, serviceID uint) (map[string]Model, e
 		log.Printf("\n\nService object targeted for deletion:\n\n%+v\n\n", deleteService)
 	}
 
-	// TODO:  Extend delete operations to all of the other object types associated with the Service record as is appropriate (ServiceOfferings, etc.)
 	err = db.Delete(deleteService).Error
 	returnRecords = map[string]Model{"service": deleteService}
 
