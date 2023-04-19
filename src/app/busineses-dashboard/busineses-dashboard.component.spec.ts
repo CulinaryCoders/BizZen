@@ -51,20 +51,20 @@ describe('BusinesesDashboardComponent', () => {
     expect(req.request.method).toEqual("GET");
   });
 
-  it('Filters services by ascending date', () => {
-    let dateRange = [new Date("4/13/2023T11:00:00")]
-    let services = [
-      new Service("123", "Test Service", "Test Service desc",
-        new Date("4/13/2023 11:00:00"), 120, 10, 15),
-      new Service("123", "Test Service", "Test Service desc",
-        new Date("4/12/2023 11:00:00"), 120, 10, 15),
-      new Service("123", "Test Service", "Test Service desc",
-        new Date("4/11/2023 11:00:00"), 120, 10, 15),
-      new Service("123", "Test Service", "Test Service desc",
-        new Date("4/15/2023 11:00:00"), 120, 10, 15)
-    ];
-
-  });
+  // it('Filters services by ascending date', () => {
+  //   let dateRange = [new Date("4/13/2023T11:00:00")]
+  //   let services = [
+  //     new Service("123", "Test Service", "Test Service desc",
+  //       new Date("4/13/2023 11:00:00"), 120, 10, 15),
+  //     new Service("123", "Test Service", "Test Service desc",
+  //       new Date("4/12/2023 11:00:00"), 120, 10, 15),
+  //     new Service("123", "Test Service", "Test Service desc",
+  //       new Date("4/11/2023 11:00:00"), 120, 10, 15),
+  //     new Service("123", "Test Service", "Test Service desc",
+  //       new Date("4/15/2023 11:00:00"), 120, 10, 15)
+  //   ];
+  //
+  // });
 
   it('Should navigate to create service', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
