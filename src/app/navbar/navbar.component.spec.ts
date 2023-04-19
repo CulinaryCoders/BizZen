@@ -12,6 +12,8 @@ describe('NavbarComponent', () => {
   let testUser = new User("12345","firstname", "lastname", "email", "pass", "User", []);
 
   beforeEach(async () => {
+    window.history.pushState({user:testUser}, '');
+
     await TestBed.configureTestingModule({
       declarations: [ NavbarComponent ],
       imports: [RouterTestingModule]
@@ -32,7 +34,7 @@ describe('NavbarComponent', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
     component.routeToProfile();
-    expect(navigateSpy).toHaveBeenCalledWith('/profile', {state: {user: testUser}});
+    expect(navigateSpy).toHaveBeenCalledWith('/profile', {state: {user: history.state.user}});
   });
 
   it('Should navigate to Landing page', () => {
@@ -46,6 +48,6 @@ describe('NavbarComponent', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
     component.routeToDash();
-    expect(navigateSpy).toHaveBeenCalledWith('/home', {state: {user: testUser}});
+    expect(navigateSpy).toHaveBeenCalledWith('/home', {state: {user: history.state.user}});
   });
 });

@@ -68,7 +68,7 @@ describe('BusinesesDashboardComponent', () => {
   it('Should navigate to create service', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.openAddService();
-    expect(navigateSpy).toHaveBeenCalledWith('/home', {state:{user:testUser}});
+    expect(navigateSpy).toHaveBeenCalledWith('/home', {state:{user:history.state.user}});
   });
 
   it('Returns correct Date-Time from start date and duration', () => {
@@ -78,13 +78,13 @@ describe('BusinesesDashboardComponent', () => {
     expect(endDate).toEqual(new Date(startDateTime.getTime() + length*60000))
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.goToServicePage(service);
-    expect(navigateSpy).toHaveBeenCalledWith('/class-summary', {state:{user:testUser, service: service, prevPage: "/home"}});
+    expect(navigateSpy).toHaveBeenCalledWith('/class-summary', {state:{user:history.state.user, service: service, prevPage: "/home"}});
   });
 
   it('Should navigate to service info page', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.goToServicePage(service);
-    expect(navigateSpy).toHaveBeenCalledWith('/class-summary', {state:{user:testUser, service: service, prevPage: "/home"}});
+    expect(navigateSpy).toHaveBeenCalledWith('/class-summary', {state:{user:history.state.user, service: service, prevPage: "/home"}});
   });
 
   it('Updates the view date range for services to be filtered by', () => {
