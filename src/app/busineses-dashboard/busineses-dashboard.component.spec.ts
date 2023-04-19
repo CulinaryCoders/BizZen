@@ -74,10 +74,11 @@ describe('BusinesesDashboardComponent', () => {
 
   it('Returns correct Date-Time from start date and duration', () => {
     let startDateTime = new Date();
-    let duration = 10;
-    let endDate = component.getEndDate(startDateTime, duration);
+    let length = 10;
+    let endDate = component.getEndDate(startDateTime, length);
     let expectedEnd = new Date(startDateTime.getTime() + length*60000);
-    expect(endDate).toEqual(expectedEnd);
+
+    expect(endDate).toEqual(new Date(expectedEnd));
   });
 
   it('Should navigate to service info page', () => {
