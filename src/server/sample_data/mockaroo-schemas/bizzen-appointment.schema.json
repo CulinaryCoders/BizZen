@@ -1,6 +1,6 @@
 {
   "id": 514466,
-  "num_rows": 500,
+  "num_rows": 800,
   "file_format": "json",
   "name": "bizzen-appointment",
   "array": false,
@@ -15,13 +15,13 @@
       "name": "service_id",
       "null_percentage": 0,
       "type": "Row Number",
-      "formula": "this + 999000"
+      "formula": "if field(\"ID\") <= 999150 then random(999001,999050)\n  elsif field(\"ID\") <= 999300 then random(999051,999100)\n  elsif field(\"ID\") <= 999500 then random(999100,999200)\n  elsif field(\"ID\") <= 999700 then random(999300,999400)\n  elsif field(\"ID\") <= 999800 then random(999500,999500)\n  end"
     },
     {
       "name": "user_id",
       "null_percentage": 0,
       "type": "Row Number",
-      "formula": "this + 999000"
+      "formula": "random(999001,999500)"
     },
     {
       "name": "cancel_date_time",

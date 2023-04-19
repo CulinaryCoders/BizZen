@@ -114,12 +114,6 @@ func (app *Application) initializeRoutes() {
 	app.Router.HandleFunc("/business/{id}/services", app.GetBusinessServices).Methods("GET")
 	app.Router.HandleFunc("/business/{id}/service-appointments", app.GetBusinessServiceAppointments).Methods("GET")
 
-	// Address routes
-	// app.Router.HandleFunc("/address", app.CreateAddress).Methods("POST")
-	// app.Router.HandleFunc("/address/{id}", app.GetAddress).Methods("GET")
-	// app.Router.HandleFunc("/address/{id}", app.UpdateAddress).Methods("PUT")
-	// app.Router.HandleFunc("/address/{id}", app.DeleteAddress).Methods("DELETE")
-
 	// Service routes
 	app.Router.HandleFunc("/service", app.CreateService).Methods("POST")
 	app.Router.HandleFunc("/service/{id}", app.GetService).Methods("GET")

@@ -137,8 +137,6 @@ func setupTables(db *gorm.DB) {
 		&Service{},
 		&Appointment{},
 		&Invoice{},
-		// &Address{},
-		// &ContactInfo{},
 	)
 }
 

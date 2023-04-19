@@ -4,7 +4,6 @@ go 1.19
 
 require (
 	github.com/go-redis/redis/v7 v7.4.1
-	github.com/golang-jwt/jwt/v4 v4.4.3
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/sessions v1.2.1
 	github.com/rs/cors v1.8.3
