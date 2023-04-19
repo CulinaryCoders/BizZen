@@ -1,19 +1,42 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BusinesesDashboardComponent } from './busineses-dashboard.component';
+import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
+import {HttpClient} from "@angular/common/http";
+import {Router} from "@angular/router";
+import {UserService} from "../user.service";
+import {Service} from "../service";
+import {User} from "../user";
 
 describe('BusinesesDashboardComponent', () => {
   let component: BusinesesDashboardComponent;
   let fixture: ComponentFixture<BusinesesDashboardComponent>;
+  let router : Router;
+  let userService: UserService;
+  let httpClient: HttpClient;
+  let httpTestController:HttpTestingController;
+
+  let service:Service = new Service("123", "Test Service", "Test Service desc",
+    new Date("4/11/2023 11:00:00"), 120, 10, 15);
+
+  let testUser = new User("12345","firstname", "lastname", "email", "pass", "Business", [service]);
 
   beforeEach(async () => {
+    window.history.pushState({user: testUser, service: service}, '');
+
     await TestBed.configureTestingModule({
-      declarations: [ BusinesesDashboardComponent ]
+      declarations: [ BusinesesDashboardComponent ],
+      imports: [HttpClientTestingModule]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(BusinesesDashboardComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
+    httpClient = TestBed.inject(HttpClient);
+    userService = TestBed.inject(UserService);
+    httpTestController = TestBed.inject(HttpTestingController);
+
     fixture.detectChanges();
   });
 
@@ -21,8 +44,50 @@ describe('BusinesesDashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('fetches list of services from db', () => {
-    expect(component).toBeTruthy();
+  it('Completes GET request to fetch list of services from db', () => {
+    const req = httpTestController.expectOne("http://localhost:8080/services");
+    expect(req.request.method).toEqual("GET");
   });
 
+  it('Filters services by ascending date', () => {
+    let dateRange = [new Date("4/13/2023T11:00:00")]
+    let services = [
+      new Service("123", "Test Service", "Test Service desc",
+        new Date("4/13/2023 11:00:00"), 120, 10, 15),
+      new Service("123", "Test Service", "Test Service desc",
+        new Date("4/12/2023 11:00:00"), 120, 10, 15),
+      new Service("123", "Test Service", "Test Service desc",
+        new Date("4/11/2023 11:00:00"), 120, 10, 15),
+      new Service("123", "Test Service", "Test Service desc",
+        new Date("4/15/2023 11:00:00"), 120, 10, 15)
+    ];
+
+  });
+
+  it('Should navigate to create service', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.openAddService();
+    expect(navigateSpy).toHaveBeenCalledWith('/home', {state:{user:testUser}});
+  });
+
+  it('Returns correct Date-Time from start date and duration', () => {
+    let startDateTime = new Date();
+    let duration = 10;
+    let endDate = component.getEndDate(startDateTime, duration);
+    expect(endDate).toEqual(new Date(startDateTime.getTime() + length*60000))
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.goToServicePage(service);
+    expect(navigateSpy).toHaveBeenCalledWith('/class-summary', {state:{user:testUser, service: service, prevPage: "/home"}});
+  });
+
+  it('Should navigate to service info page', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.goToServicePage(service);
+    expect(navigateSpy).toHaveBeenCalledWith('/class-summary', {state:{user:testUser, service: service, prevPage: "/home"}});
+  });
+
+  it('Updates the view date range for services to be filtered by', () => {
+    component.updateDateRange([new Date("4/11/2023"), new Date("4/12/2023")]);
+    expect(component.viewDateRange).toBe([new Date("4/11/2023"), new Date("4/12/2023")])
+  });
 });
