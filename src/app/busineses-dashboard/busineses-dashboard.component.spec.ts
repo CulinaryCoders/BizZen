@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {UserService} from "../user.service";
 import {Service} from "../service";
 import {User} from "../user";
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('BusinesesDashboardComponent', () => {
   let component: BusinesesDashboardComponent;
@@ -26,7 +27,7 @@ describe('BusinesesDashboardComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [ BusinesesDashboardComponent ],
-      imports: [HttpClientTestingModule]
+      imports: [RouterTestingModule, HttpClientTestingModule]
     })
     .compileComponents();
 
