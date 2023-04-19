@@ -91,10 +91,10 @@ Defines the the API endpoints/routes for the application and their behavior usin
 */
 func (app *Application) initializeRoutes() {
 	// Define routes
-	app.Router.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		// TODO: Create API table of contents or list of valid objects in API for root "/" route
-		fmt.Fprint(writer, "Hello, World!")
-	})
+	// Table of Contents / Backend reference links
+	app.Router.HandleFunc("/", serveTableOfContents)
+	app.Router.HandleFunc("/home", serveTableOfContents)
+	app.Router.HandleFunc("/index", serveTableOfContents)
 
 	// User routes
 	app.Router.HandleFunc("/register", app.CreateUser).Methods("POST")
@@ -148,6 +148,25 @@ func (app *Application) initializeRoutes() {
 	// Path prefix for API to work with Angular frontend
 	// WARNING: This MUST be the last route defined by the router.
 	app.Router.PathPrefix("/").Handler(app.NGHandler.ReverseProxy).Methods("GET")
+}
+
+/*
+*Description*
+
+func serveTableOfContents
+
+Serves the static webpage '.static/index.html' as a basic table of contents reference for the backend.
+
+*Parameters*
+
+	None
+
+*Returns*
+
+	None
+*/
+func serveTableOfContents(writer http.ResponseWriter, request *http.Request) {
+	http.ServeFile(writer, request, "./static/index.html")
 }
 
 /*
