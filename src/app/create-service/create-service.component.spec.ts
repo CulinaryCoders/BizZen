@@ -2,6 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateServiceComponent } from './create-service.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {HttpClientTestingModule} from '@angular/common/http/testing'
+import { NavbarComponent } from '../navbar/navbar.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('CreateServiceComponent', () => {
   let component: CreateServiceComponent;
@@ -9,10 +12,12 @@ describe('CreateServiceComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateServiceComponent ],
+      declarations: [ CreateServiceComponent, NavbarComponent],
       imports: [
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientTestingModule,
+        RouterTestingModule
       ]
     })
     .compileComponents();
