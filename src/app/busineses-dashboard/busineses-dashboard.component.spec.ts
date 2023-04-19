@@ -69,14 +69,15 @@ describe('BusinesesDashboardComponent', () => {
   it('Should navigate to create service', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.openAddService();
-    expect(navigateSpy).toHaveBeenCalledWith('/home', {state:{user:history.state.user}});
+    expect(navigateSpy).toHaveBeenCalledWith('/create-service', {state:{user:history.state.user}});
   });
 
   it('Returns correct Date-Time from start date and duration', () => {
     let startDateTime = new Date();
     let duration = 10;
     let endDate = component.getEndDate(startDateTime, duration);
-    expect(endDate).toEqual(new Date(startDateTime.getTime() + length*60000))
+    let expectedEnd = new Date(startDateTime.getTime() + length*60000);
+    expect(endDate).toEqual(expectedEnd);
   });
 
   it('Should navigate to service info page', () => {

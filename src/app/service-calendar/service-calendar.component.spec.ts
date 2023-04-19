@@ -11,7 +11,7 @@ describe('ServiceCalendarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ ServiceCalendarComponent ],
-      imports: [ HttpClientTestingModule]
+      imports: [HttpClientTestingModule, CalendarView]
     })
     .compileComponents();
 
