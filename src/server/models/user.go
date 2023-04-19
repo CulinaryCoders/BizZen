@@ -101,10 +101,7 @@ Creates a new User record in the database and returns the created record along w
 		Encountered error (nil if no errors are encountered).
 */
 func (user *User) Create(db *gorm.DB) (map[string]Model, error) {
-	// High hash cost translates to longer processing times. 10 is default.
-	// 8 used for  the purposes of quicker bulk test data loads.
-	var hashCost int = 8
-	hashedPassword, err := HashPassword(user.Password, hashCost)
+	hashedPassword, err := HashPassword(user.Password, config.PWHashCost)
 	if err != nil {
 		returnRecords := map[string]Model{"user": user}
 		return returnRecords, err
