@@ -21,6 +21,71 @@ type Business struct {
 /*
 *Description*
 
+func AfterDelete (GORM hook)
+
+Deletes all of the Service records in the database that are associated with a Business record
+when the Business record is deleted.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
+func (business *Business) AfterDelete(db *gorm.DB) error {
+	service := Service{}
+	var businessIDJsonKey string = "business_id"
+
+	_, err := service.DeleteRecordsBySecondaryID(db, businessIDJsonKey, business.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+/*
+*Description*
+
+func IDExists
+
+Checks to see if a Business record with the specified ID already exists in the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be queried for the specified Business ID.
+
+	businessID  <uint>
+
+		The Business ID to check for.
+
+*Returns*
+
+	_  <bool>
+
+		'true' if a Business record exists in the database with the specified ID. 'false' if not.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
+func (business *Business) IDExists(db *gorm.DB, businessID uint) (bool, error) {
+	var idExists bool
+	err := db.Model(Business{}).Select("count(*) > 0").Where("id = ?", businessID).Find(&idExists).Error
+	return idExists, err
+}
+
+/*
+*Description*
+
 func GetID
 
 # Returns ID field from Business object

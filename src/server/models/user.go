@@ -10,7 +10,6 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// TODO: Add foreign key logic to User model
 // GORM model for all User records in the database
 type User struct {
 	gorm.Model
@@ -22,7 +21,28 @@ type User struct {
 	BusinessID  *uint  `gorm:"column:business_id;default:null" json:"business_id"` // ID of the Business record associated with the User record
 }
 
-// TODO:  Add documentation for function (func StandardizeFields)
+/*
+*Description*
+
+func StandardizeFields
+
+Standardizes the formatting of various attribute values for the calling User object.
+
+Fields standardized:
+
+  - Email
+  - FirstName
+  - LastName
+  - AccountType
+
+*Parameters*
+
+	None
+
+*Returns*
+
+	None
+*/
 func (user *User) StandardizeFields() {
 	user.Email = StandardizeEmailAddress(user.Email)
 	user.FirstName = StandardizeNameField(user.FirstName)
@@ -30,13 +50,78 @@ func (user *User) StandardizeFields() {
 	user.AccountType = StandardizeUserAccountType(user.AccountType)
 }
 
-// TODO:  Add documentation for GORM db hook (func BeforeCreate)
+/*
+*Description*
+
+func BeforeCreate (GORM hook)
+
+Standardizes the attribute values of a User object and confirms that the object's account type is valid before
+creating the new User record in the database.
+
+If the User record is a 'Business' account type, a new Business record will be created unless the BusinessID attribute
+for the User record is an ID that already exists for a Business in the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func (user *User) BeforeCreate(db *gorm.DB) error {
+	// Standardize User record's attribute values
 	user.StandardizeFields()
 
+	// Confirm User's account type is valid before creating record
 	if !UserAccountTypeIsValid(user.AccountType) {
 		var errorMessage string = fmt.Sprintf("Invalid account type specified when creating new User record (account_type = %s). Account type must be 'User', 'Business', or 'System'.", user.AccountType)
 		return errors.New(errorMessage)
+	}
+
+	// If User record has a 'Business' account type, create a new Business record for it
+	if user.AccountType == "Business" {
+		// Set generic business name
+		var businessName string = fmt.Sprintf("%s %s's Business", user.FirstName, user.LastName)
+
+		business := Business{
+			OwnerID: user.ID,
+			Name:    businessName,
+		}
+
+		// If Business ID was manually passed create the business record with that ID (if it doesn't already exist in the database)
+		if user.BusinessID != nil {
+			// Check if business ID exists in the database
+			businessIDExists, err := business.IDExists(db, *user.BusinessID)
+			if err != nil {
+				return err
+			}
+
+			// If a Business record doesn't already exist with that ID, create a new Business record with the User's specified business ID
+			if !businessIDExists {
+				business.ID = *user.BusinessID
+
+				_, err := business.Create(db)
+				if err != nil {
+					return err
+				}
+			}
+		} else {
+			// Else create a new business record
+			createdRecords, err := business.Create(db)
+			if err != nil {
+				return err
+			}
+			createdBusiness := createdRecords["business"]
+
+			// Set User's BusinessID field to the ID of the newly created Business record
+			createdBusinessID := createdBusiness.GetID()
+			user.BusinessID = &createdBusinessID
+		}
 	}
 
 	return nil
@@ -47,7 +132,7 @@ func (user *User) BeforeCreate(db *gorm.DB) error {
 
 func GetID
 
-# Returns ID field from User object
+Returns the ID attribute value for the calling User object.
 
 *Parameters*
 
@@ -57,20 +142,68 @@ func GetID
 
 	_  <uint>
 
-		The ID of the User object
+		The ID of the calling User object
 */
 func (user *User) GetID() uint {
 	return user.ID
 }
 
-// TODO:  Add documentation (func IDExists)
+/*
+*Description*
+
+func IDExists
+
+Checks to see if a User record with the specified ID already exists in the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be queried for the specified User ID.
+
+	userID  <uint>
+
+		The User ID to check for.
+
+*Returns*
+
+	_  <bool>
+
+		'true' if a User record exists in the database with the specified ID. 'false' if not.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func (user *User) IDExists(db *gorm.DB, userID uint) (bool, error) {
 	var idExists bool
 	err := db.Model(User{}).Select("count(*) > 0").Where("id = ?", userID).Find(&idExists).Error
 	return idExists, err
 }
 
-// TODO:  Add documentation (func EmailExists)
+/*
+*Description*
+
+func EmailExists
+
+Checks to see if the calling User's email address already exists in the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be queried.
+
+*Returns*
+
+	_  <bool>
+
+		'true' if the calling User's email address already exists in the database. 'false' if not.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func (user *User) EmailExists(db *gorm.DB) (bool, error) {
 	var emailExists bool
 	err := db.Model(User{}).Select("count(*) > 0").Where("email = ?", user.Email).Find(&emailExists).Error

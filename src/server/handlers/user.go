@@ -131,6 +131,7 @@ Creates a new user account record in the database.
 */
 func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Request) {
 	user := models.User{}
+	business := models.Business{}
 	var createdUser models.Model
 	var createdBusiness models.Model
 
@@ -181,31 +182,6 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 			errors.New(errorMessage).Error())
 	}
 
-	// Create new Business record if User is a business account
-	if user.AccountType == "Business" {
-		var businessName string = fmt.Sprintf("%s %s's Business", user.FirstName, user.LastName)
-		business := &models.Business{
-			OwnerID: user.ID,
-			Name:    businessName,
-		}
-
-		createdRecords, err := business.Create(app.AppDB)
-		if err != nil {
-			utils.RespondWithError(
-				writer,
-				http.StatusInternalServerError,
-				err.Error())
-
-			return
-		}
-
-		createdBusiness = createdRecords["business"]
-
-		// Set User's BusinessID field to the ID of the newly created Business record
-		createdBusinessID := createdBusiness.GetID()
-		user.BusinessID = &createdBusinessID
-	}
-
 	createdRecords, err := user.Create(app.AppDB)
 	if err != nil {
 		utils.RespondWithError(
@@ -215,8 +191,20 @@ func (app *Application) CreateUser(writer http.ResponseWriter, request *http.Req
 
 		return
 	}
-
 	createdUser = createdRecords["user"]
+
+	if user.AccountType == "Business" {
+		returnedRecords, err := business.Get(app.AppDB, *user.BusinessID)
+		if err != nil {
+			utils.RespondWithError(
+				writer,
+				http.StatusInternalServerError,
+				err.Error())
+
+			return
+		}
+		createdBusiness = returnedRecords["business"]
+	}
 
 	returnRecords := map[string]interface{}{
 		"user":     createdUser,

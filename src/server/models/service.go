@@ -449,3 +449,55 @@ func (service *Service) Delete(db *gorm.DB, serviceID uint) (map[string]Model, e
 
 	return returnRecords, err
 }
+
+/*
+*Description*
+
+func DeleteRecordsBySecondaryID
+
+Deletes a list of Service records from the database that are associated with the specified secondary key.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that the records will be retrieved from.
+
+	secondaryIDJsonKey  <string>
+
+		The JSON key for the secondary ID attribute.
+
+	secondaryID  <uint>
+
+		The secondary ID value.
+
+*Returns*
+
+	_  <[]Appointment>
+
+		The list of Service records that were deleted from the database.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered)
+*/
+func (service *Service) DeleteRecordsBySecondaryID(db *gorm.DB, secondaryIDJsonKey string, secondaryID uint) ([]Model, error) {
+	var services []Service
+	var deletedServices []Model
+
+	services, err := service.GetRecordsBySecondaryID(db, secondaryIDJsonKey, secondaryID)
+	if err != nil {
+		return deletedServices, err
+	}
+
+	for _, deleteService := range services {
+		returnedRecords, err := deleteService.Delete(db, deleteService.ID)
+		if err != nil {
+			return deletedServices, err
+		}
+
+		deletedServices = append(deletedServices, returnedRecords["service"])
+	}
+
+	return deletedServices, nil
+}
