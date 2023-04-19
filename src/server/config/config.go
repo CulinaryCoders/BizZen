@@ -13,6 +13,13 @@ var AppConfig *Configuration = InitializeConfig()
 // Set global debug flag
 var Debug bool = AppConfig.DEBUG_MODE
 
+/*
+Set global cost for password hashing operations
+High hash cost translates to longer processing times. 10 is default.
+8 used for the purposes of quicker bulk test data loads.
+*/
+var PWHashCost int = 8
+
 // struct to map env values
 type Configuration struct {
 	JWT_SIGNING_KEY   []byte `mapstructure:"JWT_SIGNING_KEY"`

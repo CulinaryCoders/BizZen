@@ -9,8 +9,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// TODO: Add foreign key logic to Appointment model
-// TODO: Update time columns type / formatting to ensure behavior/values are expected
+// GORM model for all Appointment records in the database
 type Appointment struct {
 	gorm.Model
 	UserID         uint       `gorm:"column:user_id" json:"user_id"`                                // ID of user that booked the appointment

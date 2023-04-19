@@ -25,30 +25,25 @@ $DB_PORT=8420
 
 $OBJ_KEYS = "User" `
             , "Business" `
-            , "Address" `
             , "Service" `
-            , "ServiceOffering"
-            # , "Office" `
-            # , "ContactInfo" `
+            , "Appointment" `
+            , "Invoice" `
+            
 
 $API_ENDPOINTS = @{
                     User = "register" `
                     ; Business = "business" `
-                    ; Address = "address" `
                     ; Service = "service"
-                    ; ServiceOffering = "service-offering"
-                    # ; Office = "office" `
-                    #; ContactInfo = "contact" `
+                    ; Appointment = "appointment"
+                    ; Invoice = "invoice" `
                   }
 
 $FILE_NAMES = @{ `
                     User = "sample-users.json" `
                     ; Business = "sample-businesses.json" `
-                    ; Address = "sample-addresses.json" `
                     ; Service = "sample-services.json" `
-                    ; ServiceOffering = "sample-service-offerings.json" `
-                    #; Office = "sample-offices.json" `
-                    #; ContactInfo = "sample-contacts.json" `
+                    ; Appointment = "sample-appointments.json" `
+                    ; Invoice = "sample-invoices.json" `
                 }
 
 $PS_SCRIPT_FULL_PATH = $MyInvocation.MyCommand.Path

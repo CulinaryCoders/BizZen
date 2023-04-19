@@ -34,17 +34,24 @@
       "selectionStyle": "custom",
       "distribution": [
         {
-          "rule": "field('ID') != 999001",
+          "rule": "field('ID') === 999001",
+          "frequencies": {
+            "Business": "1",
+            "User": "0"
+          }
+        },
+        {
+          "rule": "field('ID') <= 999450",
           "frequencies": {
             "Business": "0",
             "User": "1"
           }
         },
         {
-          "rule": "field('ID') === 999001",
+          "rule": "field('ID') > 999450",
           "frequencies": {
-            "Business": "1",
-            "User": "0"
+            "User": "0",
+            "Business": "1"
           }
         }
       ],

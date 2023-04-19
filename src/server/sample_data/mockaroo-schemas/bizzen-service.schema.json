@@ -14,8 +14,11 @@
     {
       "name": "business_id",
       "null_percentage": 0,
-      "type": "Row Number",
-      "formula": "this + 999000"
+      "type": "Number",
+      "min": 1,
+      "max": 999500,
+      "decimals": 0,
+      "formula": "if field(\"ID\") <= 999100 then 999001\nelsif field(\"ID\") > 999100 then random(999451,999500) \nend"
     },
     {
       "name": "name",
@@ -30,7 +33,18 @@
         "Pilates",
         "Beginner Stretching",
         "Meditation",
-        "Crossfit"
+        "Crossfit",
+        "Bodyweight Training",
+        "Pure Barre",
+        "Kickboxing",
+        "Tap Dance",
+        "Ballet",
+        "Break Dancing",
+        "Hip Hop Dance",
+        "Square Dancing",
+        "Kundalini Yoga",
+        "Hatha Yoga",
+        "Bikram Yoga"
       ],
       "selectionStyle": "random",
       "distribution": null,
@@ -57,19 +71,19 @@
       "name": "length",
       "null_percentage": 0,
       "type": "Number",
-      "min": 15,
-      "max": 150,
+      "min": 30,
+      "max": 120,
       "decimals": 0,
-      "formula": null
+      "formula": "round(this/30,0) * 30"
     },
     {
       "name": "capacity",
       "null_percentage": 0,
       "type": "Number",
-      "min": 1,
+      "min": 10,
       "max": 50,
       "decimals": 0,
-      "formula": null
+      "formula": "round(this/5, 0) * 5"
     },
     {
       "name": "cancellation_fee",
@@ -85,16 +99,16 @@
       "null_percentage": 0,
       "type": "Number",
       "min": 0,
-      "max": 100000,
+      "max": 10000,
       "decimals": 0,
-      "formula": null
+      "formula": "round(this/500,0) * 500"
     },
     {
       "name": "appt_ct",
       "null_percentage": 0,
       "type": "Number",
       "min": 0,
-      "max": 50,
+      "max": 0,
       "decimals": 0,
       "formula": "if this > capacity then capacity\nelse this end"
     },
