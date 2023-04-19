@@ -40,6 +40,8 @@ export class ServicePageComponent {
     {
       this.currentUser = history.state.user;
       this.service = history.state.service;
+      
+      this.service.price.toFixed(2);
 
       this.backupService = this.copyService(this.service);
 
@@ -56,8 +58,6 @@ export class ServicePageComponent {
             this.userJoined = true;
         }
       );  
-
-      console.log(this.currentUser);
 
       //set isBusiness boolean based on current user
       if(this.currentUser.account_type === "User")

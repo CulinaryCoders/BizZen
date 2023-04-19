@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OnboardingComponent } from './onboarding.component';
 
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+
 describe('OnboardingComponent', () => {
   let component: OnboardingComponent;
   let fixture: ComponentFixture<OnboardingComponent>;
@@ -18,7 +20,8 @@ describe('OnboardingComponent', () => {
       imports: [
         RouterTestingModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientTestingModule
       ]
 
     })

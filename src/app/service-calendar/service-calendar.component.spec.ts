@@ -2,6 +2,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ServiceCalendarComponent} from './service-calendar.component';
 import {CalendarView} from 'angular-calendar';
+import { HttpClientTestingModule } from '@angular/common/http/testing'
 
 describe('ServiceCalendarComponent', () => {
   let component: ServiceCalendarComponent;
@@ -9,7 +10,8 @@ describe('ServiceCalendarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ServiceCalendarComponent ]
+      declarations: [ ServiceCalendarComponent ],
+      imports: [ HttpClientTestingModule]
     })
     .compileComponents();
 

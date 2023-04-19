@@ -8,6 +8,7 @@ import {UserService} from "../user.service";
 import {Service} from "../service";
 import {User} from "../user";
 import {RouterTestingModule} from "@angular/router/testing";
+import { NavbarComponent } from '../navbar/navbar.component';
 
 describe('BusinesesDashboardComponent', () => {
   let component: BusinesesDashboardComponent;
@@ -26,7 +27,7 @@ describe('BusinesesDashboardComponent', () => {
     window.history.pushState({user: testUser, service: service}, '');
 
     await TestBed.configureTestingModule({
-      declarations: [ BusinesesDashboardComponent ],
+      declarations: [ BusinesesDashboardComponent, NavbarComponent ],
       imports: [RouterTestingModule, HttpClientTestingModule]
     })
     .compileComponents();
