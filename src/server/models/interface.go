@@ -63,8 +63,8 @@ func Equal(firstRecord Model, secondRecord Model) (unequalFields []string, equal
 	equal = true
 
 	//  Confirm that objects being compared are of the same type
-	type1 := reflect.TypeOf(firstRecord)
-	type2 := reflect.TypeOf(secondRecord)
+	type1 := reflect.TypeOf(firstRecord).Elem()
+	type2 := reflect.TypeOf(secondRecord).Elem()
 
 	if type1 != type2 {
 		equal = false
@@ -76,32 +76,35 @@ func Equal(firstRecord Model, secondRecord Model) (unequalFields []string, equal
 		return unequalFields, equal
 	}
 
+	// Compare IDs of two objects
+	firstID := firstRecord.GetID()
+	secondID := secondRecord.GetID()
+
+	if firstID != secondID {
+		unequalFields = append(unequalFields, "ID")
+	}
+
 	//  Generic object info
 	objectType := type1 // Type assignment is arbitrary since objects being compared are confirmed to be of same type
 	fieldCount := objectType.NumField()
 	//  Specific field values for each object
-	firstRecordValues := reflect.ValueOf(firstRecord)
-	secondRecordValues := reflect.ValueOf(secondRecord)
+	firstRecordValues := reflect.ValueOf(firstRecord).Elem()
+	secondRecordValues := reflect.ValueOf(secondRecord).Elem()
 
 	for i := 0; i < fieldCount; i++ {
-		value1 := firstRecordValues.Field(i)
-		value2 := secondRecordValues.Field(i)
+		field := objectType.Field(i)
 
-		if value1 != value2 {
-			field := objectType.Field(i)
+		// Skip gorm.Model fields to avoid issues with comparing timestamp fields
+		if field.Name != "Model" {
+			value1 := firstRecordValues.FieldByName(field.Name).Interface()
+			value2 := secondRecordValues.FieldByName(field.Name).Interface()
 
-			equal = false
-			unequalFields = append(unequalFields, field.Name)
+			if value1 != value2 {
+				equal = false
+				unequalFields = append(unequalFields, field.Name)
+			}
 		}
 	}
 
 	return unequalFields, equal
 }
-
-//  INITIALLY USED FOR DEBUGGING MODEL INTERFACE FUNCTION
-// func EqualTypes(firstRecord Model, secondRecord Model) (reflect.Type, reflect.Type, bool) {
-// 	type1 := reflect.TypeOf(firstRecord)
-// 	type2 := reflect.TypeOf(secondRecord)
-
-// 	return type1, type2, type1 == type2
-// }
