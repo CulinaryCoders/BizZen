@@ -101,7 +101,7 @@
       "min": 0,
       "max": 10000,
       "decimals": 0,
-      "formula": "round(this/5,0) * 5"
+      "formula": "round(this/500,0) * 500"
     },
     {
       "name": "appt_ct",
