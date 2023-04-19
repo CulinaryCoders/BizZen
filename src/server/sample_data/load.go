@@ -25,8 +25,6 @@ type SampleData struct {
 	Services     []*models.Service     `json:"services"`     // List of Service records
 	Appointments []*models.Appointment `json:"appointments"` // List of Appointment records
 	Invoices     []*models.Invoice     `json:"invoices"`     // List of Invoice records
-	// Addresses        []*models.Address         `json:"addresses"`         // List of Address records
-	// Contacts         []*models.ContactInfo     `json:"contacts"`          // List of Contact records
 }
 
 // DataLoadMapping type is a generic wrapper struct designed to simplify the creation of records for all GORM DB object types that implement the 'Model' interface.
@@ -225,20 +223,6 @@ func LoadJSONSampleData(db *gorm.DB) error {
 	if err != nil {
 		return err
 	}
-
-	//  Addresses
-	// var addressJSONKey string = "address"
-
-	// addressLoadMapping := DataLoadMapping[*models.Address]{
-	// 	Records:                   sampleData.Addresses,
-	// 	PrimaryReturnObjectKey:    addressJSONKey,
-	// 	SecondaryReturnObjectKeys: []string{},
-	// }
-
-	// err = addressLoadMapping.CreateSampleRecords(db)
-	// if err != nil {
-	// 	return err
-	// }
 
 	//  Services
 	var serviceJSONKey string = "service"
