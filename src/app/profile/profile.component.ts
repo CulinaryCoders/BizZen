@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class ProfileComponent {
 
     userIdParameter : string = "";
+    isBusiness = false;
 
     constructor(private router: Router, private route: ActivatedRoute){}
 
@@ -17,7 +18,11 @@ export class ProfileComponent {
     {
       //this.route.params.subscribe((params:Params) => this.userIdParameter = params['idToPass'])
         if(history.state.user != null)
+        {
           this.userIdParameter = history.state.user.first_name;
+          if(history.state.user.account_type === "Business")
+            this.isBusiness = true;
+        }
         else
           this.userIdParameter = "ERROR: userIdParameter is null; no user was passed!";
     }

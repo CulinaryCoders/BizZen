@@ -57,9 +57,10 @@ export class ServicePageComponent {
         }
       );  
 
+      console.log(this.currentUser);
 
       //set isBusiness boolean based on current user
-      if(this.currentUser.accountType == "User")
+      if(this.currentUser.account_type === "User")
       {
         this.isBusiness = false;
       }
