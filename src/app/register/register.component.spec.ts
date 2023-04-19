@@ -62,27 +62,27 @@ describe('RegisterComponent', () => {
   });
 
   it('should check that all fields are filled in', () => {
-    component.userModel.firstName = "test"
-    component.userModel.email = "test@example.com"
-    component.userModel.password = "pass123"
+    component.registerForm.value.first_name = "test"
+    component.registerForm.value.email = "test@example.com"
+    component.registerForm.value.password = "pass123"
 
     const allFilled = component.allFieldsFilled();
     expect(allFilled).toBe(true);
   });
 
   it('should catch when not all fields filled in', () => {
-    component.userModel.firstName = ""
-    component.userModel.email = ""
-    component.userModel.password = ""
+    component.registerForm.value.first_name = ""
+    component.registerForm.value.email = ""
+    component.registerForm.value.password = ""
 
     const allFilled = component.allFieldsFilled();
     expect(allFilled).toBe(false);
   });
 
   it('check for matching passwords', () => {
-    component.userModel.firstName = "test"
-    component.userModel.email = "test@example.com"
-    component.userModel.password = "pass123"
+    component.registerForm.value.first_name = "test"
+    component.registerForm.value.email = "test@example.com"
+    component.registerForm.value.password = "pass123"
     component.confPass = "pass123"
 
     const passMatch = component.passwordsMatch();
@@ -90,9 +90,9 @@ describe('RegisterComponent', () => {
   });
 
   it('check for MISmatching passwords', () => {
-    component.userModel.firstName = "test"
-    component.userModel.email = "test@example.com"
-    component.userModel.password = "pass123"
+    component.registerForm.value.first_name = "test"
+    component.registerForm.value.email = "test@example.com"
+    component.registerForm.value.password = "pass123"
     component.confPass = "pass1234"
 
     const passMatch = component.passwordsMatch();
