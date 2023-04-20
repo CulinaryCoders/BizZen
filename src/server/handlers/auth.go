@@ -144,21 +144,6 @@ func (app *Application) Authenticate(writer http.ResponseWriter, request *http.R
 		return
 	}
 
-	/*
-		PLEASE DO NOT REMOVE
-		TODO: Implement authentication logic (func Authenticate)
-		session, _ := env.Store.Get(request, "sessionID")
-		session.Values["authenticated"] = true
-		session.Save(request, writer)
-		//validToken, err := utils.GenerateToken(user.Email, user.AccountType, config.AppConfig.GetSigningKey())
-		if err != nil {
-		utils.RespondWithError(
-			writer,
-			http.StatusInternalServerError,
-			err.Error())
-		}
-	*/
-
 	utils.RespondWithJSON(
 		writer,
 		http.StatusOK,

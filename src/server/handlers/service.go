@@ -656,7 +656,90 @@ func (app *Application) GetServices(writer http.ResponseWriter, request *http.Re
 		services)
 }
 
-// TODO:  Add documentation (func GetServiceAppointments)
+/*
+*Description*
+
+func GetServiceAppointments
+
+Get a list of all the active Appointments associated with the specified Service.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:  	GET
+
+	Routes:	/service/{id}/appointments
+			/service/{id}/appointments/active
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	GET /service/42/appointments/active
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				"ID": 123,
+				"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"DeletedAt": null,
+				"service_id":42,
+				"user_id":11,
+				"cancel_date_time":null,
+				"active":true
+			},
+			{
+				"ID": 456,
+				"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+				"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+				"DeletedAt": null,
+				"service_id":42,
+				"user_id":33,
+				"cancel_date_time":"2022-11-23T05:41:03.4507451-05:00",
+				"active":false
+			},
+			...
+		]
+
+	Failure:
+		-- Case = ID missing from or incorrectly formatted in request url
+		HTTP/1.1 400 Bad Request
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
+		-- Other errors
+		HTTP/1.1 500 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetServiceAppointments(writer http.ResponseWriter, request *http.Request) {
 	appt := models.Appointment{}
 	var appts []models.Appointment
@@ -690,7 +773,89 @@ func (app *Application) GetServiceAppointments(writer http.ResponseWriter, reque
 		appts)
 }
 
-// TODO:  Add documentation (func GetActiveServiceAppointments)
+/*
+*Description*
+
+func GetActiveServiceAppointments
+
+Get a list of all the Appointments (both active/inactive) associated with the specified Service.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:  	GET
+
+	Route:	/service/{id}/appointments/all
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	GET /service/42/appointments/active
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		[
+			{
+				"ID": 123,
+				"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"DeletedAt": null,
+				"service_id":42,
+				"user_id":11,
+				"cancel_date_time":null,
+				"active":true
+			},
+			{
+				"ID": 456,
+				"CreatedAt": "2022-07-10T14:32:13.1589417-05:00",
+				"UpdatedAt": "2022-11-23T05:41:03.4507451-05:00",
+				"DeletedAt": null,
+				"service_id":42,
+				"user_id":33,
+				"cancel_date_time":null,
+				"active":true
+			},
+			...
+		]
+
+	Failure:
+		-- Case = ID missing from or incorrectly formatted in request url
+		HTTP/1.1 400 Bad Request
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+
+		-- Other errors
+		HTTP/1.1 500 Internal Server Error
+		Content-Type: application/json
+
+		{
+		"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) GetActiveServiceAppointments(writer http.ResponseWriter, request *http.Request) {
 	appt := models.Appointment{}
 	var appts []models.Appointment

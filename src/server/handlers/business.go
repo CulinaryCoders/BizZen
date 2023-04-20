@@ -713,7 +713,7 @@ Get a list of all the Appointments (and the associated Service for each Appointm
 
 *Example request(s)*
 
-	POST /user/42/service-appointments
+	GET /user/42/service-appointments
 
 *Response format*
 
