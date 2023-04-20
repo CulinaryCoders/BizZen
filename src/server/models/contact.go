@@ -8,7 +8,6 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// TODO: Add foreign key logic to ContactInfo model
 // GORM model for all ContactInfo records in the database
 type ContactInfo struct {
 	gorm.Model

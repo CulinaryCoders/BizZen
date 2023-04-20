@@ -20,6 +20,7 @@ type Model interface {
 	GetID() uint
 	// TODO: IDExists
 	// TODO: StandardizeFields
+	// TODO: GetAttribute
 	// TODO: GetAll
 	// TODO: GetRecordsByPrimaryIDs
 	// TODO: GetRecordsBySecondaryID

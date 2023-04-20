@@ -685,7 +685,70 @@ func (app *Application) GetActiveAppointments(writer http.ResponseWriter, reques
 		activeAppts)
 }
 
-// TODO:  Add documentation (func CancelAppointment)
+/*
+*Description*
+
+func CancelAppointment
+
+Cancels the specified Appointment record in the database.
+
+*Parameters*
+
+	writer  <http.ResponseWriter>
+
+		The HTTP response writer
+
+	request  <*http.Request>
+
+		The HTTP request
+
+*Returns*
+
+	None
+
+*Expected request format*
+
+	Type:	POST
+
+	Routes:	/appointment/{id}/cancel
+
+	Body:
+
+		None
+
+*Example request(s)*
+
+	POST /appointment/123/cancel
+
+*Response format*
+
+	Success:
+
+		HTTP/1.1 200 OK
+		Content-Type: application/json
+
+		{
+			"appointment": {
+				"ID": 123,
+				"CreatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"UpdatedAt": "2020-01-01T01:23:45.6789012-05:00",
+				"DeletedAt": null,
+				"service_id":11,
+				"user_id":22,
+				"cancel_date_time":"2023-04-20T04:20:13.5057833-05:00",
+				"active":false
+			}
+		}
+
+	Failure:
+
+		HTTP/1.1 500 InternalServerError
+		Content-Type: application/json
+
+		{
+			"error":"ERROR MESSAGE TEXT HERE"
+		}
+*/
 func (app *Application) CancelAppointment(writer http.ResponseWriter, request *http.Request) {
 	appt := models.Appointment{}
 	apptID, err := utils.ParseRequestID(request)

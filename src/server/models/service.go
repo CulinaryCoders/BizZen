@@ -61,6 +61,39 @@ func (service *Service) AfterDelete(db *gorm.DB) error {
 /*
 *Description*
 
+func IDExists
+
+Checks to see if a Service record with the specified ID already exists in the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be queried for the specified Service ID.
+
+	serviceID  <uint>
+
+		The Service ID to check for.
+
+*Returns*
+
+	_  <bool>
+
+		'true' if a Service record exists in the database with the specified ID. 'false' if not.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
+func (service *Service) IDExists(db *gorm.DB, serviceID uint) (bool, error) {
+	var idExists bool
+	err := db.Model(Service{}).Select("count(*) > 0").Where("id = ?", serviceID).Find(&idExists).Error
+	return idExists, err
+}
+
+/*
+*Description*
+
 func GetID
 
 # Returns ID field from Service object
@@ -415,7 +448,7 @@ Deleted record is returned along with any errors that are thrown.
 
 	db  <*gorm.DB>
 
-		A pointer to the database instance where the record will be created.
+		A pointer to the database instance where the record will be deleted.
 
 	serviceID  <uint>
 

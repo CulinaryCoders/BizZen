@@ -84,30 +84,6 @@ func StandardizeNameField(name string) string {
 
 /*  --  GENERIC VALIDATION FUNCTIONS  --  */
 
-/*
-*Description*
-
-func EmailAddressIsValid
-
-Checks if an email address string has a valid format.
-
-*Parameters*
-
-	    emailAddress <string>
-
-			The email address to be validated
-
-*Returns*
-
-	    _ <bool>
-
-			'true' if email address format is valid, else 'false'.
-*/
-func EmailAddressIsValid(emailAddress string) bool {
-	// TODO:  Implement function (EmailAddressIsValid)
-	return true
-}
-
 /*  --  OBJECT-SPECIFIC STANDARDIZATION FUNCTIONS  --  */
 
 /*  USER FIELDS  */

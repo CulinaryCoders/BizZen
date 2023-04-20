@@ -18,7 +18,26 @@ type Appointment struct {
 	CancelDateTime *time.Time `gorm:"column:cancel_date_time;default:null" json:"cancel_date_time"` // Date/time when appointment was cancelled (if cancelled, else null)
 }
 
-// TODO:  Add documentation for GORM db hook (func AfterCreate)
+/*
+*Description*
+
+func AfterCreate (GORM hook)
+
+Appropriately updates the 'AppointmentCt' and 'IsFull' attributes for the Service record that is associated
+with the calling Appointment record.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the operations will be performed.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func (appt *Appointment) AfterCreate(db *gorm.DB) error {
 	if config.Debug {
 		log.Println("AfterCreate hook executed [Appointment model].")
@@ -63,7 +82,26 @@ func (appt *Appointment) AfterCreate(db *gorm.DB) error {
 	return nil
 }
 
-// TODO:  Add documentation for GORM db hook (func AfterUpdate)
+/*
+*Description*
+
+func AfterUpdate (GORM hook)
+
+Appropriately updates the 'AppointmentCt' and 'IsFull' attributes for the Service record that is associated
+with the calling Appointment record.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the operations will be performed.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func (appt *Appointment) AfterUpdate(db *gorm.DB) error {
 	if config.Debug {
 		log.Println("AfterCreate hook executed [Appointment model].")
@@ -360,7 +398,43 @@ func (appt *Appointment) Update(db *gorm.DB, apptID uint, updates map[string]int
 	return returnRecords, err
 }
 
-// TODO:  Add documentation (func Cancel)
+/*
+*Description*
+
+func Cancel
+
+Cancels the specified Appointment record.
+
+The 'Active' attribute is set to 'false' and the 'CancelDateTime' attribute is set to the current time
+for the specified Appointment record.
+
+The Appointment record that is cancelled is returned with the updated attribute values.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the record will be created.
+
+	apptID  <uint>
+
+		The ID of the appointment record being cancelled.
+
+*Returns*
+
+	_  <map[string]Model>
+
+		A JSON style map object with a key-value pair that contains the cancelled Appointment object.
+
+		Ex:
+			{
+				"appointment": <Appointment object - appointment that was cancelled>
+			}
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
 func (appt *Appointment) Cancel(db *gorm.DB, apptID uint) (map[string]Model, error) {
 	var updates map[string]interface{} = map[string]interface{}{
 		"active":           false,
@@ -371,7 +445,6 @@ func (appt *Appointment) Cancel(db *gorm.DB, apptID uint) (map[string]Model, err
 	return returnedRecords, err
 }
 
-// TODO: Cascade delete all records associated with appointment (AppointmentOfferings, etc.)
 /*
 *Description*
 
@@ -385,7 +458,7 @@ Deleted record is returned along with any errors that are thrown.
 
 	db  <*gorm.DB>
 
-		A pointer to the database instance where the record will be created.
+		A pointer to the database instance where the record will be deleted.
 
 	apptID  <uint>
 
@@ -400,7 +473,6 @@ Deleted record is returned along with any errors that are thrown.
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
 */
 func (appt *Appointment) Delete(db *gorm.DB, apptID uint) (map[string]Model, error) {
 	// Confirm apptID exists in the database and get current object
@@ -415,7 +487,6 @@ func (appt *Appointment) Delete(db *gorm.DB, apptID uint) (map[string]Model, err
 		log.Printf("\n\nAppointment object targeted for deletion:\n\n%+v\n\n", deleteAppointment)
 	}
 
-	// TODO:  Extend delete operations to all of the other object types associated with the Appointment record as is appropriate (AppointmentOfferings, etc.)
 	err = db.Delete(deleteAppointment).Error
 	returnRecords = map[string]Model{"appointment": deleteAppointment}
 

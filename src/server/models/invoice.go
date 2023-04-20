@@ -8,8 +8,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// TODO: Add foreign key logic to Invoice model
-// TODO: Update time columns type / formatting to ensure behavior/values are expected
+// GORM model for all Invoice records in the database
 type Invoice struct {
 	gorm.Model
 	AppointmentID    uint   `gorm:"column:user_id" json:"user_id"`                     // ID of invoice that invoice is associated with
@@ -189,7 +188,6 @@ func (invoice *Invoice) Update(db *gorm.DB, invoiceID uint, updates map[string]i
 	return returnRecords, err
 }
 
-// TODO: Cascade delete all records associated with invoice (InvoiceOfferings, etc.)
 /*
 *Description*
 
@@ -203,7 +201,7 @@ Deleted record is returned along with any errors that are thrown.
 
 	db  <*gorm.DB>
 
-		A pointer to the database instance where the record will be created.
+		A pointer to the database instance where the record will be deleted.
 
 	invoiceID  <uint>
 
@@ -218,7 +216,6 @@ Deleted record is returned along with any errors that are thrown.
 	_  <error>
 
 		Encountered error (nil if no errors are encountered).
-
 */
 func (invoice *Invoice) Delete(db *gorm.DB, invoiceID uint) (map[string]Model, error) {
 	// Confirm invoiceID exists in the database and get current object
@@ -233,7 +230,6 @@ func (invoice *Invoice) Delete(db *gorm.DB, invoiceID uint) (map[string]Model, e
 		log.Printf("\n\nInvoice object targeted for deletion:\n\n%+v\n\n", deleteInvoice)
 	}
 
-	// TODO:  Extend delete operations to all of the other object types associated with the Invoice record as is appropriate (InvoiceOfferings, etc.)
 	err = db.Delete(deleteInvoice).Error
 	returnRecords = map[string]Model{"invoice": deleteInvoice}
 

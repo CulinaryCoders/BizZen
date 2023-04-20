@@ -30,7 +30,7 @@ when the Business record is deleted.
 
 	db  <*gorm.DB>
 
-		A pointer to the database instance where the record will be created.
+		A pointer to the database instance where the operations will be performed.
 
 *Returns*
 
@@ -434,7 +434,7 @@ Deleted record is returned along with any errors that are thrown.
 
 	db  <*gorm.DB>
 
-		A pointer to the database instance where the record will be created.
+		A pointer to the database instance where the record will be deleted.
 
 	businessID  <uint>
 
