@@ -14,7 +14,7 @@ Backend:  https://youtu.be/EJ49sZGTnAI
 
 </br>
 
-__ Alaine's Work__
+__Alaine's Work__
 
 The main work I've completed for this sprint involves the service-page component, the view-appointments component, and fully connecting individual parts to the back-end. 
 
@@ -124,37 +124,37 @@ I focused primarily on the following areas for Sprint 4:
 
     * Routes added this sprint:
 
-/users  -  Get a list of all User records in the database
+    /users  -  Get a list of all User records in the database
 
-/user/{id}/service-appointments  -  Get all appointments a user has made (along with their associated Service object)
+    /user/{id}/service-appointments  -  Get all appointments a user has made (along with their associated Service object)
 
-/business/{id}/services  -  Get a list of all the services that a business has created.
+    /business/{id}/services  -  Get a list of all the services that a business has created.
 
-/business/{id}/service-appointments  –  Get a list of all the appointments a business has for the services that they’ve created
+    /business/{id}/service-appointments  –  Get a list of all the appointments a business has for the services that they’ve created
 
-/services  –  Get a list of all Service records in the database
+    /services  –  Get a list of all Service records in the database
 
-/service/{id}/users  –  Get a list of all the users with an active appointment for the specified service 
+    /service/{id}/users  –  Get a list of all the users with an active appointment for the specified service 
 
-/service/{id}/user-count –  Get a count of all the users with an active appointment for the specified service 
+    /service/{id}/user-count –  Get a count of all the users with an active appointment for the specified service 
 
-/service/{service-id}/user/{user-id}  -  Check whether User already has an appointment for the specified Service.
+    /service/{service-id}/user/{user-id}  -  Check whether User already has an appointment for the specified Service.
 
-/service/{id}/appointments
-/service/{id}/appointments/active  –  Get a list of all active Appointment records for the specified service.
+    /service/{id}/appointments
+    /service/{id}/appointments/active  –  Get a list of all active Appointment records for the specified service.
 
-/service/{id}/appointments/all   –  Get a list of all (active and inactive) Appointments records in the database for the specified service.
+    /service/{id}/appointments/all   –  Get a list of all (active and inactive) Appointments records in the database for the specified service.
 
-/appointment/{id}/cancel  –  Cancel an appointment
+    /appointment/{id}/cancel  –  Cancel an appointment
 
-/appointments
-/appointments/active   –  Get a list of all active Appointment records in the database
+    /appointments
+    /appointments/active   –  Get a list of all active Appointment records in the database
 
-/appointments/all  –  Get a list of all (active and inactive) Appointments records in the database
+    /appointments/all  –  Get a list of all (active and inactive) Appointments records in the database
 
-/invoice  –  Basic CRUD methods
+    /invoice  –  Basic CRUD methods
 
-/invoices  – Get a list of all Invoice records in the database
+    /invoices  – Get a list of all Invoice records in the database
 
     * Adding hooks and data standardization methods to various objects. Utilized the standard hooks in GORM to automatically perform database operations on related objects during certain transactions. This included deleting all of the Invoice records tied to an Appointment when the Appointment record was deleted, Appointment records that were tied to a Service being deleted, and deleting all of the Service records associated with a Business being deleted. Additionally, I added logic to keep certain attribute fields updated when certain actions are performed. This included updating the Appointment count attribute and boolean flag for each Service whenever an Appointment was added; creating a Business object when a User with a Business account type is created; and updating the Status attribute of an invoice based on the remaining balance field anytime an Invoice record was created or updated.
 
