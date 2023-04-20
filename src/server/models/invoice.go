@@ -20,6 +20,141 @@ type Invoice struct {
 /*
 *Description*
 
+func BeforeCreate (GORM hook)
+
+Appropriately updates the 'Status' attribute for the calling Invoice record based on the value of the
+'RemainingBalance' attribute.
+
+	RemainingBalance == OriginalBalance  -->  Status = 'Unpaid'
+	RemainingBalance < OriginalBalance && RemainingBalance > 0  -->  Status = 'Partially Paid'
+	RemainingBalance == 0  -->  Status = 'Paid'
+	RemainingBalance < 0  -->  Status = 'Overpaid'
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the operations will be performed.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
+func (invoice *Invoice) BeforeCreate(db *gorm.DB) error {
+	if config.Debug {
+		log.Println("AfterCreate hook executed [Invoice model].")
+		log.Printf("Original Invoice:\n\n%v\n\n", invoice)
+	}
+
+	if invoice.RemainingBalance > invoice.OriginalBalance {
+		invoice.RemainingBalance = invoice.OriginalBalance
+		invoice.Status = "Unpaid"
+	} else if invoice.RemainingBalance == invoice.OriginalBalance {
+		invoice.Status = "Unpaid"
+	} else if invoice.RemainingBalance < invoice.OriginalBalance && invoice.RemainingBalance > 0 {
+		invoice.Status = "Partially Paid"
+	} else if invoice.RemainingBalance == 0 {
+		invoice.Status = "Paid"
+	} else if invoice.RemainingBalance < 0 {
+		invoice.Status = "Overpaid"
+	}
+
+	if config.Debug {
+		log.Printf("Created Invoice:\n\n%v\n\n", invoice)
+	}
+
+	return nil
+}
+
+/*
+*Description*
+
+func AfterUpdate (GORM hook)
+
+Appropriately updates the 'Status' attribute for the calling Invoice record based on the value of the
+'RemainingBalance' attribute.
+
+	RemainingBalance == OriginalBalance  -->  Status = 'Unpaid'
+	RemainingBalance < OriginalBalance && RemainingBalance > 0  -->  Status = 'Partially Paid'
+	RemainingBalance == 0  -->  Status = 'Paid'
+	RemainingBalance < 0  -->  Status = 'Overpaid'
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance where the operations will be performed.
+
+*Returns*
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
+func (invoice *Invoice) AfterUpdate(db *gorm.DB) error {
+	if config.Debug {
+		log.Println("AfterUpdate hook executed [Invoice model].")
+		log.Printf("Original Invoice:\n\n%v\n\n", invoice)
+	}
+
+	if invoice.RemainingBalance > invoice.OriginalBalance {
+		invoice.RemainingBalance = invoice.OriginalBalance
+		invoice.Status = "Unpaid"
+	} else if invoice.RemainingBalance == invoice.OriginalBalance {
+		invoice.Status = "Unpaid"
+	} else if invoice.RemainingBalance < invoice.OriginalBalance && invoice.RemainingBalance > 0 {
+		invoice.Status = "Partially Paid"
+	} else if invoice.RemainingBalance == 0 {
+		invoice.Status = "Paid"
+	} else if invoice.RemainingBalance < 0 {
+		invoice.Status = "Overpaid"
+	}
+
+	if config.Debug {
+		log.Printf("Updated Invoice:\n\n%v\n\n", invoice)
+	}
+
+	return nil
+}
+
+/*
+*Description*
+
+func IDExists
+
+Checks to see if a Invoice record with the specified ID already exists in the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be queried for the specified Invoice ID.
+
+	invoiceID  <uint>
+
+		The Invoice ID to check for.
+
+*Returns*
+
+	_  <bool>
+
+		'true' if a Invoice record exists in the database with the specified ID. 'false' if not.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
+func (invoice *Invoice) IDExists(db *gorm.DB, invoiceID uint) (bool, error) {
+	var idExists bool
+	err := db.Model(Appointment{}).Select("count(*) > 0").Where("id = ?", invoiceID).Find(&idExists).Error
+	return idExists, err
+}
+
+/*
+*Description*
+
 func GetID
 
 # Returns ID field from Invoice object
