@@ -150,6 +150,39 @@ func (appt *Appointment) AfterUpdate(db *gorm.DB) error {
 /*
 *Description*
 
+func IDExists
+
+Checks to see if a Appointment record with the specified ID already exists in the database.
+
+*Parameters*
+
+	db  <*gorm.DB>
+
+		A pointer to the database instance that will be queried for the specified Appointment ID.
+
+	apptID  <uint>
+
+		The Appointment ID to check for.
+
+*Returns*
+
+	_  <bool>
+
+		'true' if a Appointment record exists in the database with the specified ID. 'false' if not.
+
+	_  <error>
+
+		Encountered error (nil if no errors are encountered).
+*/
+func (business *Appointment) IDExists(db *gorm.DB, apptID uint) (bool, error) {
+	var idExists bool
+	err := db.Model(Appointment{}).Select("count(*) > 0").Where("id = ?", apptID).Find(&idExists).Error
+	return idExists, err
+}
+
+/*
+*Description*
+
 func GetID
 
 # Returns ID field from Appointment object
