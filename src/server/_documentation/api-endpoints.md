@@ -1,4 +1,4 @@
-| **URI**                                 | **DB Object**          | **Function Called**            | **Request Type** | **Description **                                 |
+| **URI**                                 | **DB Object**          | **Function Called**            | **Request Type** | **Description**                                 |
 |-----------------------------------------|------------------------|--------------------------------|------------------|--------------------------------------------------|
 | **/**                                   | N/A (Static HTTP Page) | serveTableOfContents           | GET              | Backend / API reference links and documentation  |
 | **/home**                               | N/A (Static HTTP Page) | serveTableOfContents           | GET              | Backend / API reference links and documentation  |
