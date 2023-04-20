@@ -75,7 +75,7 @@ func TestCreateGetUser(t *testing.T) {
 	returnRecords, err = testGetUser.Get(testAppDB, createdUser.GetID())
 	returnedUser := returnRecords["user"]
 	if err != nil {
-		t.Errorf("func GetUser failed to return test User  --  %s", err)
+		t.Errorf("func User.Get failed to return test User  --  %s", err)
 	}
 
 	unequalFields, equal := models.Equal(createdUser, returnedUser)

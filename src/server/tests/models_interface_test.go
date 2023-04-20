@@ -2,53 +2,51 @@ package tests
 
 import (
 	"testing"
+	"time"
 
 	"server/models"
 
 	"github.com/stretchr/testify/assert"
 )
 
+/*
+*Description*
+
+func TestModelsEqual
+
+Tests the Equal method for the generic 'Model' interface type. Method confirms that objects with different types return as not equal and that identically defined objects return as being equal.
+*/
 func TestModelsEqual(t *testing.T) {
-	address1 := models.Address{}
-	address2 := models.Address{}
+	// Initialize test objects (types that implement 'Model' interface)
+	user1 := models.User{}
+	user2 := models.User{}
 	business1 := models.Business{}
+	service1 := models.Service{
+		BusinessID:    128,
+		Name:          "Planks & Pilates",
+		Description:   "I've heard Kylo Ren has an 8-pack. That Kylo Ren is shredded.",
+		StartDateTime: time.Date(2023, 04, 20, 17, 30, 00, 00, time.Local),
+		Length:        30,
+		Capacity:      20,
+		CancelFee:     0,
+		Price:         2000,
+	}
+	service2 := models.Service{
+		BusinessID:    128,
+		Name:          "Planks & Pilates",
+		Description:   "I've heard Kylo Ren has an 8-pack. That Kylo Ren is shredded.",
+		StartDateTime: time.Date(2023, 04, 20, 17, 30, 00, 00, time.Local),
+		Length:        30,
+		Capacity:      20,
+		CancelFee:     0,
+		Price:         2000,
+	}
 
-	unequalFields1, equal1 := models.Equal(&address1, &address2)
-	unequalFields2, equal2 := models.Equal(&business1, &address2)
+	unequalFields1, equal1 := models.Equal(&user1, &user2)
+	unequalFields2, equal2 := models.Equal(&business1, &user2)
+	unequalFields3, equal3 := models.Equal(&service1, &service2)
 
-	t.Logf("unequalFields1:  %v", unequalFields1)
-	t.Logf("unequalFields2:  %v", unequalFields2)
-
-	assert.Truef(t, equal1, "ERROR: Types do not match (EqualTypes result 1 -- Address vs. Address).")
-	assert.Falsef(t, equal2, "ERROR: Equal function returned 'true' for mismatched object types (Business and Address).")
+	assert.Truef(t, equal1, "User objects should have matching types (EqualTypes result 1 -- User vs. User). Unequal fields:  %v", unequalFields1)
+	assert.Falsef(t, equal2, "Business and User objects should have mismatched types. Unequal fields:  %v", unequalFields2)
+	assert.Truef(t, equal3, "Identically defined Service objects should be equal. Unequal fields:  %v", unequalFields3)
 }
-
-//  EqualTypes FUNCTION INITIALLY USED FOR DEBUGGING MODEL INTERFACE FUNCTION
-// func TestEqualTypes(t *testing.T) {
-// 	address1 := Address{}
-// 	address2 := Address{}
-// 	business1 := Business{}
-
-// 	type1 := reflect.TypeOf(&address1)
-// 	type2 := reflect.TypeOf(&address2)
-// 	type3 := reflect.TypeOf(&business1)
-
-// 	methodType1, methodType2, equalTypes1 := EqualTypes(&address1, &address2)
-// 	methodType3, methodType4, equalTypes2 := EqualTypes(&business1, &address2)
-
-// 	t.Logf("Type1 (Address1):  %s", type1)
-// 	t.Logf("Type2 (Address2):  %s", type2)
-// 	t.Logf("Type3 (Business1):  %s", type3)
-
-// 	t.Logf("MethodType1 (Address1):  %s", methodType1)
-// 	t.Logf("MethodType2 (Address2):  %s", methodType2)
-// 	t.Logf("MethodType3 (Business1):  %s", methodType3)
-// 	t.Logf("MethodType4 (Address2):  %s", methodType4)
-
-// 	assert.Truef(t, equalTypes1, "ERROR: Types do not match (EqualTypes result 1 -- Address vs. Address).")
-// 	assert.Falsef(t, equalTypes2, "ERROR: Types match (EqualTypes result 2 -- Business vs. Address).")
-// 	assert.Equalf(t, type1, methodType1, "ERROR: type1 and methodType1 mismatch. '%s' does not match '%s'.", type1, methodType1)
-// 	assert.Equalf(t, type2, methodType2, "ERROR: type2 and methodType2 mismatch. '%s' does not match '%s'.", type2, methodType2)
-// 	assert.Equalf(t, type3, methodType3, "ERROR: type3 and methodType3 mismatch. '%s' does not match '%s'.", type3, methodType3)
-// 	assert.Equalf(t, type2, methodType4, "ERROR: type2 and methodType4 mismatch. '%s' does not match '%s'.", type2, methodType4)
-// }
